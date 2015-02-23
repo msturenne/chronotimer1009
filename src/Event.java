@@ -33,6 +33,16 @@ public class Event {
 	}
 	
 	/**
+	 * This method returns the channel that the GUI/driver wants since they can't see the variables
+	 * @param channel the channel needed
+	 * @return
+	 */
+	public Channel getChannel(int channel){
+		//additional code needed
+		return channels[channel-1];
+	}
+	
+	/**
 	 * Swaps two runners positions in line
 	 */
 	public void swap(){
