@@ -1,9 +1,8 @@
-import java.sql.Time;
+import java.util.Date;
 
 public class ChronoTimer1009 {
 
 	private Event currentEvent;
-	private Time globalTime;
 	
 	/**
 	 * Contructor
@@ -46,7 +45,7 @@ public class ChronoTimer1009 {
 	 * Return the global time
 	 * @return global time
 	 */
-	public Time getTime(){
-		return null;
+	public static Date getTime(){
+		return new Date();
 	}
 }

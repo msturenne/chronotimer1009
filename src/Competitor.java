@@ -4,6 +4,10 @@ public class Competitor {
 	private String entryTime;
 	private String startTime;
 	private String endTime;
+	
+	public Competitor(int runNum, int idNum, int entryTime){
+		//initialize
+	}
 	/**
 	 * @return the idNum
 	 */
@@ -40,6 +44,4 @@ public class Competitor {
 	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
-	
-	
 }

@@ -1,18 +1,20 @@
 import java.io.File;
+import java.util.Queue;
 
 public class Event {
 
 	private Channel[] channels;
-	private Competitor[] competitors;
+	private Heat[] runs;
 	private String[] log;
-	private String type; //enum class??
-	private String lastTrigger; //type change??
-	private int currentCompetitor;
+	private EventType type;
+	private Time lastTrigger; //type change??
+	private Competitor currentCompetitor;
+	//private Heat[] runs;
 	
 	/**
 	 * Constructor
 	 */
-	public Event(){
+	public Event(EventType type){
 		//initialize
 	}
 	
@@ -41,14 +43,6 @@ public class Event {
 		//additional code needed
 		return channels[channel-1];
 	}
-	
-	/**
-	 * Swaps two runners positions in line
-	 */
-	public void swap(){
-		
-	}
-	
 	/**
 	 * Getter method for lastTrigger variable
 	 * @return the last trigger event
@@ -64,21 +58,20 @@ public class Event {
 	public File exportLogEvent(){
 		return null;
 	}
-	
 	/**
-	 * Set selected racer as next on to start
-	 * @param racer the racer to start next
+	 * Triggers the first channel
+	 * @return the time at which the channel is triggered.
 	 */
-	public void setNextCompetitor(int racer){
-		
+	public Time start(){
+		return getChannel(1).triggerChannel();
 	}
 	
 	/**
-	 * Take the selected runner (the next runner) out from the race
-	 * @param racer the runner to be cleared
+	 * Triggers the last channel
+	 * @return the time at which the channel is triggered.
 	 */
-	public void clearNextCompetitor(int racer){
-		
+	public Time finish(){
+		return getChannel(2).triggerChannel();
 	}
 	
 	/**
