@@ -1,5 +1,5 @@
 public class Channel {
-	
+	//SUUUUUUPPPPP
 	private String sensorType; //enum type???
 	private boolean state;
 
