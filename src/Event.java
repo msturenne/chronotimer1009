@@ -17,13 +17,15 @@ public class Event {
 	public Event(EventType type){
 		//initialize
 		runs = new ArrayList<Heat>();
+		this.type = type;
+		
 	}
 	
 	/**
 	 * Input new competitor into the system
 	 */
 	public void createRun(){
-		
+		runs.add(e);
 	}
 	
 	/**
@@ -32,7 +34,10 @@ public class Event {
 	 * Computes final times.
 	 */
 	public void endRun(){
-		
+		for(int i = 0; i<channels.length; i++)
+		{
+			channels[i].triggerChannel();
+		}
 	}
 	
 	public ArrayList<Heat> getHeats(){
@@ -53,7 +58,9 @@ public class Event {
 	 * @return the last trigger event
 	 */
 	public String getLastTrigger(){
-		return null;
+		lastTrigger = currentCompetitor.getEndTime();
+		
+		return lastTrigger;
 	}
 	
 	/**
@@ -87,19 +94,27 @@ public class Event {
 	 * @author fbgreco
 	 */
 	public class Display{
-		
+		private String display;
 		/**
 		 * Constructor
 		 */
 		public Display(){
-			
+			display = "";
 		}
 		
 		/**
 		 * toString method
 		 */
 		public String toString(){
-			return null;
+			if(type == EventType.IND) display = "Independent";
+			if(type == EventType.GRP) display = "Group";
+			if(type == EventType.PARGRP) display = "Parallel Group";
+			if(type == EventType.PARIND) display = "Parallel Individual";
+			for(Competitor x: competitors)
+			{
+				display += "\n" + x.toString();
+			}
+			return display;
 		}
 	}
 	
@@ -115,7 +130,7 @@ public class Event {
 		 * Constructor
 		 */
 		public Printer(){
-			
+			state = false;
 		}
 		
 		/**
@@ -123,14 +138,15 @@ public class Event {
 		 * @return weather the printer is on.
 		 */
 		public boolean isOn(){
-			return true;
+			return state;
 		}
 		
 		/**
 		 * Toggles the state of the printer
 		 */
 		public void toggleState(){
-			
+			if(state == false) state = true;
+			else state = false;
 		}
 		
 		/**
