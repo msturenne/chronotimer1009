@@ -1,21 +1,22 @@
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Queue;
 
 public class Event {
 
 	private Channel[] channels;
-	private Heat[] runs;
+	private ArrayList<Heat> runs;
 	private String[] log;
 	private EventType type;
-	private Time lastTrigger; //type change??
+	private Time lastTrigger;
 	private Competitor currentCompetitor;
-	//private Heat[] runs;
 	
 	/**
 	 * Constructor
 	 */
 	public Event(EventType type){
 		//initialize
+		runs = new ArrayList<Heat>();
 	}
 	
 	/**
@@ -32,6 +33,10 @@ public class Event {
 	 */
 	public void endRun(){
 		
+	}
+	
+	public ArrayList<Heat> getHeats(){
+		return runs;
 	}
 	
 	/**
@@ -62,10 +67,13 @@ public class Event {
 	 * Triggers the first channel
 	 * @return the time at which the channel is triggered.
 	 */
-	public Time start(){
-		return getChannel(1).triggerChannel();
+	public void start(){
+		//check to see if this method can even be called.
+		if(getChannel(1).getState() != true && getChannel(2).getState() != true) throw new IllegalStateException("The "
+				+ "start and finish channel must be enabled prior to run start!");
+		//trigger the start channel and record time in the competitors appropriate attribute
+		currentCompetitor.setStartTime(getChannel(1).triggerChannel());
 	}
-	
 	/**
 	 * Triggers the last channel
 	 * @return the time at which the channel is triggered.

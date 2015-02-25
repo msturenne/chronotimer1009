@@ -43,4 +43,8 @@ public class Time {
 	public int getHundreths() {
 		return hundreths;
 	}
+	
+	public String toString(){
+		return "<" + getMinutes() + ":" + getSeconds() + "." + getHundreths() + ">";
+	}
 }

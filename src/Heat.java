@@ -35,6 +35,10 @@ public class Heat {
 	public void swap(){
 		
 	}
+	
+	public void addCompetitor(Competitor x){
+		racers.add(x);
+	}
 	/**
 	 * @return the current competitor
 	 */

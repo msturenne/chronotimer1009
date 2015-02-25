@@ -1,9 +1,9 @@
 public class Competitor {
 
 	private int idNum;
-	private String entryTime;
-	private String startTime;
-	private String endTime;
+	private Time entryTime;
+	private Time startTime;
+	private Time endTime;
 	
 	public Competitor(int runNum, int idNum, int entryTime){
 		//initialize
@@ -17,31 +17,31 @@ public class Competitor {
 	/**
 	 * @return the entryTime
 	 */
-	public String getEntryTime() {
+	public Time getEntryTime() {
 		return entryTime;
 	}
 	/**
 	 * @return the startTime
 	 */
-	public String getStartTime() {
+	public Time getStartTime() {
 		return startTime;
 	}
 	/**
 	 * @return the endTime
 	 */
-	public String getEndTime() {
+	public Time getEndTime() {
 		return endTime;
 	}
 	/**
 	 * @param startTime the startTime to set
 	 */
-	public void setStartTime(String startTime) {
+	public void setStartTime(Time startTime) {
 		this.startTime = startTime;
 	}
 	/**
 	 * @param endTime the endTime to set
 	 */
-	public void setEndTime(String endTime) {
+	public void setEndTime(Time endTime) {
 		this.endTime = endTime;
 	}
 }
