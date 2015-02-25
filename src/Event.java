@@ -25,7 +25,7 @@ public class Event {
 	 * Input new competitor into the system
 	 */
 	public void createRun(){
-		runs.add(e);
+		runs.add(e)
 	}
 	
 	/**
@@ -110,7 +110,8 @@ public class Event {
 			if(type == EventType.GRP) display = "Group";
 			if(type == EventType.PARGRP) display = "Parallel Group";
 			if(type == EventType.PARIND) display = "Parallel Individual";
-			for(Competitor x: competitors)
+			Heat heat1 = runs.get(1);
+			for(Competitor x: heat1.getRacers())
 			{
 				display += "\n" + x.toString();
 			}
