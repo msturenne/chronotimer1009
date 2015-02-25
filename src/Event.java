@@ -10,6 +10,7 @@ public class Event {
 	private EventType type;
 	private Time lastTrigger;
 	private Competitor currentCompetitor;
+	private Printer p;
 	
 	/**
 	 * Constructor
@@ -25,7 +26,7 @@ public class Event {
 	 * Input new competitor into the system
 	 */
 	public void createRun(){
-		runs.add(e)
+		throw new UnsupportedOperationException("createRun() not yet implemented and should not be called");
 	}
 	
 	/**
@@ -57,7 +58,7 @@ public class Event {
 	 * Getter method for lastTrigger variable
 	 * @return the last trigger event
 	 */
-	public String getLastTrigger(){
+	public Time getLastTrigger(){
 		lastTrigger = currentCompetitor.getEndTime();
 		
 		return lastTrigger;
@@ -91,7 +92,6 @@ public class Event {
 	
 	/**
 	 * The Display Class
-	 * @author fbgreco
 	 */
 	public class Display{
 		private String display;
@@ -121,7 +121,6 @@ public class Event {
 	
 	/**
 	 * The Printer Class
-	 * @author fbgreco
 	 */
 	public class Printer{
 		
@@ -155,7 +154,7 @@ public class Event {
 		 * @return
 		 */
 		public File print(){
-			return null;
+			
 		}
 	}
 }
