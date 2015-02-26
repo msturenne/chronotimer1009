@@ -1,5 +1,4 @@
 import java.util.Scanner;
-//will this work?
 public class Driver {
 	Time latestTime;
 
