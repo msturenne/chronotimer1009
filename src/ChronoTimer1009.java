@@ -3,6 +3,7 @@ import java.util.Date;
 public class ChronoTimer1009 {
 
 	private Event currentEvent;
+	public static Time globalTime;
 	
 	/**
 	 * Contructor
@@ -11,7 +12,16 @@ public class ChronoTimer1009 {
 	public ChronoTimer1009(Event e){
 		this.currentEvent = e;
 	}
-	
+	public Event getCurrentEvent() {
+		return currentEvent;
+	}
+	/**
+	 * For testing purposes
+	 */
+	public ChronoTimer1009(EventType e, Time t){
+		this.currentEvent = new Event(e);
+		this.globalTime = t;
+	}
 	/**
 	 * Turns the system on.
 	 * Creates an instance of an Event.

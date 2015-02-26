@@ -59,7 +59,7 @@ public class Driver {
 		}
 		else if(command.equals("CONN"))
 		{
-			timer.currentEvent.getChannel(commandVar2).connectSensor(commandVar);
+			timer.getCurrentEvent().getChannel(commandVar2).connectSensor(commandVar);
 			
 		}
 		else if(command.equals("TOGGLE"))

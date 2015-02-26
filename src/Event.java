@@ -2,18 +2,20 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
+import java.io.*;
 
 public class Event {
 
 	private Channel[] channels;
 	private ArrayList<Heat> runs;
-	private String[] log;
+	private Stack<Log> log;
 	private EventType type;
 	private Time lastTrigger;
-	private Competitor currentCompetitor;
-	private Queue<Competitor>unfinished;
-	private Competitor printCompetitor;
 	private int nextCompetitor;
+	private Competitor currentCompetitor;
+	private Queue<Competitor> unfinished;
+	private Printer p;
 	
 	/**
 	 * Constructor
@@ -21,10 +23,8 @@ public class Event {
 	public Event(EventType type){
 		//initialize
 		runs = new ArrayList<Heat>();
-		this.type = type;
-		unfinished = new LinkedList<Competitor>();
-		nextCompetitor = 0;
-		
+		channels = new Channel[8];
+		for(int i=0; i<channels.length; ++i){channels[i] = new Channel(SensorType.NONE);} //creates 8 channels and disables them.
 	}
 	
 	/**
@@ -40,10 +40,7 @@ public class Event {
 	 * Computes final times.
 	 */
 	public void endRun(){
-		for(int i = 0; i<channels.length; i++)
-		{
-			channels[i].toggleState();
-		}
+		for(int i = 0; i<channels.length; i++){channels[i].toggleState();}
 	}
 	
 	public ArrayList<Heat> getHeats(){
@@ -84,10 +81,12 @@ public class Event {
 		//check to see if this method can even be called.
 		if(getChannel(1).getState() != true && getChannel(2).getState() != true) throw new IllegalStateException("The "
 				+ "start and finish channel must be enabled prior to run start!");
+		//setCurrentCompetitor
 		currentCompetitor = runs.get(0).getCompetitor(nextCompetitor);
+		//incrementCurrentCompetitor
 		++nextCompetitor;
 		//trigger the start channel and record time in the competitors appropriate attribute
-		currentCompetitor.setStartTime(ChronoTimer1009.globalTime);
+		currentCompetitor.setStartTime(getChannel(1).triggerChannel());
 		unfinished.add(currentCompetitor);
 	}
 	/**
@@ -95,9 +94,16 @@ public class Event {
 	 * @return the time at which the channel is triggered.
 	 */
 	public void finish(){
-		printCompetitor = unfinished.remove();
-		//return getChannel(2).triggerChannel();
-		
+		//takes the first unfinished runner
+		Competitor finished = unfinished.remove();
+		//sets the endtime for the completed runner
+		finished.setEndTime(getChannel(2).triggerChannel());
+		//computes the elapsed time
+		Time elapsed = Time.elapsed(finished.getEndTime(), finished.getStartTime());
+		//adds to the log
+		log.add(new Log(finished.getStartTime(), finished.getIdNum(), this.type, elapsed));
+		//tells the printer to print if on
+		if(p.isOn()) p.print();
 	}
 	
 	/**
@@ -128,21 +134,26 @@ public class Event {
 			return display;
 		}
 	}
-	
+
+
 	/**
 	 * The Printer Class
 	 */
 	public class Printer{
-		
 		private boolean state;
-		
+		private String outFileName;
 		/**
-		 * Constructor
+		 * Erase the content of the file
 		 */
 		public Printer(){
 			state = false;
+			outFileName = "printerOutFile";
+			try(PrintWriter fileOut = new PrintWriter (outFileName)){
+				fileOut.print("");
+			}catch(IOException e){
+				System.out.println("Could not open file! " + e.getMessage() +" (No such file or directory)");
+			}
 		}
-		
 		/**
 		 * Is the printer on?
 		 * @return weather the printer is on.
@@ -150,7 +161,6 @@ public class Event {
 		public boolean isOn(){
 			return state;
 		}
-		
 		/**
 		 * Toggles the state of the printer
 		 */
@@ -158,13 +168,18 @@ public class Event {
 			if(state == false) state = true;
 			else state = false;
 		}
-		
 		/**
-		 * Print (if on) various fields about runner
-		 * @return
+		 * print the information on the top of the Log stack;
 		 */
-		public File print(){
-			return null
+		public void print(){
+			try(PrintWriter fileOut = new PrintWriter (new FileWriter(outFileName, true))){
+				/**
+				 * Log auxLog = log.peek();
+				 * fileOut.println(auxLog.toString);
+				 */
+			}catch(IOException e){
+				System.out.println("Could not open file! " + e.getMessage() +" (No such file or directory)");
+			}
 		}
 	}
 }
