@@ -1,5 +1,6 @@
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Queue;
 
 public class Event {
@@ -10,7 +11,8 @@ public class Event {
 	private EventType type;
 	private Time lastTrigger;
 	private Competitor currentCompetitor;
-	private Printer p;
+	private Queue<Competitor>unfinished;
+	private Competitor printCompetitor;
 	
 	/**
 	 * Constructor
@@ -19,6 +21,7 @@ public class Event {
 		//initialize
 		runs = new ArrayList<Heat>();
 		this.type = type;
+		unfinished = new LinkedList<Competitor>();
 		
 	}
 	
@@ -81,13 +84,16 @@ public class Event {
 				+ "start and finish channel must be enabled prior to run start!");
 		//trigger the start channel and record time in the competitors appropriate attribute
 		currentCompetitor.setStartTime(getChannel(1).triggerChannel());
+		unfinished.add(currentCompetitor);
 	}
 	/**
 	 * Triggers the last channel
 	 * @return the time at which the channel is triggered.
 	 */
 	public Time finish(){
+		printCompetitor = unfinished.remove();
 		return getChannel(2).triggerChannel();
+		
 	}
 	
 	/**
@@ -154,7 +160,7 @@ public class Event {
 		 * @return
 		 */
 		public File print(){
-			
+			return null;
 		}
 	}
 }
