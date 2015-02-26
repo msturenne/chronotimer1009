@@ -13,6 +13,7 @@ public class Event {
 	private Competitor currentCompetitor;
 	private Queue<Competitor>unfinished;
 	private Competitor printCompetitor;
+	private int nextCompetitor;
 	
 	/**
 	 * Constructor
@@ -22,6 +23,7 @@ public class Event {
 		runs = new ArrayList<Heat>();
 		this.type = type;
 		unfinished = new LinkedList<Competitor>();
+		nextCompetitor = 0;
 		
 	}
 	
@@ -40,7 +42,7 @@ public class Event {
 	public void endRun(){
 		for(int i = 0; i<channels.length; i++)
 		{
-			channels[i].triggerChannel();
+			channels[i].toggleState();
 		}
 	}
 	
@@ -82,17 +84,19 @@ public class Event {
 		//check to see if this method can even be called.
 		if(getChannel(1).getState() != true && getChannel(2).getState() != true) throw new IllegalStateException("The "
 				+ "start and finish channel must be enabled prior to run start!");
+		currentCompetitor = runs.get(0).getCompetitor(nextCompetitor);
+		++nextCompetitor;
 		//trigger the start channel and record time in the competitors appropriate attribute
-		currentCompetitor.setStartTime(getChannel(1).triggerChannel());
+		currentCompetitor.setStartTime(ChronoTimer1009.globalTime);
 		unfinished.add(currentCompetitor);
 	}
 	/**
 	 * Triggers the last channel
 	 * @return the time at which the channel is triggered.
 	 */
-	public Time finish(){
+	public void finish(){
 		printCompetitor = unfinished.remove();
-		return getChannel(2).triggerChannel();
+		//return getChannel(2).triggerChannel();
 		
 	}
 	

@@ -1,11 +1,12 @@
+import java.util.ArrayList;
 import java.util.Queue;
 
 
 public class Heat {
 
-	private Queue<Competitor> racers;
+	private ArrayList<Competitor> racers;
 	
-	public Heat(Queue<Competitor> racers){
+	public Heat(){
 		
 	}
 	/**
@@ -39,10 +40,8 @@ public class Heat {
 	public void addCompetitor(Competitor x){
 		racers.add(x);
 	}
-	/**
-	 * @return the current competitor
-	 */
-	public Competitor getCurrentRacer(){
-		return null;
+	
+	public Competitor getCompetitor(int i){
+		return racers.get(i);
 	}
 }
