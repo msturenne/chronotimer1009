@@ -1,3 +1,6 @@
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Paths;
 import java.util.Scanner;
 public class Driver {
 	Time latestTime;
@@ -7,28 +10,78 @@ public class Driver {
 		timer.on();
 		
 		Scanner stdIn = new Scanner(System.in);
+		String fileInName = "fileInName";
+		String entryType;
 		
-		String line = stdIn.nextLine();
-		do
-		{
-			String[] split = line.split("\\s+");
-			String time = split[0];
-			String command = split[1];
-			String commandVar = null;
-			String commandVar2 = null;
-			if(split.length > 2)
-			{
-				commandVar = split[2];
-				if(split.length > 3)
-					commandVar2 = split[3];
-			}
-			
-			initiate(timer, time, command, commandVar, commandVar2);
-			
-			line = stdIn.nextLine();
+		System.out.println("Choose the entry method:\n1- prompt\n2- file");
+		entryType = stdIn.nextLine();
+		
+		if (entryType.equals("1")){
+			readPromptCommand(timer);
+		}else if (entryType.equals("2")){
+			readCommandFile(timer, fileInName);
 		}
-		while(line != null);
 		
+		
+	}
+	
+	/**
+	 * Interpret and initiate the command received as parameter.
+	 * @param timer
+	 * @param line
+	 */
+	public static void interpretCommand(ChronoTimer1009 timer, String line){
+		String[] split = line.split("\\s+");
+		String time = split[0];
+		String command = split[1];
+		String commandVar = null;
+		String commandVar2 = null;
+		if(split.length > 2)
+		{
+			commandVar = split[2];
+			if(split.length > 3)
+				commandVar2 = split[3];
+		}
+		
+		initiate(timer, time, command, commandVar, commandVar2);
+	}
+	
+	/**
+	 * Reads the command line from the terminal.
+	 * @param timer
+	 */
+	public static void readPromptCommand(ChronoTimer1009 timer){
+		Scanner stdIn = new Scanner(System.in);
+		
+		System.out.println("Enter command line ('exit' to finish):");
+		
+		String command = stdIn.nextLine();
+		while(!command.equals("exit")){
+			interpretCommand(timer, command);
+			
+			System.out.println("Enter next command line ('exit' to finish):");
+			command = stdIn.nextLine();
+		}
+	}
+	
+	
+	/**
+	 * Open the command file and read and interpret each command line.
+	 * @param filename
+	 */
+	public static void readCommandFile (ChronoTimer1009 timer, String filename){
+		String command;
+		try{
+			Scanner fileIn = new Scanner (Paths.get(filename));	
+			while(fileIn.hasNextLine()){
+				command = fileIn.nextLine();
+				interpretCommand(timer, command);
+			}
+			fileIn.close();
+			System.out.println("Command File read succefuly!");
+		}catch(IOException e){
+			System.out.println("Could not open file! " + e.getMessage() +" (No such file or directory)");
+		}
 	}
 
 	private static void initiate(ChronoTimer1009 timer, String time, String command,
