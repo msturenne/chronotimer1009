@@ -61,6 +61,18 @@ public class Time {
 	public String toString(){
 		return "<" + getMinutes() + ":" + getSeconds() + "." + getHundreths() + ">";
 	}
+	
+	public int getTime(){
+		int t = 0;
+		t += (int) this.hours * 1000 * 60 * 60;
+		t += (int) this.minutes * 1000 * 60;
+		t += (int) this.seconds * 1000;
+		t += (int) this.hundreths * 10;
+		
+		return t;
+
+	}
+	
 	public void setTime(int milliseconds){
 		//compute hours
 		this.hours = (int)((milliseconds/(1000*60*60)) % 24);

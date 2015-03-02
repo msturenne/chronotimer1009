@@ -26,19 +26,25 @@ public class Driver {
 		}
 		
 	}
-
-	private static void initiate(String time, String command,
-			String commandVar, String commandVar2) {
-		
+	
+	private static int toTime(String time){
 		String[] split = time.split(":");
 		int hours = Integer.parseInt(split[0]);
 		int minutes = Integer.parseInt(split[1]);
-		int seconds = Integer.parseInt(split[2]);
+		double seconds = Double.parseDouble(split[2]);
 
 		int t = 0;
 		t += (int)(hours * (1000*60*60));
 		t+=(int)(minutes* (1000*60));
 		t+= (int)(seconds*(1000));
+		
+		return t;
+	}
+
+	private static void initiate(int time, String command,
+			String commandVar, String commandVar2) {
+		
+		
 		
 		if (command.equals("ON")){
 			powerOn = true;
@@ -48,7 +54,7 @@ public class Driver {
 		}
 		
 		if (powerOn == true){
-			timer.globalTime.setTime(t);
+			timer.globalTime.setTime(time);
 			
 			if(command.equals("OFF"))
 			{
@@ -124,7 +130,7 @@ public class Driver {
 				commandVar2 = split[3];
 		}
 		
-		initiate(time, command, commandVar, commandVar2);
+		initiate(toTime(time), command, commandVar, commandVar2);
 	}
 	
 	/**
@@ -137,7 +143,7 @@ public class Driver {
 		
 		String command = stdIn.nextLine();
 		while(!command.equals("exit")){
-			interpretCommand(command);
+			interpretCommandLine(command);
 			
 			System.out.println("Enter next command line ('exit' to finish):");
 			command = stdIn.nextLine();
@@ -145,6 +151,21 @@ public class Driver {
 	}
 	
 	
+	private static void interpretCommandLine(String line) {
+		String[] split = line.split("\\s+");
+		String command = split[0];
+		String commandVar = null;
+		String commandVar2 = null;
+		if(split.length > 1)
+		{
+			commandVar = split[1];
+			if(split.length > 2)
+				commandVar2 = split[2];
+		}
+		initiate(timer.globalTime.getTime(), command, commandVar, commandVar2);
+		
+	}
+
 	/**
 	 * Open the command file and read and interpret each command line.
 	 * @param filename
