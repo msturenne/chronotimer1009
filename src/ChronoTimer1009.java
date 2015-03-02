@@ -27,28 +27,28 @@ public class ChronoTimer1009 {
 	 * Creates an instance of an Event.
 	 */
 	public void on(){
-		
+		throw new UnsupportedOperationException("on() not yet implemented and should not be called");
 	}
 	
 	/**
 	 * Turns the system off but the event stays active.
 	 */
 	public void off(){
-		
+		throw new UnsupportedOperationException("off() not yet implemented and should not be called");
 	}
 	
 	/**
 	 * Exit the simulator
 	 */
 	public void exit(){
-		
+		throw new UnsupportedOperationException("exit() not yet implemented and should not be called");
 	}
 	
 	/**
 	 * Resets the system to its initial state
 	 */
 	public void reset(){
-		
+		throw new UnsupportedOperationException("reset() not yet implemented and should not be called");
 	}
 	
 	/**
