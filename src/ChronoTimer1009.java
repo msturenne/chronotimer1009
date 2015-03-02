@@ -11,6 +11,7 @@ public class ChronoTimer1009 {
 	 */
 	public ChronoTimer1009(Event e){
 		this.currentEvent = e;
+		this.globalTime = new Time(0);
 	}
 	public Event getCurrentEvent() {
 		return currentEvent;

@@ -9,11 +9,10 @@ public class Driver {
 	private static ChronoTimer1009 timer;
 
 	public static void main(String[] args){
-		//ChronoTimer1009 timer = new ChronoTimer1009(new Event(EventType.IND));
-		//timer.on();
+		timer = new ChronoTimer1009(new Event(EventType.IND));
 		
 		Scanner stdIn = new Scanner(System.in);
-		String fileInName = "fileInName";
+		String fileInName = "file.txt";
 		String entryType;
 		
 		System.out.println("Choose the entry method:\n1- prompt\n2- file");
@@ -178,6 +177,7 @@ public class Driver {
 			Scanner fileIn = new Scanner (Paths.get(filename));	
 			while(fileIn.hasNextLine()){
 				command = fileIn.nextLine();
+				System.out.println(command);
 				interpretCommand(command);
 			}
 			fileIn.close();
