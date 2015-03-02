@@ -1,12 +1,18 @@
 public class Competitor {
 
 	private int idNum;
+	private int runNum;
 	private Time entryTime;
 	private Time startTime;
 	private Time endTime;
 	
-	public Competitor(int runNum, int idNum, int entryTime){
+	public Competitor(int runNum, int idNum, Time entryTime){
 		//initialize
+		this.runNum = runNum;
+		this.idNum = idNum;
+		this.entryTime = entryTime;
+		startTime = null;
+		endTime = null;
 	}
 	/**
 	 * @return the idNum
@@ -43,5 +49,13 @@ public class Competitor {
 	 */
 	public void setEndTime(Time endTime) {
 		this.endTime = endTime;
+	}
+	public String toString(){
+		//A version will be displayed depending on whether the competitor is still
+		//in run or has finished
+		if(this.endTime == null)
+			return runNum + "		" + idNum + "		....";
+		else
+			return runNum + "		" + idNum + "		" + endTime;
 	}
 }

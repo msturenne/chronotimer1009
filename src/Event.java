@@ -124,10 +124,11 @@ public class Event {
 		 * toString method
 		 */
 		public String toString(){
-			if(type == EventType.IND) display = "Independent";
-			if(type == EventType.GRP) display = "Group";
-			if(type == EventType.PARGRP) display = "Parallel Group";
-			if(type == EventType.PARIND) display = "Parallel Individual";
+			if(type == EventType.IND) display = "Event: Independent\n";
+			if(type == EventType.GRP) display = "Event: Group\n";
+			if(type == EventType.PARGRP) display = "Event: Parallel Group\n";
+			if(type == EventType.PARIND) display = "Event: Parallel Individual\n";
+			display+= "Run		Bib		Time\n";
 			Heat heat1 = runs.get(1);
 			for(Competitor x: heat1.getRacers())
 			{
