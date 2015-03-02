@@ -47,7 +47,9 @@ public class Log {
 	 */
 	public String toString(){
 		return "<" + startTime.toString() + ">" + " <" + eventType.toString() + ">" + 
-	" <" + competitorNumber + ">" + " <" + elapsedTime.toString() + ">";
+	" <" + competitorNumber + ">" + " <" + 
+				(elapsedTime.equals(Integer.MAX_VALUE) ? "DNF" : elapsedTime.toString()) 
+				+ ">";
 	}
 }
 
