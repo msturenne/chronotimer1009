@@ -51,6 +51,8 @@ public class Driver {
 			if (timer == null){
 				timer = new ChronoTimer1009(new Event(EventType.IND));
 			}
+			
+			timer.globalTime.setTime(time);
 		}
 		
 		if (powerOn == true){
