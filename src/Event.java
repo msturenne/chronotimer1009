@@ -84,10 +84,11 @@ public class Event {
 	}
 	/**
 	 * Triggers the last channel
+	 * @param x true if compelted run, false if DNF
 	 * @return the time at which the channel is triggered.
 	 */
 	public void finish(boolean x){
-		Time DNF = new Time(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
+		Time DNF = new Time(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE); //will represent a DNF 
 		//takes the first unfinished runner
 		Competitor finished = unfinished.remove();
 		//sets the endtime for the completed runner only if they finished.
