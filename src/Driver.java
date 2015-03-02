@@ -1,6 +1,3 @@
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Paths;
 import java.util.Scanner;
 public class Driver {
 	Time latestTime;
@@ -10,78 +7,28 @@ public class Driver {
 		timer.on();
 		
 		Scanner stdIn = new Scanner(System.in);
-		String fileInName = "fileInName";
-		String entryType;
 		
-		System.out.println("Choose the entry method:\n1- prompt\n2- file");
-		entryType = stdIn.nextLine();
-		
-		if (entryType.equals("1")){
-			readPromptCommand(timer);
-		}else if (entryType.equals("2")){
-			readCommandFile(timer, fileInName);
-		}
-		
-		
-	}
-	
-	/**
-	 * Interpret and initiate the command received as parameter.
-	 * @param timer
-	 * @param line
-	 */
-	public static void interpretCommand(ChronoTimer1009 timer, String line){
-		String[] split = line.split("\\s+");
-		String time = split[0];
-		String command = split[1];
-		String commandVar = null;
-		String commandVar2 = null;
-		if(split.length > 2)
+		String line = stdIn.nextLine();
+		do
 		{
-			commandVar = split[2];
-			if(split.length > 3)
-				commandVar2 = split[3];
-		}
-		
-		initiate(timer, time, command, commandVar, commandVar2);
-	}
-	
-	/**
-	 * Reads the command line from the terminal.
-	 * @param timer
-	 */
-	public static void readPromptCommand(ChronoTimer1009 timer){
-		Scanner stdIn = new Scanner(System.in);
-		
-		System.out.println("Enter command line ('exit' to finish):");
-		
-		String command = stdIn.nextLine();
-		while(!command.equals("exit")){
-			interpretCommand(timer, command);
-			
-			System.out.println("Enter next command line ('exit' to finish):");
-			command = stdIn.nextLine();
-		}
-	}
-	
-	
-	/**
-	 * Open the command file and read and interpret each command line.
-	 * @param filename
-	 */
-	public static void readCommandFile (ChronoTimer1009 timer, String filename){
-		String command;
-		try{
-			Scanner fileIn = new Scanner (Paths.get(filename));	
-			while(fileIn.hasNextLine()){
-				command = fileIn.nextLine();
-				interpretCommand(timer, command);
+			String[] split = line.split("\\s+");
+			String time = split[0];
+			String command = split[1];
+			String commandVar = null;
+			String commandVar2 = null;
+			if(split.length > 2)
+			{
+				commandVar = split[2];
+				if(split.length > 3)
+					commandVar2 = split[3];
 			}
-			fileIn.close();
-			System.out.println("Command File read succefuly!");
-		}catch(IOException e){
-			System.out.println("Could not open file! " + e.getMessage() +" (No such file or directory)");
+			
+			initiate(timer, time, command, commandVar, commandVar2);
+			
+			line = stdIn.nextLine();
 		}
+		while(line != null);
+		
 	}
 
 	private static void initiate(ChronoTimer1009 timer, String time, String command,
@@ -100,7 +47,7 @@ public class Driver {
 		
 		if(command.equals("TIME"))
 		{
-			timer.globalTime.setTime(commandVar);
+			timer.globalTime.setTime(Integer.parseInt(commandVar));
 		}
 		else if(command.equals("ON"))
 		{
@@ -112,34 +59,40 @@ public class Driver {
 		}
 		else if(command.equals("CONN"))
 		{
-			timer.getCurrentEvent().getChannel(commandVar2).connectSensor(commandVar);
+			timer.getCurrentEvent().getChannel(Integer.parseInt(commandVar2)).connectSensor(SensorType.valueOf(commandVar));
 			
 		}
 		else if(command.equals("TOGGLE"))
 		{
-			timer.on();
+			timer.getCurrentEvent().getChannel(Integer.parseInt(commandVar)).toggleState();
 		}
 		else if(command.equals("NUM"))
 		{
-			timer.on();
+			//adds new heat with individual runner ?
+			//at least that's how i think it should be
+			//set up because of what the test output is supposed to be
 		}
 		else if(command.equals("FIN"))
 		{
-			timer.on();
+			timer.getCurrentEvent().finish(true);
 		}
 		else if(command.equals("START"))
 		{
-			timer.on();
+			timer.getCurrentEvent().start();
 		}
 		else if(command.equals("DNF"))
 		{
-			timer.on();
+			//add dnf method ?
+			timer.getCurrentEvent().finish(false);
 		}
 		else if(command.equals("PRINT"))
 		{
-			timer.on();
+			//the event class will need either a printer variable that is
+			//initialized in the constructor, or a method that accesses the printer
+			//class
+			timer.getCurrentEvent().getPrinter().print();
 		}
-		else if(command.equals("OFF"))
+		else if(command.equals("EXIT"))
 		{
 			timer.on();
 		}

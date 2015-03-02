@@ -24,21 +24,18 @@ public class Log {
 	public void setTimestamp(Time timestamp) {
 		this.startTime = timestamp;
 	}
-
 	/**
 	 * @param competitorNumber the competitorNumber to set
 	 */
 	public void setCompetitorNumber(int competitorNumber) {
 		this.competitorNumber = competitorNumber;
 	}
-
 	/**
 	 * @param eventType the eventType to set
 	 */
 	public void setEventType(EventType eventType) {
 		this.eventType = eventType;
 	}
-
 	/**
 	 * @param elapsedTime the elapsedTime to set
 	 */

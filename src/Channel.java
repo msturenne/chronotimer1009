@@ -11,7 +11,6 @@ public class Channel {
 		state = false; //channel initially disabled.
 		this.sensor = new Sensor(type);
 	}
-	
 	/**
 	 * Changes the state of the channel
 	 */
@@ -27,15 +26,13 @@ public class Channel {
 	public void connectSensor(SensorType type){
 		this.sensor = new Sensor(type); //connect the new sensor.
 	}
-	
 	/**
 	 * Disconnects a sensor from a channel
 	 */
 	public void disconnectSensor(){
-		//disconnect whatever sensor is currently attactched to the channel.
+		//disconnect whatever sensor is currently attached to the channel.
 		this.sensor = new Sensor(SensorType.NONE);
 	}
-	
 	/**
 	 * Triggers the channel
 	 */
@@ -50,7 +47,6 @@ public class Channel {
 	public Sensor getSensor() {
 		return sensor;
 	}
-
 	/**
 	 * @return the state
 	 */
