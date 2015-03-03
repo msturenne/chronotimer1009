@@ -30,6 +30,7 @@ public class Event {
 		unfinished = new LinkedList<Competitor>();
 		p = new Printer();
 		currentHeat = -1;
+		this.type = type;
 		createRun(); //when an event is created, it creates a heat under the assumption that an event will have at least on heat.
 	}
 	/**

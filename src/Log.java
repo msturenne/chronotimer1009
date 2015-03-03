@@ -46,9 +46,10 @@ public class Log {
 	 * 
 	 */
 	public String toString(){
-		return "<" + startTime.toString() + ">" + " <" + eventType.toString() + ">" + 
-	" <" + competitorNumber + ">" + " <" + 
-				(elapsedTime.equals(Integer.MAX_VALUE) ? "DNF" : elapsedTime.toString()) 
+		Time x = new Time(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
+		return "Start Time: <" + startTime.toString() + ">" + " EventType: <" + eventType.toString() + ">" + 
+	" Competitor Number: <" + competitorNumber + ">" + " ElapsedTime<" + 
+				(elapsedTime.equals(x) ? "DNF" : elapsedTime.toString()) 
 				+ ">";
 	}
 }
