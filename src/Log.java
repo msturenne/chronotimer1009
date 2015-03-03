@@ -4,13 +4,16 @@ public class Log {
 	private int competitorNumber;
 	private EventType eventType;
 	private Time elapsedTime;
+	private Time endTime;
 	
 	
-	public Log(Time startTime, int competitorNumber, EventType eventType, Time elapsedTime) {
+	public Log(Time startTime, int competitorNumber, EventType eventType, Time elapsedTime, Time endTime) {
 		this.startTime = startTime;
 		this.competitorNumber = competitorNumber;
 		this.eventType = eventType;
 		this.elapsedTime = elapsedTime;
+		this.endTime = endTime;
+		
 	}
 	/**
 	 * @return the timestamp

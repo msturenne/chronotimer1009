@@ -85,7 +85,7 @@ public class Event {
 	}
 	/**
 	 * Triggers the last channel
-	 * @param x true if compelted run, false if DNF
+	 * @param x true if completed run, false if DNF
 	 * @return the time at which the channel is triggered.
 	 */
 	public void finish(boolean x){
@@ -98,7 +98,7 @@ public class Event {
 		Time elapsed = DNF;
 		if(x){elapsed = Time.elapsed(finished.getEndTime(), finished.getStartTime());}
 		//adds to the log
-		log.add(new Log(finished.getStartTime(), finished.getIdNum(), this.type, elapsed));
+		log.add(new Log(finished.getStartTime(), finished.getIdNum(), this.type, elapsed, finished.getEndTime()));
 		//tells the printer to print if on
 		if(p.isOn()) p.print();
 	}

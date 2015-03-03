@@ -83,24 +83,18 @@ public class Time {
 		//compute hundreths
 		this.hundreths = (int)((milliseconds/10) % 100);
 	}
+	
+	public boolean equals(Time x){
+		return ((this.hours == x.hours) && (this.minutes == x.minutes) && (this.seconds == x.seconds) && (this.hundreths == x.hundreths));
+	}
+	
 	/**
 	 * Given two time, computed the elapsed time
 	 */
 	public static Time elapsed(Time b, Time a){
 		if(b == null || a == null) throw new IllegalArgumentException("argument can't be null!");
-		long bToMillis = (b.getHours() * 3600000) + (b.getMinutes() * 60000) + (b.getSeconds() * 1000) * (b.getHundreths() * 10);
-		long aToMillis = (a.getHours() * 3600000) + (a.getMinutes() * 60000) + (a.getSeconds() * 1000) * (a.getHundreths() * 10);
-		long elapsed = bToMillis-aToMillis;
-		//compute hours
-		int h = (int)((elapsed/(1000*60*60)) % 24);
-		//compute minutes
-		int m = (int)((elapsed/(1000*60)) % 60);
-		//compute seconds
-		int s = (int)((elapsed/(1000)) % 60);
-		//compute hundreths
-		int hun = (int)((elapsed/10) % 100);
-		//return time
-		return new Time(h, m, s, hun);
+		long elapsed = b.getTime()-a.getTime();
+		return new Time(elapsed);
 	}
 }
 

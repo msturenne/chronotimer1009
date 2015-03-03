@@ -39,7 +39,7 @@ public class Channel {
 	public Time triggerChannel(){
 		//long millis = ChronoTimer1009.getTime().getTime();
 		//return new Time(millis);
-		return ChronoTimer1009.globalTime;
+		return new Time(ChronoTimer1009.globalTime.getTime());
 	}
 	/**
 	 * @return the type
