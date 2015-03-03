@@ -102,6 +102,12 @@ public class Event {
 		if(p.isOn()) p.print();
 	}
 	/**
+	 * @return the currentHeat
+	 */
+	public int getCurrentHeat() {
+		return currentHeat;
+	}
+	/**
 	 * return the printer
 	 * @return
 	 */
