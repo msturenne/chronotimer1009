@@ -100,7 +100,11 @@ public class Driver {
 				//the event class will need either a printer variable that is
 				//initialized in the constructor, or a method that accesses the printer
 				//class
-				timer.getCurrentEvent().getPrinter().print();
+				//timer.getCurrentEvent().getPrinter().print();
+				for(Log x : timer.getCurrentEvent().getLog()){
+					System.out.print(x.toString());
+					System.out.println();
+				}
 			}
 			else if(command.equals("EXIT"))
 			{

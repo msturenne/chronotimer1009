@@ -103,6 +103,12 @@ public class Event {
 		if(p.isOn()) p.print();
 	}
 	/**
+	 * @return the log
+	 */
+	public Stack<Log> getLog() {
+		return log;
+	}
+	/**
 	 * @return the currentHeat
 	 */
 	public int getCurrentHeat() {
