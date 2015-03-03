@@ -13,15 +13,15 @@ public class ChronoTimer1009 {
 		this.currentEvent = e;
 		this.globalTime = new Time(0);
 	}
-	public Event getCurrentEvent() {
-		return currentEvent;
-	}
 	/**
 	 * For testing purposes
 	 */
 	public ChronoTimer1009(EventType e, Time t){
 		this.currentEvent = new Event(e);
 		this.globalTime = t;
+	}
+	public Event getCurrentEvent() {
+		return currentEvent;
 	}
 	/**
 	 * Turns the system on.

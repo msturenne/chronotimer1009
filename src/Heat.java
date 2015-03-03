@@ -1,12 +1,14 @@
 import java.util.ArrayList;
 import java.util.Queue;
 
-
 public class Heat {
 
 	private ArrayList<Competitor> racers;
 	private int currentCompetitor;
 	
+	/**
+	 * Constructor
+	 */
 	public Heat(){
 		racers = new ArrayList<Competitor>();
 		currentCompetitor = 0;
@@ -15,12 +17,12 @@ public class Heat {
 	 * Set selected racer as next on to start
 	 * @param racer the racer to start next
 	 */
-	public void setNextCompetitor(int racer){}
+	public void setNextCompetitor(Competitor x){}
 	/**
 	 * Take the selected runner (the next runner) out from the race
 	 * @param racer the runner to be cleared
 	 */
-	public void clearNextCompetitor(int racer){}
+	public void clearNextCompetitor(){}
 	/**
 	 * Swaps two runners positions in line
 	 */

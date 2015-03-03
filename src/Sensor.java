@@ -2,6 +2,10 @@ public class Sensor {
 	
 	private SensorType type;
 	
+	/**
+	 * Constructor
+	 * @param type
+	 */
 	public Sensor(SensorType type){
 		this.type = type;
 	}

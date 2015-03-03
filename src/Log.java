@@ -5,55 +5,32 @@ public class Log {
 	private EventType eventType;
 	private Time elapsedTime;
 	private Time endTime;
+	private int runNum;
 	
-	
-	public Log(Time startTime, int competitorNumber, EventType eventType, Time elapsedTime, Time endTime) {
+	/**
+	 * Constructor
+	 * @param startTime
+	 * @param competitorNumber
+	 * @param eventType
+	 * @param elapsedTime
+	 * @param endTime
+	 * @param runNum
+	 */
+	public Log(Time startTime, int competitorNumber, EventType eventType, Time elapsedTime, Time endTime, int runNum) {
 		this.startTime = startTime;
 		this.competitorNumber = competitorNumber;
 		this.eventType = eventType;
 		this.elapsedTime = elapsedTime;
 		this.endTime = endTime;
-		
+		this.runNum = runNum;
 	}
 	/**
-	 * @return the timestamp
-	 */
-	public Time getTimestamp() {
-		return startTime;
-	}
-	/**
-	 * @param timestamp the timestamp to set
-	 */
-	public void setTimestamp(Time timestamp) {
-		this.startTime = timestamp;
-	}
-	/**
-	 * @param competitorNumber the competitorNumber to set
-	 */
-	public void setCompetitorNumber(int competitorNumber) {
-		this.competitorNumber = competitorNumber;
-	}
-	/**
-	 * @param eventType the eventType to set
-	 */
-	public void setEventType(EventType eventType) {
-		this.eventType = eventType;
-	}
-	/**
-	 * @param elapsedTime the elapsedTime to set
-	 */
-	public void setElapsedTime(Time elapsedTime) {
-		this.elapsedTime = elapsedTime;
-	}
-	/**
-	 * 
+	 * toString
 	 */
 	public String toString(){
 		Time x = new Time(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
-		return "Start Time: <" + startTime.toString() + ">" + " EventType: <" + eventType.toString() + ">" + 
-	" Competitor Number: <" + competitorNumber + ">" + " ElapsedTime<" + 
-				(elapsedTime.equals(x) ? "DNF" : elapsedTime.toString()) 
-				+ ">";
+		return "HEAT: " + (runNum+1) + ", ID: " + competitorNumber + ", START: " + startTime.toString() + ", " 
+				+ "EVENT: " + eventType.toString() + ", " + "RESULT: " + (elapsedTime.equals(x) ? "DNF" : elapsedTime.toString());
 	}
 }
 

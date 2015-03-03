@@ -6,6 +6,12 @@ public class Competitor {
 	private Time startTime;
 	private Time endTime;
 	
+	/**
+	 * Constructor
+	 * @param runNum
+	 * @param idNum
+	 * @param entryTime
+	 */
 	public Competitor(int runNum, int idNum, Time entryTime){
 		//initialize
 		this.runNum = runNum;
@@ -39,6 +45,12 @@ public class Competitor {
 		return endTime;
 	}
 	/**
+	 * @return the runNum
+	 */
+	public int getRunNum() {
+		return runNum;
+	}
+	/**
 	 * @param startTime the startTime to set
 	 */
 	public void setStartTime(Time startTime) {
@@ -50,6 +62,9 @@ public class Competitor {
 	public void setEndTime(Time endTime) {
 		this.endTime = endTime;
 	}
+	/**
+	 * toString()
+	 */
 	public String toString(){
 		//A version will be displayed depending on whether the competitor is still
 		//in run or has finished

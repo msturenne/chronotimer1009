@@ -5,6 +5,10 @@ public class Time {
 	int seconds;
 	int hundreths;
 	
+	/**
+	 * Constructor
+	 * @param milliseconds
+	 */
 	public Time(long milliseconds){
 		//compute hours
 		this.hours = (int)((milliseconds/(1000*60*60)) % 24);
@@ -15,7 +19,6 @@ public class Time {
 		//compute hundreths
 		this.hundreths = (int)((milliseconds/10) % 100);
 	}
-	
 	/**
 	 * For testing purposes
 	 * @param hours
@@ -58,21 +61,24 @@ public class Time {
 		return hundreths;
 	}
 	
+	/**
+	 * toString()
+	 */
 	public String toString(){
 		return "<" + getMinutes() + ":" + getSeconds() + "." + getHundreths() + ">";
 	}
 	
+	/**
+	 * Returns the time in milleseconds
+	 * @return
+	 */
 	public int getTime(){
-		int t = 0;
-		t += (int) this.hours * 1000 * 60 * 60;
-		t += (int) this.minutes * 1000 * 60;
-		t += (int) this.seconds * 1000;
-		t += (int) this.hundreths * 10;
-		
-		return t;
-
+		return (int)((this.hours * 1000 * 60 * 60)+(this.minutes * 1000 * 60)+(this.seconds * 1000)+(this.hundreths * 10));
 	}
-	
+	/**
+	 * set the time
+	 * @param milliseconds
+	 */
 	public void setTime(int milliseconds){
 		//compute hours
 		this.hours = (int)((milliseconds/(1000*60*60)) % 24);
@@ -83,18 +89,20 @@ public class Time {
 		//compute hundreths
 		this.hundreths = (int)((milliseconds/10) % 100);
 	}
-	
+	/**
+	 * Checks equality of variables
+	 * @param x
+	 * @return
+	 */
 	public boolean equals(Time x){
 		return ((this.hours == x.hours) && (this.minutes == x.minutes) && (this.seconds == x.seconds) && (this.hundreths == x.hundreths));
 	}
-	
 	/**
 	 * Given two time, computed the elapsed time
 	 */
 	public static Time elapsed(Time b, Time a){
 		if(b == null || a == null) throw new IllegalArgumentException("argument can't be null!");
-		long elapsed = b.getTime()-a.getTime();
-		return new Time(elapsed);
+		return new Time(b.getTime()-a.getTime());
 	}
 }
 

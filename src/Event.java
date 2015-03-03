@@ -20,6 +20,7 @@ public class Event {
 	 * Constructor
 	 */
 	public Event(EventType type){
+		if(type == null) throw new IllegalArgumentException();
 		//initialize
 		channels = new Channel[8];
 		for(int i=0; i<channels.length; ++i){channels[i] = new Channel(SensorType.NONE);} //creates 8 channels and disables them.
@@ -63,13 +64,6 @@ public class Event {
 		return channels[channel-1];
 	}
 	/**
-	 * Export run in XML to file
-	 * @return
-	 */
-	public File exportLogEvent(){
-		throw new UnsupportedOperationException("createRun() not yet implemented and should not be called");
-	}
-	/**
 	 * Triggers the first channel
 	 * @return the time at which the channel is triggered.
 	 */
@@ -98,7 +92,7 @@ public class Event {
 		Time elapsed = DNF;
 		if(x){elapsed = Time.elapsed(finished.getEndTime(), finished.getStartTime());}
 		//adds to the log
-		log.add(new Log(finished.getStartTime(), finished.getIdNum(), this.type, elapsed, finished.getEndTime()));
+		log.add(new Log(finished.getStartTime(), finished.getIdNum(), this.type, elapsed, finished.getEndTime(), finished.getRunNum()));
 		//tells the printer to print if on
 		if(p.isOn()) p.print();
 	}
