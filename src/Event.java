@@ -183,10 +183,8 @@ public class Event {
 		public void print(){
 			try{
 				PrintWriter fileOut = new PrintWriter (new FileWriter(outFileName, true));
-				/**
-				 * Log auxLog = log.peek();
-				 * fileOut.println(auxLog.toString);
-				 */
+				Log auxLog = log.peek();
+				fileOut.println(auxLog.toString());
 				fileOut.close();
 			}catch(IOException e){
 				System.out.println("Could not open file! " + e.getMessage() +" (No such file or directory)");
