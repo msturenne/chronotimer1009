@@ -170,7 +170,8 @@ public class Driver {
 			if(split.length > 2)
 				commandVar2 = split[2];
 		}
-		initiate(ChronoTimer1009.globalTime.getTime(), command, commandVar, commandVar2);
+		initiate(ChronoTimer1009.globalTime == null ? 0 : ChronoTimer1009.globalTime.getTime(), command, commandVar, commandVar2);
+		//initiate(ChronoTimer1009.globalTime.getTime(), command, commandVar, commandVar2);
 		
 	}
 
