@@ -9,7 +9,7 @@ public class Driver {
 	private static ChronoTimer1009 timer;
 
 	public static void main(String[] args){
-		timer = new ChronoTimer1009(new Event(EventType.IND));
+		timer = new ChronoTimer1009();
 		
 		Scanner stdIn = new Scanner(System.in);
 		String fileInName = "file.txt";
@@ -23,7 +23,7 @@ public class Driver {
 		}else if (entryType.equals("2")){
 			readCommandFile(fileInName);
 		}
-		
+		stdIn.close();
 	}
 	
 	private static int toTime(String time){
@@ -48,14 +48,14 @@ public class Driver {
 		if (command.equals("ON")){
 			powerOn = true;
 			if (timer == null){
-				timer = new ChronoTimer1009(new Event(EventType.IND));
+				timer = new ChronoTimer1009();
 			}
-			
-			timer.globalTime.setTime(time);
+			timer.on(new Event(EventType.IND));
+			ChronoTimer1009.globalTime.setTime(time);
 		}
 		
 		if (powerOn == true){
-			timer.globalTime.setTime(time);
+			ChronoTimer1009.globalTime.setTime(time);
 			
 			if(command.equals("OFF"))
 			{
@@ -63,7 +63,7 @@ public class Driver {
 			}
 			if(command.equals("TIME"))
 			{
-				timer.globalTime.setTime(Integer.parseInt(commandVar));
+				ChronoTimer1009.globalTime.setTime(Integer.parseInt(commandVar));
 			}
 			else if(command.equals("CONN"))
 			{
@@ -155,6 +155,7 @@ public class Driver {
 			System.out.println("Enter next command line ('exit' to finish):");
 			command = stdIn.nextLine();
 		}
+		stdIn.close();
 	}
 	
 	
@@ -169,7 +170,7 @@ public class Driver {
 			if(split.length > 2)
 				commandVar2 = split[2];
 		}
-		initiate(timer.globalTime.getTime(), command, commandVar, commandVar2);
+		initiate(ChronoTimer1009.globalTime.getTime(), command, commandVar, commandVar2);
 		
 	}
 

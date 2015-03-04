@@ -116,6 +116,12 @@ public class Event {
 		return p;
 	}
 	/**
+	 * @return the type
+	 */
+	public EventType getType() {
+		return type;
+	}
+	/**
 	 * The Display Class
 	 */
 	public class Display{

@@ -4,21 +4,16 @@ public class ChronoTimer1009 {
 
 	private Event currentEvent;
 	public static Time globalTime;
+	private boolean state;
 	
 	/**
 	 * Contructor
 	 * @param e current event
 	 */
-	public ChronoTimer1009(Event e){
-		this.currentEvent = e;
-		this.globalTime = new Time(0);
-	}
-	/**
-	 * For testing purposes
-	 */
-	public ChronoTimer1009(EventType e, Time t){
-		this.currentEvent = new Event(e);
-		this.globalTime = t;
+	public ChronoTimer1009(){
+		this.currentEvent = null;
+		ChronoTimer1009.globalTime = null;
+		this.state = false;
 	}
 	public Event getCurrentEvent() {
 		return currentEvent;
@@ -27,31 +22,36 @@ public class ChronoTimer1009 {
 	 * Turns the system on.
 	 * Creates an instance of an Event.
 	 */
-	public void on(){
-		throw new UnsupportedOperationException("on() not yet implemented and should not be called");
+	public void on(Event e){
+		if(!state){
+			try{
+				this.currentEvent = e;
+				ChronoTimer1009.globalTime = new Time(0);
+			}catch (Exception x){
+				reset();
+				on(this.currentEvent);
+			}
+		}
 	}
 	
 	/**
 	 * Turns the system off but the event stays active.
 	 */
 	public void off(){
-		throw new UnsupportedOperationException("off() not yet implemented and should not be called");
+		if(state) state = false;
 	}
-	
 	/**
 	 * Exit the simulator
 	 */
 	public void exit(){
-		throw new UnsupportedOperationException("exit() not yet implemented and should not be called");
+		reset(); off();
 	}
-	
 	/**
 	 * Resets the system to its initial state
 	 */
 	public void reset(){
-		throw new UnsupportedOperationException("reset() not yet implemented and should not be called");
+		this.currentEvent = new Event(this.currentEvent.getType());
 	}
-	
 	/**
 	 * Return the global time
 	 * @return global time
