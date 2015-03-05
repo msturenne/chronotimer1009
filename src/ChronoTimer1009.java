@@ -28,8 +28,9 @@ public class ChronoTimer1009 {
 				this.currentEvent = e;
 				ChronoTimer1009.globalTime = new Time(0);
 			}catch (Exception x){
-				reset();
-				on(this.currentEvent);
+				Event k = this.currentEvent;
+				reset(); //we want to reset the system but retain the current event.
+				on(k);
 			}
 		}
 	}
@@ -50,7 +51,8 @@ public class ChronoTimer1009 {
 	 * Resets the system to its initial state
 	 */
 	public void reset(){
-		this.currentEvent = new Event(this.currentEvent.getType());
+		this.currentEvent = null;
+		ChronoTimer1009.globalTime = null;
 	}
 	/**
 	 * Return the global time
