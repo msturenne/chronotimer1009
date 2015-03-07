@@ -66,7 +66,20 @@ public class Driver {
 			}
 			if(command.equals("TIME"))
 			{
-				ChronoTimer1009.globalTime.setTime(Integer.parseInt(commandVar));
+				String[] times = commandVar.split(":");
+				int hours, minutes, seconds;
+				hours = minutes = seconds = 0;
+				double hundreths = 0;
+				if(times.length > 0)
+					hours = Integer.parseInt(times[0]);
+				if(times.length > 1)
+					minutes = Integer.parseInt(times[1]);
+				if(times.length > 2)
+					seconds = Integer.parseInt(times[2]);
+				if(times.length > 3)
+					hundreths = Double.parseDouble(times[3]);
+				Time variable = new Time(hours, minutes, seconds, hundreths);
+				ChronoTimer1009.globalTime.setTime(variable.getTime());
 			}
 			else if(command.equals("CONN"))
 			{
@@ -154,8 +167,8 @@ public class Driver {
 		String command = stdIn.nextLine();
 		while(!command.equals("exit")){
 			interpretCommandLine(command);
-			
-			System.out.println("Enter next command line ('exit' to finish):");
+			if(ChronoTimer1009.globalTime != null)
+				System.out.print(ChronoTimer1009.globalTime.toString() + ": ");
 			command = stdIn.nextLine();
 		}
 		stdIn.close();
@@ -173,7 +186,7 @@ public class Driver {
 			if(split.length > 2)
 				commandVar2 = split[2];
 		}
-		initiate(ChronoTimer1009.globalTime == null ? 0 : ChronoTimer1009.globalTime.getTime(), command, commandVar, commandVar2);
+		initiate(ChronoTimer1009.globalTime == null ? 0 : ChronoTimer1009.globalTime.updateTime(), command, commandVar, commandVar2);
 		//initiate(ChronoTimer1009.globalTime.getTime(), command, commandVar, commandVar2);
 		
 	}

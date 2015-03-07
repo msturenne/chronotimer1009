@@ -3,7 +3,8 @@ public class Time {
 	int hours;
 	int minutes;
 	int seconds;
-	int hundreths;
+	double hundreths;
+	long lastMilliseconds;
 	
 	/**
 	 * Constructor
@@ -18,19 +19,20 @@ public class Time {
 		this.seconds = (int)((milliseconds/(1000)) % 60);
 		//compute hundreths
 		this.hundreths = (int)((milliseconds/10) % 100);
+		this.lastMilliseconds = System.currentTimeMillis();
 	}
 	/**
 	 * For testing purposes
 	 * @param hours
 	 * @param min
 	 * @param sec
-	 * @param hun
+	 * @param d
 	 */
-	public Time(int hours, int min, int sec, int hun){
+	public Time(int hours, int min, int sec, double d){
 		this.hours = hours;
 		this.minutes = min;
 		this.seconds = sec;
-		this.hundreths = hun;
+		this.hundreths = d;
 	}
 
 	/**
@@ -57,7 +59,7 @@ public class Time {
 	/**
 	 * @return the hundreths
 	 */
-	public int getHundreths() {
+	public double getHundreths() {
 		return hundreths;
 	}
 	
@@ -65,11 +67,11 @@ public class Time {
 	 * toString()
 	 */
 	public String toString(){
-		return "<" + getMinutes() + ":" + getSeconds() + "." + getHundreths() + ">";
+		return "<" + getHours() + ":" + getMinutes() + ":" + getSeconds() + "." + getHundreths() + ">";
 	}
 	
 	/**
-	 * Returns the time in milleseconds
+	 * Returns the time in milliseconds
 	 * @return
 	 */
 	public int getTime(){
@@ -79,7 +81,7 @@ public class Time {
 	 * set the time
 	 * @param milliseconds
 	 */
-	public void setTime(int milliseconds){
+	public void setTime(long milliseconds){
 		//compute hours
 		this.hours = (int)((milliseconds/(1000*60*60)) % 24);
 		//compute minutes
@@ -103,6 +105,11 @@ public class Time {
 	public static Time elapsed(Time b, Time a){
 		if(b == null || a == null) throw new IllegalArgumentException("argument can't be null!");
 		return new Time(b.getTime()-a.getTime());
+	}
+	public int updateTime() {
+		this.setTime(this.getTime() + System.currentTimeMillis() - this.lastMilliseconds);
+		this.lastMilliseconds = System.currentTimeMillis();
+		return this.getTime();
 	}
 }
 
