@@ -1,5 +1,3 @@
-import java.util.Date;
-
 public class ChronoTimer1009 {
 
 	private Event currentEvent;
@@ -53,12 +51,5 @@ public class ChronoTimer1009 {
 	public void reset(){
 		this.currentEvent = null;
 		ChronoTimer1009.globalTime = null;
-	}
-	/**
-	 * Return the global time
-	 * @return global time
-	 */
-	public static Date getTime(){
-		return new Date();
 	}
 }

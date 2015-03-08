@@ -92,9 +92,6 @@ public class Driver {
 			}
 			else if(command.equals("NUM"))
 			{
-				//adds new heat with individual runner ?
-				//at least that's how i think it should be
-				//set up because of what the test output is supposed to be
 				int currentHeat = timer.getCurrentEvent().getCurrentHeat();
 				timer.getCurrentEvent().getHeats().get(currentHeat).addCompetitor(new Competitor(currentHeat, Integer.parseInt(commandVar), ChronoTimer1009.globalTime));
 			}
