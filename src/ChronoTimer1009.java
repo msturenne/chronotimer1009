@@ -25,6 +25,7 @@ public class ChronoTimer1009 {
 			try{
 				this.currentEvent = e;
 				ChronoTimer1009.globalTime = new Time(0);
+				state = true;
 			}catch (Exception x){
 				Event k = this.currentEvent;
 				reset(); //we want to reset the system but retain the current event.
@@ -43,7 +44,9 @@ public class ChronoTimer1009 {
 	 * Exit the simulator
 	 */
 	public void exit(){
-		reset(); off();
+		this.currentEvent = null;
+		ChronoTimer1009.globalTime = null;
+		off();
 	}
 	/**
 	 * Resets the system to its initial state
@@ -51,5 +54,24 @@ public class ChronoTimer1009 {
 	public void reset(){
 		this.currentEvent = null;
 		ChronoTimer1009.globalTime = null;
+		off();
+		on(new Event(EventType.IND));
+	}
+	/**
+	 * Readies the system for anew event;
+	 */
+	public void newEvent(EventType x){
+		switch(x){
+			case IND: this.currentEvent = new Event(EventType.IND); break;
+			case PARIND: this.currentEvent = new Event(EventType.PARIND); break;
+			case GRP: this.currentEvent = new Event(EventType.GRP); break;
+			case PARGRP: this.currentEvent = new Event(EventType.PARGRP); break;
+		}
+	}
+	/**
+	 * @return state
+	 */
+	public boolean getState(){
+		return state;
 	}
 }

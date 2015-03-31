@@ -32,5 +32,17 @@ public class Log {
 		return "HEAT: " + (runNum+1) + ", ID: " + competitorNumber + ", START: " + startTime.toString() + ", " 
 				+ "EVENT: " + eventType.toString() + ", " + "RESULT: " + (elapsedTime.equals(x) ? "DNF" : elapsedTime.toString());
 	}
+	/**
+	 * @return elapsedTime
+	 */
+	public Time getElapsedTimer(){
+		return elapsedTime;
+	}
+	/**
+	 * @return getCompetitorNumber
+	 */
+	public int getCompetitorNumber(){
+		return competitorNumber;
+	}
 }
 

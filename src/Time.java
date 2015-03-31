@@ -34,7 +34,12 @@ public class Time {
 		this.seconds = sec;
 		this.hundreths = d;
 	}
-
+	/**
+	 * @return lastMilliseconds
+	 */
+	public long getMillis(){
+		return this.lastMilliseconds;
+	}
 	/**
 	 * @return the hours
 	 */

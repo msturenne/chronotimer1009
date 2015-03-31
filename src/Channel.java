@@ -2,13 +2,14 @@ public class Channel {
 	
 	private Sensor sensor;
 	private boolean state;
+	private boolean canTrigger;
 
 	/**
 	 * Constructor
 	 * @param type the type of sensor for this channel
 	 */
 	public Channel(SensorType type){
-		state = false; //channel initially disabled.
+		state = canTrigger = false; //channel initially disabled.
 		this.sensor = new Sensor(type);
 	}
 	/**
@@ -37,8 +38,7 @@ public class Channel {
 	 * Triggers the channel
 	 */
 	public Time triggerChannel(){
-		//long millis = ChronoTimer1009.getTime().getTime();
-		//return new Time(millis);
+		if(!state) throw new IllegalStateException("You will never see this error in the GUI");
 		return new Time(ChronoTimer1009.globalTime.getTime());
 	}
 	/**
@@ -52,5 +52,17 @@ public class Channel {
 	 */
 	public boolean getState() {
 		return state;
+	}
+	/**
+	 * @return the canTrigger
+	 */
+	public boolean isCanTrigger() {
+		return canTrigger;
+	}
+	/**
+	 * @param canTrigger the canTrigger to set
+	 */
+	public void setCanTrigger(boolean canTrigger) {
+		this.canTrigger = canTrigger;
 	}
 }

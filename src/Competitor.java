@@ -5,6 +5,7 @@ public class Competitor {
 	private Time entryTime;
 	private Time startTime;
 	private Time endTime;
+	private boolean isCompeting;
 	
 	/**
 	 * Constructor
@@ -17,8 +18,9 @@ public class Competitor {
 		this.runNum = runNum;
 		this.idNum = idNum;
 		this.entryTime = entryTime;
-		startTime = null;
-		endTime = null;
+		this.startTime = null;
+		this.endTime = null;
+		this.isCompeting = false;
 	}
 	/**
 	 * @return the idNum
@@ -61,6 +63,18 @@ public class Competitor {
 	 */
 	public void setEndTime(Time endTime) {
 		this.endTime = endTime;
+	}
+	/**
+	 * @return the isCompeting
+	 */
+	public boolean isCompeting() {
+		return isCompeting;
+	}
+	/**
+	 * @param isCompeting the isCompeting to set
+	 */
+	public void setCompeting(boolean isCompeting) {
+		this.isCompeting = isCompeting;
 	}
 	/**
 	 * toString()

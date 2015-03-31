@@ -29,8 +29,8 @@ public class Heat {
 	 * Take the selected runner (the next runner) out from the race
 	 * @param racer the runner to be cleared
 	 */
-	public void clearNextCompetitor(){
-		if(racers.size() == 0) throw new IllegalStateException("No runners to clear!");
+	public void clearNextCompetitor() throws UserErrorException {
+		if(racers.size()-(currentCompetitor)<1) throw new UserErrorException("No runners to clear!");
 		for(int i = currentCompetitor+1; i<racers.size(); ++i){
 			racers.set(i-1, racers.get(i));
 		}
@@ -40,7 +40,11 @@ public class Heat {
 	 * Swaps two runners positions in line
 	 */
 	public void swap(){
-		if(racers.size() > 1 && currentCompetitor + 1 <= racers.size()){
+		int count = 0;
+		for(Competitor x : racers){
+			if(x.getStartTime() == null) ++count;
+		}
+		if(count > 1 && currentCompetitor + 1 <= racers.size()){
 			Competitor first = racers.get(currentCompetitor);
 			Competitor second = racers.get(currentCompetitor+1);
 			racers.set(currentCompetitor, second);
@@ -51,16 +55,60 @@ public class Heat {
 	 * Add a competitor to the end of the current line of competitors if any
 	 * @param x the competitor to add
 	 */
-	public void addCompetitor(Competitor x){
-		racers.add(x);
+	public boolean addCompetitor(Competitor x) throws UserErrorException{
+		if(x.getIdNum() < 0 || x.getIdNum() > 99999) throw new UserErrorException("ID number out of range");
+		if(x.getRunNum() < 0) throw new IllegalArgumentException("Run Num Out of range");
+		boolean add = true;
+		for(Competitor i : racers){
+			if(i.getIdNum() == x.getIdNum()){
+				add = false;
+				break;
+			}
+		}
+		if(add){
+			racers.add(x);
+			
+		}
+		return add;
 	}
 	/**
 	 * Retrieve the next competitor if there is one
 	 * @return the next competitor
 	 */
-	public Competitor getNextCompetitor(){
-		if(!hasNextCompetitor()) throw new IllegalStateException("There are no more competitors!");
+	public Competitor getNextCompetitor() throws UserErrorException{
+		if(!hasNextCompetitor()) throw new UserErrorException("There are no more competitors!");
 		return racers.get(currentCompetitor++);
+	}
+	/**
+	 * used to fix the order of the queue after cancel is called
+	 */
+	public void fix(EventType x){
+		switch(x){
+		case IND: 
+			--currentCompetitor;
+		break;
+			
+		case GRP: 
+			for(int i = 0; i<racers.size(); ++i){
+				if(racers.get(i).getStartTime() == null){
+					currentCompetitor = i;
+					break;
+				}
+			}
+		break;
+			
+		case PARGRP: 
+			for(int i = 0; i<racers.size(); ++i){
+				if(racers.get(i).getStartTime() == null){
+					currentCompetitor = i;
+					break;
+				}
+			}
+		break;
+			
+		case PARIND: 
+		break;
+		}
 	}
 	/**
 	 * Is there another competitor to go?

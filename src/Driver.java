@@ -93,20 +93,43 @@ public class Driver {
 			else if(command.equals("NUM"))
 			{
 				int currentHeat = timer.getCurrentEvent().getCurrentHeat();
-				timer.getCurrentEvent().getHeats().get(currentHeat).addCompetitor(new Competitor(currentHeat, Integer.parseInt(commandVar), ChronoTimer1009.globalTime));
+				try {
+					timer.getCurrentEvent().getHeats().get(currentHeat).addCompetitor(new Competitor(currentHeat, Integer.parseInt(commandVar), ChronoTimer1009.globalTime));
+				} catch (NumberFormatException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (UserErrorException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			else if(command.equals("FIN"))
 			{
-				timer.getCurrentEvent().finish(true);
+				try {
+					timer.getCurrentEvent().finish(true);
+				} catch (UserErrorException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			else if(command.equals("START"))
 			{
-				timer.getCurrentEvent().start();
+				try {
+					timer.getCurrentEvent().start();
+				} catch (UserErrorException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			else if(command.equals("DNF"))
 			{
 				//add dnf method ?
-				timer.getCurrentEvent().finish(false);
+				try {
+					timer.getCurrentEvent().finish(false);
+				} catch (UserErrorException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			else if(command.equals("PRINT"))
 			{
