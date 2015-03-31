@@ -13,6 +13,11 @@ public class ChronoTimer1009 {
 		ChronoTimer1009.globalTime = null;
 		this.state = false;
 	}
+	public ChronoTimer1009(Event e){
+		this.currentEvent = e;
+		ChronoTimer1009.globalTime = null;
+		this.state = false;
+	}
 	public Event getCurrentEvent() {
 		return currentEvent;
 	}
