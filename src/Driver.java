@@ -64,7 +64,7 @@ public class Driver {
 			{
 				powerOn = false;
 			}
-			if(command.equals("TIME"))
+			else if(command.equals("TIME"))
 			{
 				String[] times = commandVar.split(":");
 				int hours, minutes, seconds;
@@ -150,6 +150,45 @@ public class Driver {
 			else if(command.equals("RESET"))
 			{
 				timer = null;
+			}
+			else if(command.equals("EVENT"))
+			{
+				EventType x = EventType.valueOf(commandVar);
+				timer.newEvent(x);
+			}
+			else if(command.equals("TOGGLE"))
+			{
+				timer.getCurrentEvent().getChannel(Integer.parseInt(commandVar)).toggleState();
+			}
+			else if(command.equals("TRIG"))
+			{
+				timer.getCurrentEvent().getChannel(Integer.parseInt(commandVar)).triggerChannel();
+			}
+			else if(command.equals("EXPORT"))
+			{
+				//export heats by heat #?
+				try {
+					timer.getCurrentEvent().export();
+				} catch (UserErrorException e) {
+					System.out.println(e.getMessage());
+				}
+			}
+			else if(command.equals("ENDRUN"))
+			{
+				timer.getCurrentEvent().endRun();
+			}
+			else if(command.equals("NEWRUN"))
+			{
+				try {
+					timer.getCurrentEvent().createRun();
+				} catch (UserErrorException e) {
+					System.out.println(e.getMessage());
+				}
+			}
+			
+			else if(!command.equals("ON") && !command.equals("OFF"))
+			{
+				System.out.println("Invalid Command");
 			}
 			
 		}
