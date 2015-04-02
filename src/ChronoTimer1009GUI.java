@@ -886,6 +886,7 @@ public class ChronoTimer1009GUI {
 			switch(y){
 			case EYE:
 				icon = new ImageIcon(getClass().getResource("/images/Eye_open_font_awesome.svg.png"));
+				
 				Image img = icon.getImage();  
 				Image newimg = img.getScaledInstance(15, 15,  java.awt.Image.SCALE_SMOOTH ) ;  
 				icon = new ImageIcon(newimg);
