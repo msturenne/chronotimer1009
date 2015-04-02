@@ -919,7 +919,7 @@ public class ChronoTimer1009GUI {
 			break;
 			
 			case NONE:
-				icon = new ImageIcon("/images/none.jpg.png");
+				icon = new ImageIcon(getClass().getResource("/images/none.jpg.png"));
 				Image img4 = icon.getImage();  
 				Image newimg4 = img4.getScaledInstance(15, 15,  java.awt.Image.SCALE_SMOOTH ) ;  
 				icon = new ImageIcon(newimg4);
