@@ -57,12 +57,25 @@ public class Event {
 	 * Input new heat into the system
 	 */
 	public void createRun() throws UserErrorException{
+		Time DNF = new Time(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE); //will represent a DNF 
 		if(currentHeat != -1){
 			if(runs.get(currentHeat).getRacers().isEmpty()) throw new UserErrorException("Utilize the current heat first");
 			for(Competitor x : runs.get(currentHeat).getRacers()){
-				if(x.getStartTime() == null) throw new UserErrorException("Thre are still runners in the queue");
+				if(x.getStartTime() == null){
+					x.setStartTime(new Time(0));
+					x.setEndTime(DNF);
+				}
+				//if(x.getStartTime() == null) throw new UserErrorException("Thre are still runners in the queue");
 			}
-			if(!unfinished.isEmpty()) throw new UserErrorException("Wait for competitors to finish");
+			if(!unfinished.isEmpty()){
+				/*for(Competitor x : unfinished){
+					x.setEndTime(DNF);
+					
+				}*/
+				while(!unfinished.isEmpty()){finish(false);};
+				//IMPLEMENT OTHER RACE TYPES
+				//throw new UserErrorException("Wait for competitors to finish");
+			}
 		}
 		runs.add(new Heat());
 		++currentHeat;
@@ -97,6 +110,8 @@ public class Event {
 		//check to see if this method can even be called.
 		if(getChannel(1).getState() != true || getChannel(2).getState() != true) throw new UserErrorException("The "
 				+ "start and finish channel must be enabled prior to run start!");
+		if(getChannel(1).getSensor().getType().equals(SensorType.NONE) || getChannel(2).getSensor().getType().equals(SensorType.NONE))throw new 
+		UserErrorException("Please connect sensors to all channels used");
 		//setCurrentCompetitor
 		currentCompetitor = runs.get(currentHeat).getNextCompetitor();
 		//trigger the start channel and record time in the competitors appropriate attribute
@@ -125,7 +140,7 @@ public class Event {
 		//tells the printer to print if on
 		if(p.isOn()) p.print();
 	}
-	public void triggerChannel(int channel) throws UserErrorException{
+	public void triggerChannel(int channel, boolean dnfCheck) throws UserErrorException{
 		switch(channel){
 		case 1:
 			if(this.type.equals(EventType.IND)){
@@ -133,10 +148,13 @@ public class Event {
 					start();
 				} catch (UserErrorException e) {
 					// TODO Auto-generated catch block
-					// do nothing
+					throw new UserErrorException(e.getMessage());
 				}
 			}
 			else if(this.type.equals(EventType.GRP)){
+				if(!this.getHeats().get(currentHeat).hasNextCompetitor()){
+					throw new UserErrorException("There are no competitors in the queue");
+				}
 				while(this.getHeats().get(currentHeat).hasNextCompetitor()){
 					start();
 				}
@@ -165,14 +183,17 @@ public class Event {
 			else{
 				if(channels[1].isCanTrigger()){
 					if(this.unfinishedLane1.isEmpty()) throw new UserErrorException("There are no competitors competing in Lane 1");
+					Time DNF = new Time(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE); //will represent a DNF 
 					//takes the first unfinished runner
 					Competitor finished = unfinishedLane1.remove();
 					finished.setCompeting(false);
 					//sets the endtime for the completed runner only if they finished.
-					finished.setEndTime(getChannel(2).triggerChannel());
 					//computes the elapsed time
-					Time elapsed = Time.elapsed(finished.getEndTime(), finished.getStartTime());
-					//adds to the log
+					finished.setEndTime(dnfCheck ? getChannel(2).triggerChannel() : DNF);
+					//computes the elapsed time
+					Time elapsed = DNF;
+					if(dnfCheck){elapsed = Time.elapsed(finished.getEndTime(), finished.getStartTime());}
+					//adds to the log					//adds to the log
 					log.add(new Log(finished.getStartTime(), finished.getIdNum(), this.type, elapsed, finished.getEndTime(), finished.getRunNum()));
 					//tells the printer to print if on
 					if(p.isOn()) p.print();
@@ -199,12 +220,14 @@ public class Event {
 				if(channels[3].isCanTrigger()){
 					if(this.unfinishedLane2.isEmpty()) throw new UserErrorException("There are no competitors competing in Lane 2");
 					//takes the first unfinished runner
+					Time DNF = new Time(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE); //will represent a DNF 
 					Competitor finished = unfinishedLane2.remove();
 					finished.setCompeting(false);
 					//sets the endtime for the completed runner only if they finished.
-					finished.setEndTime(getChannel(4).triggerChannel());
+					finished.setEndTime(dnfCheck ? getChannel(4).triggerChannel() : DNF);
 					//computes the elapsed time
-					Time elapsed = Time.elapsed(finished.getEndTime(), finished.getStartTime());
+					Time elapsed = DNF;
+					if(dnfCheck){elapsed = Time.elapsed(finished.getEndTime(), finished.getStartTime());}
 					//adds to the log
 					log.add(new Log(finished.getStartTime(), finished.getIdNum(), this.type, elapsed, finished.getEndTime(), finished.getRunNum()));
 					//tells the printer to print if on
@@ -232,12 +255,14 @@ public class Event {
 				if(channels[5].isCanTrigger()){
 					if(this.unfinishedLane3.isEmpty()) throw new UserErrorException("There are no competitors competing in Lane 3");
 					//takes the first unfinished runner
+					Time DNF = new Time(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE); //will represent a DNF 
 					Competitor finished = unfinishedLane3.remove();
 					finished.setCompeting(false);
 					//sets the endtime for the completed runner only if they finished.
-					finished.setEndTime(getChannel(6).triggerChannel());
+					finished.setEndTime(dnfCheck ? getChannel(6).triggerChannel() : DNF);
 					//computes the elapsed time
-					Time elapsed = Time.elapsed(finished.getEndTime(), finished.getStartTime());
+					Time elapsed = DNF;
+					if(dnfCheck){elapsed = Time.elapsed(finished.getEndTime(), finished.getStartTime());}
 					//adds to the log
 					log.add(new Log(finished.getStartTime(), finished.getIdNum(), this.type, elapsed, finished.getEndTime(), finished.getRunNum()));
 					//tells the printer to print if on
@@ -265,12 +290,14 @@ public class Event {
 				if(channels[7].isCanTrigger()){
 					if(this.unfinishedLane4.isEmpty()) throw new UserErrorException("There are no competitors competing in Lane 4");
 					//takes the first unfinished runner
+					Time DNF = new Time(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE); //will represent a DNF 
 					Competitor finished = unfinishedLane4.remove();
 					finished.setCompeting(false);
 					//sets the endtime for the completed runner only if they finished.
-					finished.setEndTime(getChannel(8).triggerChannel());
+					finished.setEndTime(dnfCheck ? getChannel(8).triggerChannel() : DNF);
 					//computes the elapsed time
-					Time elapsed = Time.elapsed(finished.getEndTime(), finished.getStartTime());
+					Time elapsed = DNF;
+					if(dnfCheck){elapsed = Time.elapsed(finished.getEndTime(), finished.getStartTime());}
 					//adds to the log
 					log.add(new Log(finished.getStartTime(), finished.getIdNum(), this.type, elapsed, finished.getEndTime(), finished.getRunNum()));
 					//tells the printer to print if on
@@ -287,10 +314,10 @@ public class Event {
 	/**
 	 * start was not valid. competitor is still in queue to start
 	 */
-	public void cancel(EventType x)throws UserErrorException{
-		Queue<Competitor> unfinishedDummy = new LinkedList<Competitor>();
+	public void cancel(EventType x, int lane)throws UserErrorException{
 		switch(x){
 		case IND: 
+			Queue<Competitor> unfinishedDummy = new LinkedList<Competitor>();
 			if(unfinished.isEmpty()) throw new UserErrorException("no runners to cancel");
 			int size = 0;
 			while(size < (unfinished.size()-1)){
@@ -306,7 +333,14 @@ public class Event {
 		
 		case GRP:
 			if(unfinished.isEmpty()) throw new UserErrorException("no runners to cancel");
-			while(!unfinished.isEmpty()){
+			boolean canRemove = true;
+			for(Competitor y : runs.get(currentHeat).getRacers()){
+				if(y.getEndTime() != null){
+					canRemove = false;
+					break;
+				}
+			}
+			while(!unfinished.isEmpty() && canRemove){
 				Competitor comp = unfinished.remove();
 				comp.setStartTime(null);
 				comp.setCompeting(false);
@@ -342,6 +376,67 @@ public class Event {
 		break;
 			
 		case PARIND: 
+			switch(lane){
+			case 1: 
+				Queue<Competitor> unfinishedDummyLane1 = new LinkedList<Competitor>();
+				if(unfinishedLane1.isEmpty()) throw new UserErrorException("no runners to cancel");
+				int sizeLane1 = 0;
+				while(sizeLane1 < (unfinishedLane1.size()-1)){
+					unfinishedDummyLane1.add(unfinishedLane1.remove());
+					++sizeLane1;
+				}
+				Competitor j1 = unfinishedLane1.remove();
+				j1.setStartTime(null);
+				j1.setCompeting(false);
+				this.unfinishedLane1 = unfinishedDummyLane1;
+				runs.get(currentHeat).fix(x);
+			break;
+			
+			case 2: 
+				Queue<Competitor> unfinishedDummyLane2 = new LinkedList<Competitor>();
+				if(unfinishedLane2.isEmpty()) throw new UserErrorException("no runners to cancel");
+				int sizeLane2 = 0;
+				while(sizeLane2 < (unfinishedLane2.size()-1)){
+					unfinishedDummyLane2.add(unfinishedLane2.remove());
+					++sizeLane2;
+				}
+				Competitor j2 = unfinishedLane1.remove();
+				j2.setStartTime(null);
+				j2.setCompeting(false);
+				this.unfinishedLane2 = unfinishedDummyLane2;
+				runs.get(currentHeat).fix(x);
+			break;
+				
+			case 3:
+				Queue<Competitor> unfinishedDummyLane3 = new LinkedList<Competitor>();
+				if(unfinishedLane3.isEmpty()) throw new UserErrorException("no runners to cancel");
+				int sizeLane3 = 0;
+				while(sizeLane3 < (unfinishedLane3.size()-1)){
+					unfinishedDummyLane3.add(unfinishedLane3.remove());
+					++sizeLane3;
+				}
+				Competitor j3 = unfinishedLane1.remove();
+				j3.setStartTime(null);
+				j3.setCompeting(false);
+				this.unfinishedLane3 = unfinishedDummyLane3;
+				runs.get(currentHeat).fix(x);
+			break;
+				
+			case 4:
+				Queue<Competitor> unfinishedDummyLane4 = new LinkedList<Competitor>();
+				if(unfinishedLane1.isEmpty()) throw new UserErrorException("no runners to cancel");
+				int sizeLane4 = 0;
+				while(sizeLane4 < (unfinishedLane4.size()-1)){
+					unfinishedDummyLane4.add(unfinishedLane4.remove());
+					++sizeLane4;
+				}
+				Competitor j4 = unfinishedLane1.remove();
+				j4.setStartTime(null);
+				j4.setCompeting(false);
+				this.unfinishedLane4 = unfinishedDummyLane4;
+				runs.get(currentHeat).fix(x);
+			break;
+			}
 		break;
 		}
 	}
@@ -353,9 +448,13 @@ public class Event {
 		exportFileName = "exportFile";
 		PrintWriter fileOut;
 		try {
-			fileOut = new PrintWriter (new FileWriter(exportFileName, true));
+			File file = new File(exportFileName);
+			if(file.exists()){file.delete(); file = new File(exportFileName);}
+
+			fileOut = new PrintWriter (new FileWriter(file, true));
 			Stack<Log> toExport = new Stack<Log>();
-			while(!log.isEmpty()){toExport.push(log.pop());}
+			Stack<Log> thisLog = (Stack<Log>) log.clone();
+			while(!thisLog.isEmpty()){toExport.push(thisLog.pop());}
 			while(!toExport.isEmpty()){
 				fileOut.println(toExport.pop().toString());
 			}

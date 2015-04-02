@@ -136,11 +136,11 @@ public class Driver {
 				//the event class will need either a printer variable that is
 				//initialized in the constructor, or a method that accesses the printer
 				//class
-				//timer.getCurrentEvent().getPrinter().print();
-				for(Log x : timer.getCurrentEvent().getLog()){
+				timer.getCurrentEvent().getPrinter().print();
+				/*for(Log x : timer.getCurrentEvent().getLog()){
 					System.out.print(x.toString());
 					System.out.println();
-				}
+				}*/
 			}
 			else if(command.equals("EXIT"))
 			{
@@ -162,7 +162,13 @@ public class Driver {
 			}
 			else if(command.equals("TRIG"))
 			{
-				timer.getCurrentEvent().getChannel(Integer.parseInt(commandVar)).triggerChannel();
+				//timer.getCurrentEvent().getChannel(Integer.parseInt(commandVar)).triggerChannel();
+				try {
+					timer.getCurrentEvent().triggerChannel(Integer.parseInt(commandVar), true);
+				} catch (UserErrorException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			else if(command.equals("EXPORT"))
 			{

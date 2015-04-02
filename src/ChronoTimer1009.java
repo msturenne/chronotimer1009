@@ -43,6 +43,7 @@ public class ChronoTimer1009 {
 	 * Turns the system off but the event stays active.
 	 */
 	public void off(){
+		reset();
 		if(state) state = false;
 	}
 	/**
@@ -59,7 +60,7 @@ public class ChronoTimer1009 {
 	public void reset(){
 		this.currentEvent = null;
 		ChronoTimer1009.globalTime = null;
-		off();
+		//off();
 		on(new Event(EventType.IND));
 	}
 	/**

@@ -23,7 +23,12 @@ public class ChronoBoundaryTest extends TestCase {
 		assertTrue(oneChannel.getState());
 		oneChannel.connectSensor(SensorType.EYE);
 		assertEquals(SensorType.EYE, oneChannel.getSensor().getType());
-		oneChannel.disconnectSensor();
+		try {
+			oneChannel.disconnectSensor();
+		} catch (UserErrorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		assertEquals(SensorType.NONE, oneChannel.getSensor().getType());
 		oneChannel.toggleState();
 		assertFalse(oneChannel.getState());

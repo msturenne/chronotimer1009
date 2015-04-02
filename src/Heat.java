@@ -39,7 +39,7 @@ public class Heat {
 	/**
 	 * Swaps two runners positions in line
 	 */
-	public void swap(){
+	public void swap() throws UserErrorException{
 		int count = 0;
 		for(Competitor x : racers){
 			if(x.getStartTime() == null) ++count;
@@ -49,6 +49,9 @@ public class Heat {
 			Competitor second = racers.get(currentCompetitor+1);
 			racers.set(currentCompetitor, second);
 			racers.set(currentCompetitor+1, first);
+		}
+		else{
+			throw new UserErrorException("Not enough competitors to swap");
 		}
 	}
 	/**
@@ -77,6 +80,7 @@ public class Heat {
 	 */
 	public Competitor getNextCompetitor() throws UserErrorException{
 		if(!hasNextCompetitor()) throw new UserErrorException("There are no more competitors!");
+		while(racers.get(currentCompetitor).isCompeting()){++currentCompetitor;}
 		return racers.get(currentCompetitor++);
 	}
 	/**
@@ -107,6 +111,12 @@ public class Heat {
 		break;
 			
 		case PARIND: 
+			for(int i = 0; i<racers.size(); ++i){
+				if(racers.get(i).getStartTime() == null){
+					currentCompetitor = i;
+					break;
+				}
+			}
 		break;
 		}
 	}

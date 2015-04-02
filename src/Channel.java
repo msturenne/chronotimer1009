@@ -30,8 +30,9 @@ public class Channel {
 	/**
 	 * Disconnects a sensor from a channel
 	 */
-	public void disconnectSensor(){
+	public void disconnectSensor() throws UserErrorException{
 		//disconnect whatever sensor is currently attached to the channel.
+		if(this.sensor.getType().equals(SensorType.NONE)) throw new UserErrorException("no sensor to disconnect");
 		this.sensor = new Sensor(SensorType.NONE);
 	}
 	/**
