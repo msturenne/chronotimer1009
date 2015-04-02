@@ -58,9 +58,7 @@ public class ChronoTimer1009 {
 	 * Resets the system to its initial state
 	 */
 	public void reset(){
-		this.currentEvent = null;
-		ChronoTimer1009.globalTime = null;
-		//off();
+		if(state) state = false;
 		on(new Event(EventType.IND));
 	}
 	/**

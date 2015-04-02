@@ -23,6 +23,14 @@ public class Event {
 	private Queue<Competitor> unfinishedLane2;
 	private Queue<Competitor> unfinishedLane3;
 	private Queue<Competitor> unfinishedLane4;
+	private Queue<Competitor> canceledLane1;
+	private Queue<Competitor> canceledLane2;
+	private Queue<Competitor> canceledLane3;
+	private Queue<Competitor> canceledLane4;
+	private boolean canCancelLane1;
+	private boolean canCancelLane2;
+	private boolean canCancelLane3;
+	private boolean canCancelLane4;
 	
 	/**
 	 * Constructor
@@ -41,6 +49,11 @@ public class Event {
 		unfinishedLane2 = new LinkedList<Competitor>();
 		unfinishedLane3 = new LinkedList<Competitor>();
 		unfinishedLane4 = new LinkedList<Competitor>();
+		canceledLane1 = new LinkedList<Competitor>();
+		canceledLane2 = new LinkedList<Competitor>();
+		canceledLane3 = new LinkedList<Competitor>();
+		canceledLane4 = new LinkedList<Competitor>();
+		canCancelLane1 = canCancelLane2 = canCancelLane3 = canCancelLane4 = false;
 		p = new Printer();
 		d = new Display();
 		exportFileName = "";
@@ -57,34 +70,31 @@ public class Event {
 	 * Input new heat into the system
 	 */
 	public void createRun() throws UserErrorException{
-		Time DNF = new Time(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE); //will represent a DNF 
-		if(currentHeat != -1){
-			if(runs.get(currentHeat).getRacers().isEmpty()) throw new UserErrorException("Utilize the current heat first");
-			for(Competitor x : runs.get(currentHeat).getRacers()){
-				if(x.getStartTime() == null){
-					x.setStartTime(new Time(0));
-					x.setEndTime(DNF);
-				}
-				//if(x.getStartTime() == null) throw new UserErrorException("Thre are still runners in the queue");
-			}
-			if(!unfinished.isEmpty()){
-				/*for(Competitor x : unfinished){
-					x.setEndTime(DNF);
-					
-				}*/
-				while(!unfinished.isEmpty()){finish(false);};
-				//IMPLEMENT OTHER RACE TYPES
-				//throw new UserErrorException("Wait for competitors to finish");
-			}
-		}
 		runs.add(new Heat());
 		++currentHeat;
 	}
 	/**
 	 * 
 	 */
-	public void endRun(){
-		for(int i = 0; i<channels.length; i++){if((channels[i]).getState() == true) channels[i].toggleState();}
+	public void endRun() throws UserErrorException{
+		EventType e = this.type;
+		for(Competitor x : runs.get(currentHeat).getRacers()){
+			if(x.getStartTime() == null){
+				x.setStartTime(new Time(0));
+			}
+		}
+		if(e.equals(EventType.IND) || e.equals(EventType.GRP)){
+			if(!unfinished.isEmpty()){while(!unfinished.isEmpty()){finish(false);};}
+		}
+		else if(e.equals(EventType.PARIND)){
+			if(!unfinishedLane1.isEmpty()){while(!unfinishedLane1.isEmpty()){triggerChannel(2, false);};}
+			if(!unfinishedLane2.isEmpty()){while(!unfinishedLane2.isEmpty()){triggerChannel(4, false);};}
+			if(!unfinishedLane3.isEmpty()){while(!unfinishedLane3.isEmpty()){triggerChannel(6, false);};}
+			if(!unfinishedLane4.isEmpty()){while(!unfinishedLane4.isEmpty()){triggerChannel(8, false);};}
+		}
+		else{ //EventType is PARGRP
+			
+		}
 	}
 	/**
 	 * 
@@ -159,12 +169,29 @@ public class Event {
 					start();
 				}
 			}
-			else{
+			else{ //EventType is PARIND or PARGRP
 				if(!getChannel(1).getState() || !getChannel(2).getState()) throw new UserErrorException("please enable the channels to be used");
-				channels[1].setCanTrigger(true);
+				if(getChannel(1).getSensor().getType().equals(SensorType.NONE) || getChannel(2).getSensor().getType().equals(SensorType.NONE)){
+					throw new UserErrorException("Please enable sensors to be used");
+				}
 				//setCurrentCompetitor
 				currentCompetitor = runs.get(currentHeat).getNextCompetitor();
+				//if this is true, throw error if found in other lane;
+				if(!currentCompetitor.equals(canceledLane1.peek())){
+					if(currentCompetitor.equals(canceledLane2.peek()) ||
+							currentCompetitor.equals(canceledLane3.peek()) ||
+							currentCompetitor.equals(canceledLane4.peek())){ 
+						runs.get(currentHeat).fix(type);
+						throw new UserErrorException("you must start this runner in "
+								+ "the lane in which it was canelled");
+					}
+				}
+				else{
+					canceledLane1.remove();
+				}
 				//trigger the start channel and record time in the competitors appropriate attribute
+				channels[1].setCanTrigger(true);
+				canCancelLane1 = true;
 				currentCompetitor.setStartTime(getChannel(1).triggerChannel());
 				currentCompetitor.setCompeting(true);
 				unfinishedLane1.add(currentCompetitor);
@@ -205,10 +232,26 @@ public class Event {
 		case 3:
 			if(this.type.equals(EventType.PARGRP) || this.type.equals(EventType.PARIND)){
 				if(!getChannel(3).getState() || !getChannel(4).getState()) throw new UserErrorException("please enable the channels to be used");
-				channels[3].setCanTrigger(true);
+				if(getChannel(3).getSensor().getType().equals(SensorType.NONE) || getChannel(4).getSensor().getType().equals(SensorType.NONE)){
+					throw new UserErrorException("Please enable sensors to be used");
+				}
 				//setCurrentCompetitor
 				currentCompetitor = runs.get(currentHeat).getNextCompetitor();
 				//trigger the start channel and record time in the competitors appropriate attribute
+				if(!currentCompetitor.equals(canceledLane2.peek())){
+					if(currentCompetitor.equals(canceledLane1.peek()) ||
+							currentCompetitor.equals(canceledLane3.peek()) ||
+							currentCompetitor.equals(canceledLane4.peek())){ 
+						runs.get(currentHeat).fix(type);
+						throw new UserErrorException("you must start this runner in "
+								+ "the lane in which it was canelled");
+					}
+				}
+				else{
+					canceledLane2.remove();
+				}
+				channels[3].setCanTrigger(true);
+				canCancelLane2 = true;
 				currentCompetitor.setStartTime(getChannel(1).triggerChannel());
 				currentCompetitor.setCompeting(true);
 				unfinishedLane2.add(currentCompetitor);
@@ -240,10 +283,26 @@ public class Event {
 		case 5:
 			if(this.type.equals(EventType.PARGRP) || this.type.equals(EventType.PARIND)){
 				if(!getChannel(5).getState() || !getChannel(6).getState()) throw new UserErrorException("please enable the channels to be used");
-				channels[5].setCanTrigger(true);
+				if(getChannel(5).getSensor().getType().equals(SensorType.NONE) || getChannel(6).getSensor().getType().equals(SensorType.NONE)){
+					throw new UserErrorException("Please enable sensors to be used");
+				}
 				//setCurrentCompetitor
 				currentCompetitor = runs.get(currentHeat).getNextCompetitor();
 				//trigger the start channel and record time in the competitors appropriate attribute
+				if(!currentCompetitor.equals(canceledLane3.peek())){
+					if(currentCompetitor.equals(canceledLane2.peek()) ||
+							currentCompetitor.equals(canceledLane1.peek()) ||
+							currentCompetitor.equals(canceledLane4.peek())){ 
+						runs.get(currentHeat).fix(type);
+						throw new UserErrorException("you must start this runner in "
+								+ "the lane in which it was canelled");
+					}
+				}
+				else{
+					canceledLane3.remove();
+				}
+				channels[5].setCanTrigger(true);
+				canCancelLane3 = true;
 				currentCompetitor.setStartTime(getChannel(1).triggerChannel());
 				currentCompetitor.setCompeting(true);
 				unfinishedLane3.add(currentCompetitor);
@@ -275,10 +334,26 @@ public class Event {
 		case 7:
 			if(this.type.equals(EventType.PARGRP) || this.type.equals(EventType.PARIND)){
 				if(!getChannel(7).getState() || !getChannel(8).getState()) throw new UserErrorException("please enable the channels to be used");
-				channels[7].setCanTrigger(true);
+				if(getChannel(7).getSensor().getType().equals(SensorType.NONE) || getChannel(8).getSensor().getType().equals(SensorType.NONE)){
+					throw new UserErrorException("Please enable sensors to be used");
+				}
 				//setCurrentCompetitor
 				currentCompetitor = runs.get(currentHeat).getNextCompetitor();
 				//trigger the start channel and record time in the competitors appropriate attribute
+				if(!currentCompetitor.equals(canceledLane4.peek())){
+					if(currentCompetitor.equals(canceledLane2.peek()) ||
+							currentCompetitor.equals(canceledLane3.peek()) ||
+							currentCompetitor.equals(canceledLane1.peek())){ 
+						runs.get(currentHeat).fix(type);
+						throw new UserErrorException("you must start this runner in "
+								+ "the lane in which it was canelled");
+					}
+				}
+				else{
+					canceledLane4.remove();
+				}
+				channels[7].setCanTrigger(true);
+				canCancelLane4 = true;
 				currentCompetitor.setStartTime(getChannel(1).triggerChannel());
 				currentCompetitor.setCompeting(true);
 				unfinishedLane4.add(currentCompetitor);
@@ -377,64 +452,88 @@ public class Event {
 			
 		case PARIND: 
 			switch(lane){
-			case 1: 
-				Queue<Competitor> unfinishedDummyLane1 = new LinkedList<Competitor>();
-				if(unfinishedLane1.isEmpty()) throw new UserErrorException("no runners to cancel");
-				int sizeLane1 = 0;
-				while(sizeLane1 < (unfinishedLane1.size()-1)){
-					unfinishedDummyLane1.add(unfinishedLane1.remove());
-					++sizeLane1;
+			case 1:
+				if(canCancelLane1){
+					Queue<Competitor> unfinishedDummyLane1 = new LinkedList<Competitor>();
+					if(unfinishedLane1.isEmpty()) throw new UserErrorException("no runners to cancel");
+					int sizeLane1 = 0;
+					while(sizeLane1 < (unfinishedLane1.size()-1)){
+						unfinishedDummyLane1.add(unfinishedLane1.remove());
+						++sizeLane1;
+					}
+					Competitor j1 = unfinishedLane1.remove();
+					j1.setStartTime(null);
+					j1.setCompeting(false);
+					//if canceled, add to canceled queue
+					canceledLane1.add(j1);
+					this.unfinishedLane1 = unfinishedDummyLane1;
+					runs.get(currentHeat).fix(x);
+					canCancelLane1 = false;
 				}
-				Competitor j1 = unfinishedLane1.remove();
-				j1.setStartTime(null);
-				j1.setCompeting(false);
-				this.unfinishedLane1 = unfinishedDummyLane1;
-				runs.get(currentHeat).fix(x);
+				else throw new UserErrorException("You can only cancel the current competitor");
 			break;
 			
 			case 2: 
-				Queue<Competitor> unfinishedDummyLane2 = new LinkedList<Competitor>();
-				if(unfinishedLane2.isEmpty()) throw new UserErrorException("no runners to cancel");
-				int sizeLane2 = 0;
-				while(sizeLane2 < (unfinishedLane2.size()-1)){
-					unfinishedDummyLane2.add(unfinishedLane2.remove());
-					++sizeLane2;
+				if(canCancelLane2){
+					Queue<Competitor> unfinishedDummyLane2 = new LinkedList<Competitor>();
+					if(unfinishedLane2.isEmpty()) throw new UserErrorException("no runners to cancel");
+					int sizeLane2 = 0;
+					while(sizeLane2 < (unfinishedLane2.size()-1)){
+						unfinishedDummyLane2.add(unfinishedLane2.remove());
+						++sizeLane2;
+					}
+					Competitor j2 = unfinishedLane2.remove();
+					j2.setStartTime(null);
+					j2.setCompeting(false);
+					//if canceled, add to canceled queue
+					canceledLane2.add(j2);
+					this.unfinishedLane2 = unfinishedDummyLane2;
+					runs.get(currentHeat).fix(x);
+					canCancelLane2 = false;
 				}
-				Competitor j2 = unfinishedLane1.remove();
-				j2.setStartTime(null);
-				j2.setCompeting(false);
-				this.unfinishedLane2 = unfinishedDummyLane2;
-				runs.get(currentHeat).fix(x);
+				else throw new UserErrorException("You can only cancel the current competitor");
 			break;
 				
 			case 3:
-				Queue<Competitor> unfinishedDummyLane3 = new LinkedList<Competitor>();
-				if(unfinishedLane3.isEmpty()) throw new UserErrorException("no runners to cancel");
-				int sizeLane3 = 0;
-				while(sizeLane3 < (unfinishedLane3.size()-1)){
-					unfinishedDummyLane3.add(unfinishedLane3.remove());
-					++sizeLane3;
+				if(canCancelLane3){
+					Queue<Competitor> unfinishedDummyLane3 = new LinkedList<Competitor>();
+					if(unfinishedLane3.isEmpty()) throw new UserErrorException("no runners to cancel");
+					int sizeLane3 = 0;
+					while(sizeLane3 < (unfinishedLane3.size()-1)){
+						unfinishedDummyLane3.add(unfinishedLane3.remove());
+						++sizeLane3;
+					}
+					Competitor j3 = unfinishedLane3.remove();
+					j3.setStartTime(null);
+					j3.setCompeting(false);
+					//if canceled, add to canceled queue
+					canceledLane3.add(j3);
+					this.unfinishedLane3 = unfinishedDummyLane3;
+					runs.get(currentHeat).fix(x);
+					canCancelLane3 = false;
 				}
-				Competitor j3 = unfinishedLane1.remove();
-				j3.setStartTime(null);
-				j3.setCompeting(false);
-				this.unfinishedLane3 = unfinishedDummyLane3;
-				runs.get(currentHeat).fix(x);
+				else throw new UserErrorException("You can only cancel the current competitor");
 			break;
 				
 			case 4:
-				Queue<Competitor> unfinishedDummyLane4 = new LinkedList<Competitor>();
-				if(unfinishedLane1.isEmpty()) throw new UserErrorException("no runners to cancel");
-				int sizeLane4 = 0;
-				while(sizeLane4 < (unfinishedLane4.size()-1)){
-					unfinishedDummyLane4.add(unfinishedLane4.remove());
-					++sizeLane4;
+				if(canCancelLane4){
+					Queue<Competitor> unfinishedDummyLane4 = new LinkedList<Competitor>();
+					if(unfinishedLane4.isEmpty()) throw new UserErrorException("no runners to cancel");
+					int sizeLane4 = 0;
+					while(sizeLane4 < (unfinishedLane4.size()-1)){
+						unfinishedDummyLane4.add(unfinishedLane4.remove());
+						++sizeLane4;
+					}
+					Competitor j4 = unfinishedLane4.remove();
+					j4.setStartTime(null);
+					j4.setCompeting(false);
+					//if canceled, add to canceled queue
+					canceledLane4.add(j4);
+					this.unfinishedLane4 = unfinishedDummyLane4;
+					runs.get(currentHeat).fix(x);
+					canCancelLane4 = false;
 				}
-				Competitor j4 = unfinishedLane1.remove();
-				j4.setStartTime(null);
-				j4.setCompeting(false);
-				this.unfinishedLane4 = unfinishedDummyLane4;
-				runs.get(currentHeat).fix(x);
+				else throw new UserErrorException("You can only cancel the current competitor");
 			break;
 			}
 		break;
@@ -463,6 +562,15 @@ public class Event {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	public Time findElapsedInLog(int idNum){
+		Time toReturn = null;
+		for(Log item : log){
+			if(item.getCompetitorNumber() == idNum){
+				toReturn = item.getElapsedTimer(); break;
+			}
+		}
+		return toReturn;
 	}
 	/**
 	 * @return the currentCompetitor
@@ -649,12 +757,24 @@ public class Event {
 				running = lane1 + "\n" + lane2 + "\n" + lane3 + "\n" + lane4;
 			}
 			
-			if(log.isEmpty()) noFinished = "\nno runners have finished";
+			finished = "";
+			boolean noRunners = true;
+			for(Competitor x : runs.get(currentHeat).getRacers()){
+				if(x.getEndTime() != null){
+					finished += "\n" + x.getIdNum() + " " + (Event.this.findElapsedInLog(x.getIdNum()).equals(max) ? "DNF" : Event.this.findElapsedInLog(x.getIdNum()).toString() + " F");
+					noRunners = false;
+				}
+			}
+			if(noRunners){noFinished = "\nno runners have finished";}
+			
+			
+			/*if(log.isEmpty()) noFinished = "\nno runners have finished";
 			else if(!log.isEmpty() && (log.size() > logSize)){
 				logSize = log.size();
 				finished += "\n" + log.peek().getCompetitorNumber() + " " + (log.peek().getElapsedTimer().equals(max) ? "DNF" : log.peek().getElapsedTimer().toString() + " F");
-			}
-			return systemTime + heatNum + eventType + printerStatus + inQueue + running + (log.isEmpty() ? noFinished : finished);
+			}*/
+			return systemTime + heatNum + eventType + printerStatus + inQueue + running + (noRunners ? noFinished : finished);
+			//return systemTime + heatNum + eventType + printerStatus + inQueue + running + (log.isEmpty() ? noFinished : finished);
 		}
 	}
 	/**

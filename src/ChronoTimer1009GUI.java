@@ -205,17 +205,16 @@ public class ChronoTimer1009GUI {
 				setupEventTypeEnabledButtons(x);
 				for(JButton y : channels){
 					y.setBackground(Color.RED);
-					try {
-						addSensorPicture(y, SensorType.NONE);
-					} catch (UserErrorException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
 				}
 				sensors.setEnabled(true);
 				discChan.setEnabled(true);
 				connChan.setEnabled(true);
-				timer.getCurrentEvent().endRun();
+				try {
+					timer.getCurrentEvent().endRun();
+				} catch (UserErrorException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				updateDisplay();
 			}
 		});
@@ -337,26 +336,12 @@ public class ChronoTimer1009GUI {
 		power.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// system is on
-				/*if(timer.getState()){
-					timer.off();
-					clockTimer.stop();
-					setEnabledSelectedButtons(keypad,false);
-					setEnabledSelectedButtons(channels, false);
-					setEnabledSelectedButtons(new JButton[]{printer, reset, new_heat, start, finish,
-							cancel, dnf, swap, manual, clear, export, add, disconnect, create, connect}, false);
-					sensors.setEnabled(false);
-					connChan.setEnabled(false);
-					discChan.setEnabled(false);
-					eventTypes.setEnabled(false);
-					idNum.setEnabled(false);
-					//updateDisplay();
-				}*
-				//system. is off
-				/*else{*/
-					if (timer == null || timer.getCurrentEvent() == null){
+				JButton button = (JButton) e.getSource();
+				button.setEnabled(false);
+				if(!timer.getState()){
+					if (timer == null){
 						timer = new ChronoTimer1009();
-						//timer.newEvent(EventType.IND);
+						timer.newEvent(EventType.IND);
 					}
 					if(timer.getCurrentEvent() == null){ //exit must have been called or this is the first time we are using the timer
 						timer.on(new Event(EventType.IND));
@@ -373,7 +358,7 @@ public class ChronoTimer1009GUI {
 					sensors.setEnabled(true);
 					connChan.setEnabled(true);
 					eventTypes.setEnabled(true);
-				//}
+				}
 			}
 		});
 		rightTop.add(power);
@@ -416,6 +401,7 @@ public class ChronoTimer1009GUI {
 				sensors.setEnabled(false);
 				idNum.setEnabled(false);
 				idNum.setText("");
+				power.setEnabled(true);
 				rightBottom.setText("");
 				error.setText("");
 			}
@@ -425,10 +411,14 @@ public class ChronoTimer1009GUI {
 		reset.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(clockTimer != null) clockTimer.stop();
 				if(timer != null){
 					timer.reset();
-					timer.getCurrentEvent().endRun();
+					try {
+						if(timer.getCurrentEvent() != null)timer.getCurrentEvent().endRun();
+					} catch (UserErrorException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 				for(JButton x : channels){
 					x.setBackground(Color.RED);
@@ -447,7 +437,6 @@ public class ChronoTimer1009GUI {
 				discChan.setEnabled(true);
 				idNum.setText("Competitor");
 				error.setText("");
-				updateDisplay();
 			}
 		});
 		rightTop.add(reset);
@@ -465,6 +454,7 @@ public class ChronoTimer1009GUI {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				try {
+					timer.getCurrentEvent().endRun();
 					timer.getCurrentEvent().createRun();
 				} catch (UserErrorException e1) {
 					// TODO Auto-generated catch block
@@ -473,6 +463,8 @@ public class ChronoTimer1009GUI {
 				sensors.setEnabled(true);
 				connect.setEnabled(true);
 				connChan.setEnabled(true);
+				disconnect.setEnabled(true);
+				discChan.setEnabled(true);
 			}
 		});
 		
@@ -492,9 +484,22 @@ public class ChronoTimer1009GUI {
 		start.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				JButton button = (JButton) e.getSource();
 				if(timer.getState()){
 					try {
 						if(timer.getCurrentEvent().getType().equals(EventType.PARGRP)){
+							button.setEnabled(false);
+							//first check for sensors enabled
+							for(JButton x : channels){
+								if(x.getBackground().equals(Color.GREEN)){
+									if(timer.getCurrentEvent().getChannel(Integer.parseInt(x.getName())).getSensor().getType().equals(SensorType.NONE) ||
+											timer.getCurrentEvent().getChannel(Integer.parseInt(x.getName())+1).getSensor().getType().equals(SensorType.NONE)){
+										start.setEnabled(true);
+										throw new UserErrorException("Please connect all sensors for all channels used");
+									}
+								}
+							}
+							//then trigger
 							for(JButton x : channels){
 								if(x.getBackground().equals(Color.GREEN)){
 									timer.getCurrentEvent().getChannel(Integer.parseInt(x.getName())+1).setCanTrigger(true);
@@ -508,11 +513,6 @@ public class ChronoTimer1009GUI {
 						cancel.setEnabled(true);
 						
 						disableSensorConnection();
-						/*connect.setEnabled(false);
-						sensors.setEnabled(false);
-						connChan.setEnabled(false);
-						discChan.setEnabled(false);
-						disconnect.setEnabled(false);*/
 					} catch (UserErrorException e1) {
 						// TODO Auto-generated catch block
 						if(canEnableSensorConnection(timer.getCurrentEvent().getType())){
@@ -545,25 +545,31 @@ public class ChronoTimer1009GUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					if(canCancel){
-						if(timer.getCurrentEvent().getType().equals(EventType.PARIND)){
-							for(int i = 1; i<channels.length; i+=2){
-								if(channels[i].getBackground().equals(Color.YELLOW)){
-									channels[i].setBackground(Color.ORANGE);
-									error.setText("Click on the blue channel to activate DNF");
-								}
-								else if(channels[i].getBackground().equals(Color.ORANGE)){
-									channels[i].setBackground(Color.YELLOW);
-								}
+					if(timer.getCurrentEvent().getType().equals(EventType.PARIND)){
+						for(int i = 1; i<channels.length; i+=2){
+							if(channels[i].getBackground().equals(Color.YELLOW)){
+								channels[i].setBackground(Color.ORANGE);
+								error.setText("Click on the orange channel to activate cancel");
+							}
+							else if(channels[i].getBackground().equals(Color.ORANGE)){
+								channels[i].setBackground(Color.YELLOW);
 							}
 						}
-						else timer.getCurrentEvent().cancel(timer.getCurrentEvent().getType(), 0);
 					}
-					else error.setText("can only cancel the current competitor");
+					else if(canCancel){
+						timer.getCurrentEvent().cancel(timer.getCurrentEvent().getType(), 0);
+					}
+					else{
+						error.setText("can only cancel the current competitor");
+					}
 					canCancel = false;
 					EventType thisEvent = timer.getCurrentEvent().getType();
 					if(thisEvent.equals(EventType.IND) || thisEvent.equals(EventType.GRP)){
 						if(canEnableSensorConnection(timer.getCurrentEvent().getType())){enableSensorConnection();}
+					}
+					if(thisEvent.equals(EventType.PARGRP)){
+						start.setEnabled(true);
+						enableSensorConnection();
 					}
 				} catch (UserErrorException e1) {
 					// TODO Auto-generated catch block
@@ -698,14 +704,36 @@ public class ChronoTimer1009GUI {
 							try {
 								timer.getCurrentEvent().triggerChannel(Integer.parseInt(button.getName()), true);
 								canCancel = true;
+								if(button.getName().equals("1") ||
+										button.getName().equals("3") ||
+										button.getName().equals("5") || 
+										button.getName().equals("7")){
+									disableSensorConnection();
+								}
+								else{ //it is a finish channel and yellow
+									if(canEnableSensorConnection(timer.getCurrentEvent().getType())) enableSensorConnection();
+								}
+								if(timer.getCurrentEvent().getType().equals(EventType.PARGRP)){
+									if(button.getName().equals("2") ||
+											button.getName().equals("4") ||
+											button.getName().equals("6") || 
+											button.getName().equals("8")){
+										if(canEnableSensorConnection(timer.getCurrentEvent().getType())) start.setEnabled(true);
+									}
+								}
 							} catch (UserErrorException e1) {
 								// TODO Auto-generated catch block
+								enableSensorConnection();
 								error.setText(e1.getMessage());
 							}
 						}
 						if(button.getBackground().equals(Color.cyan)){
 							try {
 								timer.getCurrentEvent().triggerChannel(Integer.parseInt(button.getName()), false);
+								if(canEnableSensorConnection(timer.getCurrentEvent().getType())) enableSensorConnection();
+								if(timer.getCurrentEvent().getType().equals(EventType.PARGRP)){
+									if(canEnableSensorConnection(timer.getCurrentEvent().getType())) start.setEnabled(true);
+								}
 							} catch (UserErrorException e1) {
 								// TODO Auto-generated catch block
 								error.setText(e1.getMessage());;
@@ -719,6 +747,7 @@ public class ChronoTimer1009GUI {
 								else if(button.getName().equals("6")){lane = 3;}
 								else if(button.getName().equals("8")){lane = 4;}
 								timer.getCurrentEvent().cancel(timer.getCurrentEvent().getType(), lane);
+								if(canEnableSensorConnection(timer.getCurrentEvent().getType())) enableSensorConnection();
 							} catch (UserErrorException e1) {
 								// TODO Auto-generated catch block
 								error.setText(e1.getMessage());;
@@ -828,6 +857,11 @@ public class ChronoTimer1009GUI {
 	}
 	}
 	public void changeButtonColor(JButton x){
+		if(timer.getCurrentEvent().getType().equals(EventType.PARGRP)){
+			if(manualModeEnabled){
+				return;
+			}
+		}
 		boolean change = true;
 		for(Competitor y : timer.getCurrentEvent().getHeats().get(timer.getCurrentEvent().getCurrentHeat()).getRacers()){
 			if(y.isCompeting() || manualModeEnabled){
@@ -933,11 +967,21 @@ public class ChronoTimer1009GUI {
 		break;
 		
 		case PARGRP:
-			toReturn = true;
+			for(Competitor comp : timer.getCurrentEvent().getHeats().get(timer.getCurrentEvent().getCurrentHeat()).getRacers()){
+				if(comp.isCompeting()){
+					running = true; break;
+				}
+			}
+			if(!running){toReturn = true;}
 		break;
 		
 		case PARIND:
-			toReturn = true;
+			for(Competitor comp : timer.getCurrentEvent().getHeats().get(timer.getCurrentEvent().getCurrentHeat()).getRacers()){
+				if(comp.isCompeting()){
+					running = true; break;
+				}
+			}
+			if(!running){toReturn = true;}
 		break;
 		}
 		return toReturn;

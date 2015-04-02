@@ -181,7 +181,12 @@ public class Driver {
 			}
 			else if(command.equals("ENDRUN"))
 			{
-				timer.getCurrentEvent().endRun();
+				try {
+					timer.getCurrentEvent().endRun();
+				} catch (UserErrorException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			else if(command.equals("NEWRUN"))
 			{
