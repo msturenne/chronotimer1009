@@ -252,7 +252,7 @@ public class Event {
 				}
 				channels[3].setCanTrigger(true);
 				canCancelLane2 = true;
-				currentCompetitor.setStartTime(getChannel(1).triggerChannel());
+				currentCompetitor.setStartTime(getChannel(3).triggerChannel());
 				currentCompetitor.setCompeting(true);
 				unfinishedLane2.add(currentCompetitor);
 			}
@@ -303,7 +303,7 @@ public class Event {
 				}
 				channels[5].setCanTrigger(true);
 				canCancelLane3 = true;
-				currentCompetitor.setStartTime(getChannel(1).triggerChannel());
+				currentCompetitor.setStartTime(getChannel(5).triggerChannel());
 				currentCompetitor.setCompeting(true);
 				unfinishedLane3.add(currentCompetitor);
 			}
@@ -354,7 +354,7 @@ public class Event {
 				}
 				channels[7].setCanTrigger(true);
 				canCancelLane4 = true;
-				currentCompetitor.setStartTime(getChannel(1).triggerChannel());
+				currentCompetitor.setStartTime(getChannel(7).triggerChannel());
 				currentCompetitor.setCompeting(true);
 				unfinishedLane4.add(currentCompetitor);
 			}
@@ -567,7 +567,7 @@ public class Event {
 		Time toReturn = null;
 		for(Log item : log){
 			if(item.getCompetitorNumber() == idNum){
-				toReturn = item.getElapsedTimer(); break;
+				toReturn = item.getElapsedTime(); break;
 			}
 		}
 		return toReturn;
@@ -626,20 +626,12 @@ public class Event {
 		private String inQueue;
 		private String printerStatus;
 		private String heatNum;
-		private int logSize;
-		private int queueSize;
-		private int pendingSize;
-		private int pendingSizeLane1;
-		private int pendingSizeLane2;
-		private int pendingSizeLane3;
-		private int pendingSizeLane4;
 		private String noFinished;
 		/**
 		 * Constructor
 		 */
 		public Display(){
 			running = finished = heatNum = noFinished = printerStatus = systemTime = eventType = inQueue = "";
-			logSize = queueSize = pendingSize = 0;
 		}
 		public String display(){
 			ChronoTimer1009.globalTime.updateTime();
@@ -662,7 +654,6 @@ public class Event {
 			else{
 				inQueue = "";
 				if(Event.this.type.equals(EventType.IND) || Event.this.type.equals(EventType.GRP)){
-					queueSize = z.size();
 					for(Competitor i : z){
 						boolean a = true;
 						for(Competitor j : unfinished){
@@ -672,7 +663,6 @@ public class Event {
 					}
 				}
 				else{
-					queueSize = z.size();
 					for(Competitor i : z){
 						boolean a = true;
 						for(Competitor j : unfinishedLane1){
@@ -697,7 +687,6 @@ public class Event {
 				if(unfinished.isEmpty()) running = "\nno competitors competing";
 				else{
 					running = "\n";
-					pendingSize = unfinished.size();
 					for(Competitor x : unfinished){
 						Time y = Time.elapsed(ChronoTimer1009.globalTime, x.getStartTime());
 						running += "\n" + x.getIdNum() + " <" + y.getHours() + ":" + y.getMinutes() + ":" + y.getSeconds() + ":" + y.getHundreths() + "> R";
@@ -711,7 +700,6 @@ public class Event {
 				if(unfinishedLane1.isEmpty()) lane1 = "\nLane 1 is empty";
 				else{
 					lane1 = "\nLane  1:";
-					pendingSizeLane1 = unfinishedLane1.size();
 					for(Competitor x : unfinishedLane1){
 						Time y = Time.elapsed(ChronoTimer1009.globalTime, x.getStartTime());
 						lane1 += "\n" + x.getIdNum() + " <" + y.getHours() + ":" + y.getMinutes() + ":" + y.getSeconds() + ":" + y.getHundreths() + "> R";
@@ -723,7 +711,6 @@ public class Event {
 				if(unfinishedLane2.isEmpty()) lane2 = "\nLane 2 is empty";
 				else{
 					lane2 = "\nLane 2:";
-					pendingSizeLane2 = unfinishedLane2.size();
 					for(Competitor x : unfinishedLane2){
 						Time y = Time.elapsed(ChronoTimer1009.globalTime, x.getStartTime());
 						lane2 += "\n" + x.getIdNum() + " <" + y.getHours() + ":" + y.getMinutes() + ":" + y.getSeconds() + ":" + y.getHundreths() + "> R";
@@ -735,7 +722,6 @@ public class Event {
 				if(unfinishedLane3.isEmpty()) lane3 = "\nLane 3 is empty";
 				else{
 					lane3 = "\nLane 3:";
-					pendingSizeLane3 = unfinishedLane3.size();
 					for(Competitor x : unfinishedLane3){
 						Time y = Time.elapsed(ChronoTimer1009.globalTime, x.getStartTime());
 						lane3 += "\n" + x.getIdNum() + " <" + y.getHours() + ":" + y.getMinutes() + ":" + y.getSeconds() + ":" + y.getHundreths() + "> R";
@@ -747,7 +733,6 @@ public class Event {
 				if(unfinishedLane4.isEmpty()) lane4 = "\nLane 4 is empty";
 				else{
 					lane4 = "\nLane 4:";
-					pendingSizeLane4 = unfinishedLane4.size();
 					for(Competitor x : unfinishedLane4){
 						Time y = Time.elapsed(ChronoTimer1009.globalTime, x.getStartTime());
 						lane4 += "\n" + x.getIdNum() + " <" + y.getHours() + ":" + y.getMinutes() + ":" + y.getSeconds() + ":" + y.getHundreths() + "> R";
@@ -766,15 +751,7 @@ public class Event {
 				}
 			}
 			if(noRunners){noFinished = "\nno runners have finished";}
-			
-			
-			/*if(log.isEmpty()) noFinished = "\nno runners have finished";
-			else if(!log.isEmpty() && (log.size() > logSize)){
-				logSize = log.size();
-				finished += "\n" + log.peek().getCompetitorNumber() + " " + (log.peek().getElapsedTimer().equals(max) ? "DNF" : log.peek().getElapsedTimer().toString() + " F");
-			}*/
 			return systemTime + heatNum + eventType + printerStatus + inQueue + running + (noRunners ? noFinished : finished);
-			//return systemTime + heatNum + eventType + printerStatus + inQueue + running + (log.isEmpty() ? noFinished : finished);
 		}
 	}
 	/**

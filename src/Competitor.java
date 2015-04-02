@@ -76,15 +76,4 @@ public class Competitor {
 	public void setCompeting(boolean isCompeting) {
 		this.isCompeting = isCompeting;
 	}
-	/**
-	 * toString()
-	 */
-	public String toString(){
-		//A version will be displayed depending on whether the competitor is still
-		//in run or has finished
-		if(this.endTime == null)
-			return runNum + "		" + idNum + "		....";
-		else
-			return runNum + "		" + idNum + "		" + endTime;
-	}
 }

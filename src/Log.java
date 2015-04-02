@@ -35,7 +35,7 @@ public class Log {
 	/**
 	 * @return elapsedTime
 	 */
-	public Time getElapsedTimer(){
+	public Time getElapsedTime(){
 		return elapsedTime;
 	}
 	/**
