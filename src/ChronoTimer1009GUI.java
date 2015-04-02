@@ -885,7 +885,7 @@ public class ChronoTimer1009GUI {
 		if(x.isEnabled()){
 			switch(y){
 			case EYE:
-				icon = new ImageIcon("images/Eye_open_font_awesome.svg.png");
+				icon = new ImageIcon(getClass().getResource("/images/Eye_open_font_awesome.svg.png"));
 				Image img = icon.getImage();  
 				Image newimg = img.getScaledInstance(15, 15,  java.awt.Image.SCALE_SMOOTH ) ;  
 				icon = new ImageIcon(newimg);
@@ -896,7 +896,7 @@ public class ChronoTimer1009GUI {
 			break;
 			
 			case GATE:
-				icon = new ImageIcon("images/wicket_gate.jpg");
+				icon = new ImageIcon(getClass().getResource("/images/wicket_gate.jpg"));
 				Image img2 = icon.getImage();  
 				Image newimg2 = img2.getScaledInstance(15, 15,  java.awt.Image.SCALE_SMOOTH ) ;  
 				icon = new ImageIcon(newimg2);
@@ -907,7 +907,7 @@ public class ChronoTimer1009GUI {
 			break;
 			
 			case PAD:
-				icon = new ImageIcon("images/sponge.png");
+				icon = new ImageIcon(getClass().getResource("/images/sponge.png"));
 				Image img3 = icon.getImage();  
 				Image newimg3 = img3.getScaledInstance(15, 15,  java.awt.Image.SCALE_SMOOTH ) ;  
 				icon = new ImageIcon(newimg3);
@@ -918,7 +918,7 @@ public class ChronoTimer1009GUI {
 			break;
 			
 			case NONE:
-				icon = new ImageIcon("images/none.jpg.png");
+				icon = new ImageIcon("/images/none.jpg.png");
 				Image img4 = icon.getImage();  
 				Image newimg4 = img4.getScaledInstance(15, 15,  java.awt.Image.SCALE_SMOOTH ) ;  
 				icon = new ImageIcon(newimg4);
@@ -930,7 +930,7 @@ public class ChronoTimer1009GUI {
 			}
 		}
 		else if(!x.isEnabled() && y.equals(SensorType.NONE)){
-			icon = new ImageIcon("images/none.jpg.png");
+			icon = new ImageIcon(getClass().getResource("/images/none.jpg.png"));
 			Image img4 = icon.getImage();  
 			Image newimg4 = img4.getScaledInstance(15, 15,  java.awt.Image.SCALE_SMOOTH ) ;  
 			icon = new ImageIcon(newimg4);
