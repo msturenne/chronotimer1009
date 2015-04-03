@@ -51,7 +51,7 @@ public class Driver {
 				timer = new ChronoTimer1009();
 			}
 			if(timer.getCurrentEvent() == null){ //exit must have been called or this is the first time we are using the timer
-				timer.on(new Event(EventType.IND));
+				timer.on(new Event(EventType.IND, ChronoTimer1009.channels));
 				ChronoTimer1009.globalTime.setTime(time);
 			}
 			else{timer.on(timer.getCurrentEvent());} 

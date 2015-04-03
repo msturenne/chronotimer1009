@@ -344,7 +344,7 @@ public class ChronoTimer1009GUI {
 						timer.newEvent(EventType.IND);
 					}
 					if(timer.getCurrentEvent() == null){ //exit must have been called or this is the first time we are using the timer
-						timer.on(new Event(EventType.IND));
+						timer.on(new Event(EventType.IND, ChronoTimer1009.channels));
 						ChronoTimer1009.globalTime.setTime(ChronoTimer1009.globalTime == null ? 0 : ChronoTimer1009.globalTime.updateTime());
 					}
 					else{timer.on(timer.getCurrentEvent());} 

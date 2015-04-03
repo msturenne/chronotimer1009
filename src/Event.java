@@ -35,11 +35,11 @@ public class Event {
 	/**
 	 * Constructor
 	 */
-	public Event(EventType type){
+	public Event(EventType type, Channel[] channels){
 		if(type == null) throw new IllegalArgumentException();
 		//initialize
-		channels = new Channel[8];
-		for(int i=0; i<channels.length; ++i){channels[i] = new Channel(SensorType.NONE);} //creates 8 channels and disables them.
+		this.channels = channels;
+		for(int i=0; i<channels.length; ++i){channels[i].toggleState();} //creates 8 channels and disables them.
 		runs = new ArrayList<Heat>();
 		log = new Stack<Log>();
 		//lastTrigger = null;

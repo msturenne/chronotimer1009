@@ -12,11 +12,11 @@ public class ChronoBoundaryTest extends TestCase {
 	Time time2 = null;
 	//Setup Tests
 	public void testEvents(){
-		ChronoTimer1009 timer1 = new ChronoTimer1009(new Event(EventType.IND));
+		ChronoTimer1009 timer1 = new ChronoTimer1009(new Event(EventType.IND, ChronoTimer1009.channels));
 		assertEquals(timer1.getCurrentEvent().getType(), EventType.IND);
 	}
 	public void testChannels(){
-		ChronoTimer1009 timer1 = new ChronoTimer1009(new Event(EventType.IND));
+		ChronoTimer1009 timer1 = new ChronoTimer1009(new Event(EventType.IND, ChronoTimer1009.channels));
 		Event one = timer1.getCurrentEvent();
 		Channel oneChannel = one.getChannel(1);
 		oneChannel.toggleState();
@@ -50,7 +50,7 @@ public class ChronoBoundaryTest extends TestCase {
 	}
 	//Event Tests
 	public void testStart(){
-		ChronoTimer1009 timer1 = new ChronoTimer1009(new Event(EventType.IND));
+		ChronoTimer1009 timer1 = new ChronoTimer1009(new Event(EventType.IND, ChronoTimer1009.channels));
 		Channel one = timer1.getCurrentEvent().getChannel(1); 
 		one.toggleState();
 		try{
@@ -60,7 +60,7 @@ public class ChronoBoundaryTest extends TestCase {
 		}
 	}
 	public void testStartChannelsLow(){
-		ChronoTimer1009 timer1 = new ChronoTimer1009(new Event(EventType.IND));
+		ChronoTimer1009 timer1 = new ChronoTimer1009(new Event(EventType.IND, ChronoTimer1009.channels));
 		try{
 			Channel one = timer1.getCurrentEvent().getChannel(-1);
 		}catch(Exception e){
@@ -68,7 +68,7 @@ public class ChronoBoundaryTest extends TestCase {
 		}
 	}
 	public void testStartChannelsHigh(){
-		ChronoTimer1009 timer1 = new ChronoTimer1009(new Event(EventType.IND));
+		ChronoTimer1009 timer1 = new ChronoTimer1009(new Event(EventType.IND, ChronoTimer1009.channels));
 		try{
 			Channel one = timer1.getCurrentEvent().getChannel(9);
 		}catch(Exception e){
