@@ -85,22 +85,7 @@ public class ChronoTimer1009System {
 		return channels[chan-1];
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void export(){
-		if(log.size() <= oldLogSize) return; //only execute as log changes
-		oldLogSize = log.size();
-		//TODO for the server
-		//convert the stack to a linked list
-		Stack<Log> copy = (Stack<Log>) ChronoTimer1009System.log.clone(); //is this safe?
-		Stack<Log> reversed = new Stack<Log>();
-		while(!copy.isEmpty()){reversed.push(copy.pop());}
-		LinkedList<Log> LLlog = new LinkedList<Log>();
-		while(!reversed.isEmpty()){LLlog.add(reversed.pop());}
-		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-		String json = gson.toJson(LLlog); //json is a String that holds the JSON representation of the log in the correct order
-		System.out.println(json); //for testing
-		
-		
 		//an alternative implementation is to use only covert/sent the last finished:
 		if(log.size() <= oldLogSize) return; //only execute as log changes
 		oldLogSize = log.size();

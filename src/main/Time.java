@@ -25,7 +25,7 @@ public class Time {
 		//compute hundreths
 		this.hundreths = (int)((milliseconds/10) % 100);
 		this.lastMilliseconds = System.currentTimeMillis();
-		time = this.toString();
+		time = this.toString().substring(1, this.toString().length()-1);
 	}
 	/**
 	 * @param hours
