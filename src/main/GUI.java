@@ -22,7 +22,7 @@ public class GUI extends JFrame implements ActionListener{
 	//JLabel
 	private JLabel middleTop, connSensor, discSensor;
 	//JButton
-	private final JButton channels[], keys[], connect, disconnect, exit, power, printer, reset, newHeat, start, finish, cancel, dnf, swap, manual, clear, export, add, create;
+	private final JButton channels[], keys[], connect, disconnect, exit, power, printer, reset, newHeat, start, finish, cancel, dnf, swap, manual, clear, add, create;
 	//JComboBox
 	private final JComboBox<String> connChan, discChan;
 	private final JComboBox<SensorType> sensors;
@@ -79,10 +79,9 @@ public class GUI extends JFrame implements ActionListener{
 		swap = new JButton("Swap");
 		manual = new JButton("Manual");
 		clear = new JButton("Clear");
-		export = new JButton("Export");
 		add = new JButton("add");
 		create = new JButton("create");
-		addJButtonActionListeners(new JButton[]{connect, disconnect, exit, power, printer, reset, newHeat, start, finish, cancel, dnf, swap, manual, clear, export, add, create});
+		addJButtonActionListeners(new JButton[]{connect, disconnect, exit, power, printer, reset, newHeat, start, finish, cancel, dnf, swap, manual, clear, /*export,*/ add, create});
 		addJButtonActionListeners(keys);
 		addJButtonActionListeners(channels);
 		setupChannels();
@@ -111,6 +110,7 @@ public class GUI extends JFrame implements ActionListener{
 				++resetErrorDisplay;
 				//update the display every hundreth of a second
 				updateDisplay();
+				timer.export();
 			}
 		});
 		//initialize other
@@ -125,7 +125,7 @@ public class GUI extends JFrame implements ActionListener{
 		//start off the system by disabling all button except the power
 		setEnabledSelectedJComponents(keys, false);
 		setEnabledSelectedJComponents(new JComponent[]{exit, printer, reset, newHeat, start, finish,
-				cancel, dnf, swap, manual, clear, connect, disconnect, export, add, create, eventTypes, discChan, idNum, sensors, connChan}, false);
+				cancel, dnf, swap, manual, clear, connect, disconnect, add, create, eventTypes, discChan, idNum, sensors, connChan}, false);
 		gbc.gridx = gbc.gridy = 0;
 		leftTop.add(new JLabel("New Comp"), gbc);
 		++gbc.gridx;
@@ -170,7 +170,6 @@ public class GUI extends JFrame implements ActionListener{
 		optionsGrid.add(cancel);
 		optionsGrid.add(dnf);
 		optionsGrid.add(swap);
-		optionsGrid.add(export);
 		optionsGrid.add(manual);
 		//add the channel buttons to the grid
 		channelsGrid.add(channels[0]);
@@ -250,7 +249,6 @@ public class GUI extends JFrame implements ActionListener{
 		if(btn.equals(cancel))doCancel();
 		if(btn.equals(dnf))doDNF();
 		if(btn.equals(swap))doSwap();
-		if(btn.equals(export))doExport();
 		if(btn.equals(manual))doManual();
 		if(btn.equals(power))doPower();
 		if(btn.equals(exit))doExit();
@@ -282,7 +280,7 @@ public class GUI extends JFrame implements ActionListener{
 		setEnabledSelectedJComponents(keys,false);
 		setEnabledSelectedJComponents(channels,false);
 		setEnabledSelectedJComponents(new JComponent[]{exit, printer, reset, newHeat, start, finish,
-				cancel, dnf, swap, manual, clear, export, connect, disconnect, add, create, eventTypes, connChan, discChan, discChan, sensors, idNum,}, false);
+				cancel, dnf, swap, manual, clear, connect, disconnect, add, create, eventTypes, connChan, discChan, discChan, sensors, idNum,}, false);
 		power.setEnabled(true);
 		for(JButton x : channels){setColorRed(x);}
 		idNum.setText("Competitor");
@@ -456,8 +454,6 @@ public class GUI extends JFrame implements ActionListener{
 			error.setText(e1.getMessage());
 		}
 	}
-	
-	public void doExport(){timer.export();}
 	
 	public void doManual(){
 		if(manualModeEnabled){
@@ -651,26 +647,26 @@ public class GUI extends JFrame implements ActionListener{
 	public void setupEventTypeEnabledButtons(EventType x){
 		switch(x){
 		case IND: 
-			setEnabledSelectedJComponents(new JButton[]{channels[0], export, disconnect, clear, channels[1], cancel, swap, newHeat, add, printer, reset, 
+			setEnabledSelectedJComponents(new JButton[]{channels[0], /*export,*/ disconnect, clear, channels[1], cancel, swap, newHeat, add, printer, reset, 
 					exit, create, start, finish, connect, dnf, manual}, true);
 			setEnabledSelectedJComponents(new JButton[]{channels[2], channels[3], channels[4], channels[5], channels[6], channels[7], manual}, false);
 		break;
 		
 		case PARIND:
-			setEnabledSelectedJComponents(new JButton[]{export, clear, cancel, swap, newHeat, add, printer, reset, 
+			setEnabledSelectedJComponents(new JButton[]{/*export,*/ clear, cancel, swap, newHeat, add, printer, reset, 
 					exit, create, finish, dnf, connect, disconnect, manual}, true);
 			for(JButton chan : channels){chan.setEnabled(true);}
 			setEnabledSelectedJComponents(new JButton[]{start, finish}, false);
 		break;
 		
 		case GRP: 
-			setEnabledSelectedJComponents(new JButton[]{channels[0], export, clear, channels[1], cancel, swap, newHeat, add, printer, reset, dnf, 
+			setEnabledSelectedJComponents(new JButton[]{channels[0], /*export,*/ clear, channels[1], cancel, swap, newHeat, add, printer, reset, dnf, 
 					exit, create, start, finish, disconnect, connect, manual}, true);
 			setEnabledSelectedJComponents(new JButton[]{channels[2], channels[3], channels[4], channels[5], channels[6], channels[7], manual}, false);
 		break;
 		
 		case PARGRP: 
-			setEnabledSelectedJComponents(new JButton[]{export, connect, dnf, clear, cancel, swap, newHeat, add, printer, reset, 
+			setEnabledSelectedJComponents(new JButton[]{/*export,*/ connect, dnf, clear, cancel, swap, newHeat, add, printer, reset, 
 					exit, create, finish, disconnect, manual}, true);
 			for(JButton chan : channels){chan.setEnabled(true);}
 			setEnabledSelectedJComponents(new JButton[]{ start, finish}, false);					break;

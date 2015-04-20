@@ -14,6 +14,7 @@ public class ChronoTimer1009System {
 	private static Stack<Log> log;
 	private static Printer p;
 	public static Time globalTime;
+	private int oldLogSize; //used only in this.export()
 	
 	public ChronoTimer1009System() throws UserErrorException{
 		for(int i=0; i<channels.length; ++i){channels[i] = new Channel(SensorType.NONE);}  // initialize channels
@@ -22,6 +23,7 @@ public class ChronoTimer1009System {
 		log = new Stack<Log>();
 		p = new Printer();
 		globalTime = null;
+		oldLogSize = 0;
 	}
 
 	public void newEvent(EventType e) throws UserErrorException {
@@ -85,9 +87,11 @@ public class ChronoTimer1009System {
 	
 	@SuppressWarnings("unchecked")
 	public void export(){
+		if(log.size() <= oldLogSize) return; //only execute as log changes
+		oldLogSize = log.size();
 		//TODO for the server
 		//convert the stack to a linked list
-		Stack<Log> copy = (Stack<Log>) log.clone(); //is this safe?
+		Stack<Log> copy = (Stack<Log>) ChronoTimer1009System.log.clone(); //is this safe?
 		Stack<Log> reversed = new Stack<Log>();
 		while(!copy.isEmpty()){reversed.push(copy.pop());}
 		LinkedList<Log> LLlog = new LinkedList<Log>();
@@ -95,6 +99,17 @@ public class ChronoTimer1009System {
 		Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 		String json = gson.toJson(LLlog); //json is a String that holds the JSON representation of the log in the correct order
 		System.out.println(json); //for testing
+		
+		
+		//an alternative implementation is to use only covert/sent the last finished:
+		if(log.size() <= oldLogSize) return; //only execute as log changes
+		oldLogSize = log.size();
+		//TODO for the server
+		LinkedList<Log> LLlog2 = new LinkedList<Log>();
+		if(!log.isEmpty()){LLlog2.add(log.peek());}
+		Gson gson2 = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+		String json2 = gson2.toJson(LLlog2); //json is a String that holds the JSON representation of the log in the correct order
+		System.out.println(json2); //for testing
 	}
 
 	/**
