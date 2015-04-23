@@ -1,5 +1,9 @@
 package main;
 
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.LinkedList;
 import java.util.Stack;
 
@@ -95,6 +99,53 @@ public class ChronoTimer1009System {
 		Gson gson2 = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 		String json2 = gson2.toJson(LLlog2); //json is a String that holds the JSON representation of the log in the correct order
 		System.out.println(json2); //for testing
+		/**
+		 * TODO json2 should be a json array in the following format:
+		 * 
+		   {  
+			   "runners":[  
+			      {  
+			         "place":"1",
+			         "compNum":"1",
+			         "eventType":"IND",
+			         "heatNum":"1",
+			         "elapsed":"0:0:0.83"
+			      },
+			      {  
+			         "place":"1",
+			         "compNum":"1",
+			         "eventType":"IND",
+			         "heatNum":"1",
+			         "elapsed":"0:0:0.83"
+			      }
+			   ]
+			}
+			
+			idk what the whole gson thing is doing, but the gson thing doesn't even validate as correct json :/
+			we can probably just create our own method for this,
+			especially because they should be ordered by fastest time, so like placing/rank
+		 */
+		
+		try{
+			URL site = new URL("http://7-dot-eastern-cosmos-92417.appspot.com/chronoserver");
+			HttpURLConnection conn = (HttpURLConnection) site.openConnection();
+			conn.setRequestMethod("POST");
+			conn.setDoInput(true);
+			conn.setDoOutput(true);
+			DataOutputStream out = new DataOutputStream(conn.getOutputStream());
+
+			String data = "data=" + json2;
+			out.writeBytes(data);
+			out.flush();
+			out.close();
+			System.out.println("Done sent to server");
+
+			new InputStreamReader(conn.getInputStream());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	/**
