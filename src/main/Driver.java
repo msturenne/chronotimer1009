@@ -13,7 +13,7 @@ public class Driver {
 		timer = new ChronoTimer1009System();
 		
 		Scanner stdIn = new Scanner(System.in);
-		String fileInName = "file.txt";
+		String fileInName = "test_files/";
 		String entryType;
 		
 		System.out.println("Choose the entry method:\n1- prompt\n2- file");
@@ -22,6 +22,8 @@ public class Driver {
 		if (entryType.equals("1")){
 			readPromptCommand();
 		}else if (entryType.equals("2")){
+			System.out.println("Enter the test file name (E.g. file.txt ):");
+			fileInName += stdIn.nextLine();
 			readCommandFile(fileInName);
 		}
 		stdIn.close();
@@ -47,15 +49,19 @@ public class Driver {
 		
 		
 		if (command.equals("ON")){
-			powerOn = true;
+			powerOn = true;			
 			if (timer == null){
 				timer = new ChronoTimer1009System();
+				timer.on();
+			}else if (!timer.isState()){
+				timer.on();
 			}
+			
 			if(timer.getCurEvent() == null){ //exit must have been called or this is the first time we are using the timer
 				timer.on();
 				ChronoTimer1009System.globalTime.setTime(time);
 			}
-			else{timer.on();} 
+			
 		}
 		
 		if (powerOn == true){
@@ -140,12 +146,14 @@ public class Driver {
 			}
 			else if(command.equals("EXIT"))
 			{
-				timer = null;
+				timer.exit();
+				//timer = null;
 				powerOn = false;
 			}
 			else if(command.equals("RESET"))
 			{
-				timer = null;
+				timer.reset();
+				//timer = null;
 			}
 			else if(command.equals("EVENT"))
 			{
