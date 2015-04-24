@@ -102,24 +102,71 @@ public class ChronoTimer1009System {
 		/**
 		 * TODO json2 should be a json array in the following format:
 		 * 
-		   {  
-			   "runners":[  
-			      {  
-			         "place":"1",
-			         "compNum":"1",
-			         "eventType":"IND",
-			         "heatNum":"1",
-			         "elapsed":"0:0:0.83"
-			      },
-			      {  
-			         "place":"1",
-			         "compNum":"1",
-			         "eventType":"IND",
-			         "heatNum":"1",
-			         "elapsed":"0:0:0.83"
-			      }
-			   ]
-			}
+{  
+  "heats":[  
+    {  
+      "runners":[  
+        {  
+          "place":"1",
+          "compNum":"1",
+          "elapsed":"0:0:0.83"
+        },
+        {  
+          "place":"1",
+          "compNum":"1",
+          "elapsed":"0:0:0.83"
+        }
+      ]
+    },
+    {  
+      "runners":[  
+        {  
+          "place":"1",
+          "compNum":"1",
+          "elapsed":"0:0:0.83"
+        },
+        {  
+          "place":"1",
+          "compNum":"1",
+          "elapsed":"0:0:0.83"
+        }
+      ]
+    },
+    {  
+      "runners":[  
+        {  
+          "place":"1",
+          "compNum":"1",
+          "elapsed":"0:0:0.83"
+        },
+        {  
+          "place":"1",
+          "compNum":"1",
+          "elapsed":"0:0:0.83"
+        }
+      ]
+    },
+    {  
+      "runners":[  
+        {  
+          "place":"1",
+          "compNum":"1",
+          "elapsed":"0:0:0.83"
+        },
+        {  
+          "place":"1",
+          "compNum":"1",
+          "elapsed":"0:0:0.83"
+        }
+      ]
+    }
+  ]
+}
+			so this demo json i've been using has 4 identical heats, and each heat has the two identical runners
+			and the only data the server currently uses is the place #, the bid # and the elapsed time
+			but other than that i have the server program done and css'd so we just need to send it correctly
+			formatted json arrays
+			
 			
 			idk what the whole gson thing is doing, but the gson thing doesn't even validate as correct json :/
 			we can probably just create our own method for this,
