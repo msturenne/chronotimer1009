@@ -21,7 +21,6 @@ public abstract class SingleLaneEvent extends Event {
 		if(getHeats().get(getCurHeat()).getRacers().isEmpty()) throw new UserErrorException("Utilize the current heat!");
 		for(Competitor x : getHeats().get(getCurHeat()).getRacers()){
 			if(x.getStartTime() == null){
-				//x.setStartTime(new Time(0));
 				//if runner hasn't gone yet we need to remove that runner
 				getHeats().get(getCurHeat()).remove(x);
 			}
@@ -52,13 +51,7 @@ public abstract class SingleLaneEvent extends Event {
 		Competitor finished = unfinished.remove();
 		finished.setCompeting(false);
 		//sets the endtime for the completed runner only if they finished.
-		//finished.setEndTime(dnf ? ChronoTimer1009System.getChan(2).triggerChannel() : DNF);
 		finished.setEndTime(dnf ? Time.elapsed(ChronoTimer1009System.getChan(2).triggerChannel(), finished.getStartTime()) : DNF);
-		//computes the elapsed time
-		//Time elapsed = DNF;
-		//if(dnf){elapsed = Time.elapsed(finished.getStartTime(), finished.getEndTime());}
-		//adds to the log
-		//ChronoTimer1009System.getLog().add(new Log(finished.getStartTime(), finished.getIdNum(), getType(), elapsed, finished.getEndTime(), finished.getRunNum()));
 		//tells the printer to print if on
 		if(ChronoTimer1009System.getPrinter().isOn()) ChronoTimer1009System.getPrinter().print("Event: " + getName() + " " + finished.toString());
 		ChronoTimer1009System.export();
@@ -68,9 +61,6 @@ public abstract class SingleLaneEvent extends Event {
 		//check to see if the channels are enabled
 		if(ChronoTimer1009System.getChan(1).getState() != true || ChronoTimer1009System.getChan(2).getState() != true) throw new UserErrorException("The "
 				+ "start and finish channel must be enabled prior to run start!");
-		//if channels are enabled, check to see if sensors are connected
-		/*if(ChronoTimer1009System.getChan(1).getSensor().getType().equals(SensorType.NONE) || ChronoTimer1009System.getChan(2).getSensor().getType().equals(SensorType.NONE))throw new 
-		UserErrorException("Please connect sensors to all channels used");*/
 		//setCurrentCompetitor
 		setCurComp(getHeats().get(getCurHeat()).getNextCompetitor());
 		//trigger the start channel and record time in the competitors appropriate attribute

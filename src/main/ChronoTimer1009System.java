@@ -202,14 +202,6 @@ public class ChronoTimer1009System {
             wholeIndex++;
         }
     }
-
-	/**
-	 * @return the log
-	 */
-	/*public static Stack<Log> getLog() {
-		return log;
-	}*/
-	
 	/**
 	 * @return the masterLog
 	 */

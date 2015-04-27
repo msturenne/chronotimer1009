@@ -1,5 +1,12 @@
-package main;
+package testing;
 import static org.junit.Assert.*;
+import main.Channel;
+import main.ChronoTimer1009System;
+import main.Competitor;
+import main.EventType;
+import main.SensorType;
+import main.Time;
+import main.UserErrorException;
 import junit.framework.TestCase;
 
 
