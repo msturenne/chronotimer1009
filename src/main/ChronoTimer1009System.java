@@ -47,8 +47,7 @@ public class ChronoTimer1009System {
 	public void on() throws UserErrorException{
 		if(state) throw new IllegalStateException();
 		if(this.curEvent == null){
-			this.curEvent = new IND();
-			ChronoTimer1009System.getMasterLog().add(curEvent);
+			newEvent(EventType.IND);
 		}
 		ChronoTimer1009System.globalTime = new Time(0);
 		state = true;
@@ -92,7 +91,7 @@ public class ChronoTimer1009System {
 		for(int i = ChronoTimer1009System.getMasterLog().size()-1; i >= 0; --i){
 			//iterate through each heat of each event
 			toJson += "{\"heats\":[";
-			for(int j = 0; j < ChronoTimer1009System.getMasterLog().get(i).getHeats().size(); ++j){
+			for(int j = ChronoTimer1009System.getMasterLog().get(i).getHeats().size()-1; j >= 0; --j){
 				//iterate through each competitor in each heat
 				toJson += "{\"runners\":[";
 				ArrayList<Competitor> y = new ArrayList<Competitor>();
@@ -107,10 +106,10 @@ public class ChronoTimer1009System {
 					if(k < y.size()-1) toJson += ",";
 				}
 				toJson += "]}";
-				if(j < ChronoTimer1009System.getMasterLog().get(i).getHeats().size()-1) toJson += ",";
+				if(j > 0) toJson += ",";
 			}
 			toJson += "]}";
-			if(i >= 0) toJson += ",";
+			if(i > 0) toJson += ",";
 		}
 		
 		toJson += "]}";
@@ -118,7 +117,7 @@ public class ChronoTimer1009System {
 		System.out.println(toJson);
 		
 		try{
-			URL site = new URL("http://2-dot-eastern-cosmos-92417.appspot.com/server");
+			URL site = new URL("http://5-dot-eastern-cosmos-92417.appspot.com/server");
 			HttpURLConnection conn = (HttpURLConnection) site.openConnection();
 			conn.setRequestMethod("POST");
 			conn.setDoInput(true);
