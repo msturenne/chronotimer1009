@@ -38,6 +38,15 @@ public class Heat {
 		racers.remove(racers.size()-1);
 	}
 	/**
+	 * basically a remove method
+	 * @param x
+	 */
+	public void remove(Competitor x){
+		int pos = racers.indexOf(x);
+		if(pos < 0) throw new IllegalArgumentException("runner does not exists");
+		racers.remove(pos);
+	}
+	/**
 	 * Swaps two runners positions in line
 	 */
 	public void swap() throws UserErrorException{
@@ -71,7 +80,6 @@ public class Heat {
 		}
 		if(add){
 			racers.add(x);
-			
 		}
 		return add;
 	}
@@ -115,6 +123,6 @@ public class Heat {
 	 * @return
 	 */
 	public ArrayList<Competitor> getRacers(){
-		return racers;
+		return this.racers;
 	}
 }

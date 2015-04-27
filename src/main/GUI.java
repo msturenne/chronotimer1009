@@ -14,6 +14,7 @@ import java.util.Stack;
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 
+@SuppressWarnings("serial")
 public class GUI extends JFrame implements ActionListener{
 	//ChronoTimer1009System
 	private static ChronoTimer1009System timer;
@@ -110,7 +111,6 @@ public class GUI extends JFrame implements ActionListener{
 				++resetErrorDisplay;
 				//update the display every hundreth of a second
 				updateDisplay();
-				timer.export();
 			}
 		});
 		//initialize other

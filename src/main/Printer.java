@@ -37,11 +37,12 @@ import java.io.PrintWriter;
 		/**
 		 * print the information on the top of the Log stack;
 		 */
-		public void print(){
+		public void print(String toPrint){
 			try{
 				PrintWriter fileOut = new PrintWriter (new FileWriter(outFileName, true));
-				Log auxLog = ChronoTimer1009System.getLog().peek();
-				fileOut.println(auxLog.toString());
+				//Log auxLog = ChronoTimer1009System.getLog().peek();
+				//fileOut.println(auxLog.toString());
+				fileOut.println(toPrint);
 				fileOut.close();
 			}catch(IOException e){
 				System.out.println("Could not open file! " + e.getMessage() +" (No such file or directory)");

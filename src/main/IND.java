@@ -4,7 +4,9 @@ import java.util.Queue;
 
 public class IND extends SingleLaneEvent{
 	
-	public IND() throws UserErrorException{super();}
+	public IND(String name) throws UserErrorException{super(name);}
+	
+	public IND() throws UserErrorException{super("insert name here");}
 
 	@Override
 	public void trigChan(int chan, boolean dnf) throws UserErrorException {

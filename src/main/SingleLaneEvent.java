@@ -1,15 +1,18 @@
 package main;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Vector;
 
 
 public abstract class SingleLaneEvent extends Event {
 
 	private Queue<Competitor> unfinished; //used for pending competitors.  for the purpose of multiple competitors using a 'track' at one time.
 	
-	public SingleLaneEvent() throws UserErrorException {
-		super();
+	public SingleLaneEvent(String name) throws UserErrorException {
+		super(name);
 		unfinished = new LinkedList<Competitor>();
 	}
 
@@ -18,7 +21,9 @@ public abstract class SingleLaneEvent extends Event {
 		if(getHeats().get(getCurHeat()).getRacers().isEmpty()) throw new UserErrorException("Utilize the current heat!");
 		for(Competitor x : getHeats().get(getCurHeat()).getRacers()){
 			if(x.getStartTime() == null){
-				x.setStartTime(new Time(0));
+				//x.setStartTime(new Time(0));
+				//if runner hasn't gone yet we need to remove that runner
+				getHeats().get(getCurHeat()).remove(x);
 			}
 		}
 		if(!unfinished.isEmpty()){while(!unfinished.isEmpty()){trigChan(2, false);};}
@@ -39,20 +44,24 @@ public abstract class SingleLaneEvent extends Event {
 	}
 
 	public void finish(boolean dnf) throws UserErrorException{
+
+
 		if(this.unfinished.isEmpty()) throw new UserErrorException("There are no competitors competing");
 		Time DNF = new Time(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE); //will represent a DNF 
 		//takes the first unfinished runner
 		Competitor finished = unfinished.remove();
 		finished.setCompeting(false);
 		//sets the endtime for the completed runner only if they finished.
-		finished.setEndTime(dnf ? ChronoTimer1009System.getChan(2).triggerChannel() : DNF);
+		//finished.setEndTime(dnf ? ChronoTimer1009System.getChan(2).triggerChannel() : DNF);
+		finished.setEndTime(dnf ? Time.elapsed(ChronoTimer1009System.getChan(2).triggerChannel(), finished.getStartTime()) : DNF);
 		//computes the elapsed time
-		Time elapsed = DNF;
-		if(dnf){elapsed = Time.elapsed(finished.getEndTime(), finished.getStartTime());}
+		//Time elapsed = DNF;
+		//if(dnf){elapsed = Time.elapsed(finished.getStartTime(), finished.getEndTime());}
 		//adds to the log
-		ChronoTimer1009System.getLog().add(new Log(finished.getStartTime(), finished.getIdNum(), getType(), elapsed, finished.getEndTime(), finished.getRunNum()));
+		//ChronoTimer1009System.getLog().add(new Log(finished.getStartTime(), finished.getIdNum(), getType(), elapsed, finished.getEndTime(), finished.getRunNum()));
 		//tells the printer to print if on
-		if(ChronoTimer1009System.getPrinter().isOn()) ChronoTimer1009System.getPrinter().print();
+		if(ChronoTimer1009System.getPrinter().isOn()) ChronoTimer1009System.getPrinter().print("Event: " + getName() + " " + finished.toString());
+		ChronoTimer1009System.export();
 	}
 	
 	public void start() throws UserErrorException{

@@ -10,8 +10,8 @@ public abstract class MultiLaneEvent extends Event {
 	private Queue<Competitor> canceledLane1, canceledLane2, canceledLane3, canceledLane4;
 	private boolean canCancelLane1, canCancelLane2, canCancelLane3, canCancelLane4;
 
-	public MultiLaneEvent() throws UserErrorException {
-		super();
+	public MultiLaneEvent(String name) throws UserErrorException {
+		super(name);
 		unfinishedLane1 = new LinkedList<Competitor>();
 		unfinishedLane2 = new LinkedList<Competitor>();
 		unfinishedLane3 = new LinkedList<Competitor>();
@@ -30,8 +30,11 @@ public abstract class MultiLaneEvent extends Event {
 	public void endRun() throws UserErrorException {
 		for(Competitor x : getHeats().get(getCurHeat()).getRacers()){
 			if(x.getStartTime() == null){
-				x.setStartTime(new Time(0));
+				//x.setStartTime(new Time(0));
+				//if runner hasn't gone yet we need to remove that runner
+				getHeats().get(getCurHeat()).remove(x);
 			}
+			
 		}
 		if(!unfinishedLane1.isEmpty()){while(!unfinishedLane1.isEmpty()){trigChan(2, false);};}
 		if(!unfinishedLane2.isEmpty()){while(!unfinishedLane2.isEmpty()){trigChan(4, false);};}
@@ -72,14 +75,16 @@ public abstract class MultiLaneEvent extends Event {
 			finished.setCompeting(false);
 			//sets the endtime for the completed runner only if they finished.
 			//computes the elapsed time
-			finished.setEndTime(dnf ? ChronoTimer1009System.getChan(chan).triggerChannel() : DNF);
+			//finished.setEndTime(dnf ? ChronoTimer1009System.getChan(chan).triggerChannel() : DNF);
+			finished.setEndTime(dnf ? Time.elapsed(ChronoTimer1009System.getChan(chan).triggerChannel(), finished.getStartTime()) : DNF);
 			//computes the elapsed time
-			Time elapsed = DNF;
-			if(dnf){elapsed = Time.elapsed(finished.getEndTime(), finished.getStartTime());}
+			//Time elapsed = DNF;
+			//if(dnf){elapsed = Time.elapsed(finished.getStartTime(), finished.getEndTime());}
 			//adds to the log					//adds to the log
-			ChronoTimer1009System.getLog().add(new Log(finished.getStartTime(), finished.getIdNum(), getType(), elapsed, finished.getEndTime(), finished.getRunNum()));
+			//ChronoTimer1009System.getLog().add(new Log(finished.getStartTime(), finished.getIdNum(), getType(), elapsed, finished.getEndTime(), finished.getRunNum()));
 			//tells the printer to print if on
-			if(ChronoTimer1009System.getPrinter().isOn()) ChronoTimer1009System.getPrinter().print();
+			if(ChronoTimer1009System.getPrinter().isOn()) ChronoTimer1009System.getPrinter().print("Event: " + getName() + " " + finished.toString());
+			ChronoTimer1009System.export();
 		}
 		else throw new UserErrorException("You must start this competitor first");
 	}

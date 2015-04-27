@@ -46,5 +46,11 @@ public class Log {
 	public int getCompetitorNumber(){
 		return compNum;
 	}
+	/**
+	 * @return the eventType
+	 */
+	public EventType getEventType() {
+		return eventType;
+	}
 }
 

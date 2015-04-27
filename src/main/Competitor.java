@@ -77,4 +77,13 @@ public class Competitor {
 	public void setCompeting(boolean isCompeting) {
 		this.isCompeting = isCompeting;
 	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "heat: " + getRunNum()+1 + ", ID#: " + getIdNum() + ", elapsed: " + getEndTime();
+	}
+	
 }

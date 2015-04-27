@@ -2,7 +2,7 @@ package main;
 
 import com.google.gson.annotations.Expose;
 
-public class Time {
+public class Time implements Comparable{
 	
 	private int hours;
 	private int minutes;
@@ -74,7 +74,9 @@ public class Time {
 	 * toString()
 	 */
 	public String toString(){
-		return "<" + getHours() + ":" + getMinutes() + ":" + getSeconds() + "." + getHundreths() + ">";
+		boolean isDNF = false;
+		if((this.hours == Integer.MAX_VALUE) && (this.minutes == Integer.MAX_VALUE) && (this.seconds == Integer.MAX_VALUE) && (this.hundreths == Integer.MAX_VALUE)) isDNF = true;
+		return isDNF ? "DNF" : "<" + getHours() + ":" + getMinutes() + ":" + getSeconds() + "." + getHundreths() + ">";
 	}
 	/**
 	 * Returns the time in milliseconds
@@ -116,6 +118,15 @@ public class Time {
 		this.setTime(this.getTime() + System.currentTimeMillis() - this.lastMilliseconds);
 		this.lastMilliseconds = System.currentTimeMillis();
 		return this.getTime();
+	}
+	@Override
+	public int compareTo(Object o) {
+		// TODO Auto-generated method stub
+		Time x = (Time) o;
+		int toReturn = 0;
+		if(this.getTime() < x.getTime()) toReturn = -1;
+		if(this.getTime() > x.getTime()) toReturn = 1;
+		return toReturn;
 	}
 }
 

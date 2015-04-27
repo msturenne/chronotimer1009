@@ -4,8 +4,12 @@ import java.util.Queue;
 
 public class PARGRP extends MultiLaneEvent {
 
+	public PARGRP(String name) throws UserErrorException{
+		super(name);
+	}
+	
 	public PARGRP() throws UserErrorException{
-		super();
+		super("insert name here");
 	}
 	
 	private void doCancel(int ln, Queue<Competitor> unfinishedLn){

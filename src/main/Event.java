@@ -6,14 +6,15 @@ public abstract class Event extends Display{
 	private ArrayList<Heat> heats;
 	private int curHeat; //private means only this class can modify, not the subclasses
 	private Competitor curComp;
+	private String name;
 	
-	public Event() throws UserErrorException{
+	public Event(String name) throws UserErrorException{
+		this.name = name;
 		heats = new ArrayList<Heat>();
 		curHeat = -1;
 		curComp = null;
 		createRun();
 	}
-	
 	/**
 	 * This method will be used by all EventTypes and will not change
 	 * regardless of the EventType.
@@ -22,35 +23,36 @@ public abstract class Event extends Display{
 	public void createRun() throws UserErrorException{
 		heats.add(new Heat()); ++curHeat;
 	}
-	
 	/**
 	 * @return the heats
 	 */
 	public ArrayList<Heat> getHeats() {
 		return heats;
 	}
-
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
 	/**
 	 * @return the currentHeat
 	 */
 	public int getCurHeat() {
 		return curHeat;
 	}
-	
 	/**
 	 * @return the curComp
 	 */
 	public Competitor getCurComp() {
 		return curComp;
 	}
-	
 	/**
 	 * @param curComp the curComp to set
 	 */
 	public void setCurComp(Competitor curComp) {
 		this.curComp = curComp;
 	}
-
 	/* (non-Javadoc)
 	 * @see Display#displayHeatNumber()
 	 */
@@ -69,7 +71,7 @@ public abstract class Event extends Display{
 		boolean noRunners = true;
 		for(Competitor x : getHeats().get(getCurHeat()).getRacers()){
 			if(x.getEndTime() != null){
-				toReturn += "\n" + x.getIdNum() + " " + (ChronoTimer1009System.searchElapsedByID(x.getIdNum()).equals(new Time(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE)) ? "DNF" : ChronoTimer1009System.searchElapsedByID(x.getIdNum()).toString() + " F");
+				toReturn += "\n" + x.getIdNum() + " " + x.getEndTime().toString() + " F";
 				noRunners = false;
 			}
 		}
