@@ -69,7 +69,7 @@ public class Heat {
 	 * @param x the competitor to add
 	 */
 	public boolean addCompetitor(Competitor x) throws UserErrorException{
-		if(x.getIdNum() < 0 || x.getIdNum() > 99999) throw new UserErrorException("ID number out of range");
+		if(x.getIdNum() < 1 || x.getIdNum() > 99999) throw new UserErrorException("ID number out of range");
 		if(x.getRunNum() < 0) throw new IllegalArgumentException("Run Num Out of range");
 		boolean add = true;
 		for(Competitor i : racers){

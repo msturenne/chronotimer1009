@@ -62,7 +62,7 @@ public class GUI extends JFrame implements ActionListener{
 		discSensor = new JLabel("Disc Sensor");
 		setupJLabels();
 		//initialize & setup JButton
-		keys = new JButton[10]; for(int i=0;i<keys.length;++i){keys[i] = new JButton(String.valueOf(i+1));keys[i].setName(String.valueOf(i+1));}
+		keys = new JButton[10]; for(int i=0;i<keys.length;++i){keys[i] = new JButton(String.valueOf((i+1)%10));keys[i].setName(String.valueOf((i+1)%10));}
 		channels = new JButton[8]; for(int i = 0; i<channels.length; ++i){channels[i] = new JButton("CHAN" + (i+1));}
 		connect = new JButton("Connect");
 		disconnect = new JButton("Disconnect");
@@ -97,8 +97,19 @@ public class GUI extends JFrame implements ActionListener{
 		idNum = new JTextField("Competitor");
 		//initialize Timer
 		clockTimer = new Timer(10, new ActionListener(){
+			Color[] colors = {Color.PINK, Color.CYAN, Color.GREEN, Color.BLUE, Color.LIGHT_GRAY, Color.MAGENTA, Color.ORANGE, Color.YELLOW};
+			int i = 0;
+			int backgroundTimer = 200;
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				//lets make the background change color every second
+				if(backgroundTimer == 0){
+					setBackground(new JPanel[]{parentPanel, parentLeft, leftTop, leftBottom, parentMiddle, middleGridParent, optionsGrid, channelsGrid, parentRight, rightTop}, colors[i%colors.length]);
+					++i;
+					backgroundTimer = 200;
+					
+				}
+				--backgroundTimer;
 				//update the display every hundreth of a second
 				updateDisplay();
 			}
@@ -110,6 +121,7 @@ public class GUI extends JFrame implements ActionListener{
 		//CREATE GUI
 		this.setTitle("ChronoTimer1009");
 		this.setSize(1200, 400);
+		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		for(int i=0;i<keys.length;++i){leftBottom.add(keys[i]);}
 		//start off the system by disabling all button except the power
@@ -200,8 +212,8 @@ public class GUI extends JFrame implements ActionListener{
 		this.setVisible(true);
 	}
 	//setup JPanel methods
-	public void setupJPanels(){setBackground(new JPanel[]{parentLeft, leftTop, leftBottom, parentMiddle, middleGridParent, optionsGrid, channelsGrid, parentRight, rightTop});}
-	public void setBackground(JPanel[] x){for(JPanel y : x)y.setBackground(Color.DARK_GRAY);}
+	public void setupJPanels(){setBackground(new JPanel[]{parentLeft, leftTop, leftBottom, parentMiddle, middleGridParent, optionsGrid, channelsGrid, parentRight, rightTop}, Color.DARK_GRAY);}
+	public void setBackground(JPanel[] x, Color c){for(JPanel y : x)y.setBackground(c);}
 	//setup JLabel methods
 	public void setupJLabels(){middleTop.setFont(new Font("Bazooka", Font.PLAIN, 36));middleTop.setForeground(Color.WHITE);}
 	//setup Channels
@@ -209,12 +221,7 @@ public class GUI extends JFrame implements ActionListener{
 		for(int i = 0; i<channels.length; ++i){
 			channels[i].setEnabled(false);
 			setColorRed(channels[i]);
-			try {
-				addSensorPicture(channels[i], SensorType.NONE);
-			} catch (UserErrorException e2) {
-				// TODO Auto-generated catch block
-				e2.printStackTrace();
-			}
+			addSensorPicture(channels[i], SensorType.NONE);
 			channels[i].setName(String.valueOf(i+1));
 		}
 	}
@@ -299,12 +306,7 @@ public class GUI extends JFrame implements ActionListener{
 	public void resetChannels(){
 		for(JButton x : channels){
 			x.setBackground(Color.RED);
-			try {
-				addSensorPicture(x, SensorType.NONE);
-			} catch (UserErrorException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			addSensorPicture(x, SensorType.NONE);
 		}
 	}
 	
@@ -486,6 +488,7 @@ public class GUI extends JFrame implements ActionListener{
 		else{
 			JOptionPane.showMessageDialog(this, "Not a valid competitor number!", "ERROR", JOptionPane.ERROR_MESSAGE);
 			idNum.setText("Not Valid");
+			idNumText = "";
 		}
 	}
 	
@@ -526,13 +529,8 @@ public class GUI extends JFrame implements ActionListener{
 		if(selectedChannel.equals("Chan 6")) parameter = 6;
 		if(selectedChannel.equals("Chan 7")) parameter = 7;
 		if(selectedChannel.equals("Chan 8")) parameter = 8;
-		try {
-			addSensorPicture(channels[parameter-1], selectedSensor);
-			ChronoTimer1009System.getChan(parameter).connectSensor(selectedSensor);
-		} catch (UserErrorException e1) {
-			// TODO Auto-generated catch block
-			JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
-		}
+		addSensorPicture(channels[parameter-1], selectedSensor);
+		ChronoTimer1009System.getChan(parameter).connectSensor(selectedSensor);
 	}
 	
 	public void doDiscSensor(){
@@ -549,6 +547,8 @@ public class GUI extends JFrame implements ActionListener{
 		try {
 			addSensorPicture(channels[parameter-1], SensorType.NONE);
 			ChronoTimer1009System.getChan(parameter).disconnectSensor();
+			if(ChronoTimer1009System.getChan(parameter).getState()) ChronoTimer1009System.getChan(parameter).toggleState();
+			setColorRed(channels[parameter-1]);
 		} catch (UserErrorException e1) {
 			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -677,7 +677,7 @@ public class GUI extends JFrame implements ActionListener{
 			if(!x.getBackground().equals(Color.YELLOW)){
 				if(x.getBackground().equals(Color.RED)){
 					if(ChronoTimer1009System.getChan(Integer.parseInt(x.getName())).getSensor().getType().equals(SensorType.NONE))
-						throw new UserErrorException("Your must connect a sensor before enabling the sensor!");
+						throw new UserErrorException("Connect a Sensor");
 					else x.setBackground(Color.GREEN);
 				}
 				else x.setBackground(Color.RED);
@@ -697,8 +697,11 @@ public class GUI extends JFrame implements ActionListener{
 		btn.setIcon(icon);
 	}
 	
-	public void addSensorPicture(JButton x, SensorType y) throws UserErrorException{
-		if(x.isEnabled()){
+	public void addSensorPicture(JButton x, SensorType y){
+		if(!x.isEnabled() && y.equals(SensorType.NONE)){
+			doAddPicture("/images/none.jpg.png", x);
+		}
+		else{
 			switch(y){
 			case EYE:
 				doAddPicture("/images/Eye_open_font_awesome.svg.png", x);
@@ -717,10 +720,6 @@ public class GUI extends JFrame implements ActionListener{
 			break;
 			}
 		}
-		else if(!x.isEnabled() && y.equals(SensorType.NONE)){
-			doAddPicture("/images/none.jpg.png", x);
-		}
-		else if(!x.isEnabled())	throw new UserErrorException("this channel is not enabled");
 	}
 	
 	public void updateDisplay(){
