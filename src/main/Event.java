@@ -6,10 +6,8 @@ public abstract class Event extends Display{
 	private ArrayList<Heat> heats;
 	private int curHeat; //private means only this class can modify, not the subclasses
 	private Competitor curComp;
-	private String name;
 	
-	public Event(String name) throws UserErrorException{
-		this.name = name;
+	public Event() throws UserErrorException{
 		heats = new ArrayList<Heat>();
 		curHeat = -1;
 		curComp = null;
@@ -28,12 +26,6 @@ public abstract class Event extends Display{
 	 */
 	public ArrayList<Heat> getHeats() {
 		return heats;
-	}
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
 	}
 	/**
 	 * @return the currentHeat

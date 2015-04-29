@@ -11,8 +11,7 @@ public abstract class SingleLaneEvent extends Event {
 
 	private Queue<Competitor> unfinished; //used for pending competitors.  for the purpose of multiple competitors using a 'track' at one time.
 	
-	public SingleLaneEvent(String name) throws UserErrorException {
-		super(name);
+	public SingleLaneEvent() throws UserErrorException {
 		unfinished = new LinkedList<Competitor>();
 	}
 
@@ -53,7 +52,7 @@ public abstract class SingleLaneEvent extends Event {
 		//sets the endtime for the completed runner only if they finished.
 		finished.setEndTime(dnf ? Time.elapsed(ChronoTimer1009System.getChan(2).triggerChannel(), finished.getStartTime()) : DNF);
 		//tells the printer to print if on
-		if(ChronoTimer1009System.getPrinter().isOn()) ChronoTimer1009System.getPrinter().print("Event: " + getName() + " " + finished.toString());
+		if(ChronoTimer1009System.getPrinter().isOn()) ChronoTimer1009System.getPrinter().print(finished.toString());
 		ChronoTimer1009System.export();
 	}
 	

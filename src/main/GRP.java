@@ -1,13 +1,7 @@
 package main;
 public class GRP extends SingleLaneEvent{
-
-	public GRP(String name) throws UserErrorException {
-		super(name);
-	}
 	
-	public GRP() throws UserErrorException {
-		super("insert name here");
-	}
+	public GRP() throws UserErrorException {super();}
 
 	@Override
 	public void cancel(int ln) throws UserErrorException {

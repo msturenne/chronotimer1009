@@ -4,14 +4,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class PARIND extends MultiLaneEvent{
-
-	public PARIND(String name) throws UserErrorException{
-		super(name);
-	}
 	
-	public PARIND() throws UserErrorException{
-		super("insert name here");
-	}
+	public PARIND() throws UserErrorException{super();}
 	
 	private boolean doCancel(int ln, boolean canCancelLn, Queue<Competitor> canceledLn, Queue<Competitor> unfinishedLane) throws UserErrorException{
 		if(!canCancelLn) throw new UserErrorException("You can only cancel the current competitor");

@@ -30,7 +30,6 @@ public class GUI extends JFrame implements ActionListener{
 	private final JComboBox<EventType> eventTypes;
 	//JTextArea
 	private JTextArea console;
-	private JTextArea error;
 	//JScrollPane
 	private JScrollPane consoleScrollPane;
 	//Timer
@@ -41,7 +40,6 @@ public class GUI extends JFrame implements ActionListener{
 	private final GridBagConstraints gbc;
 	private boolean manualModeEnabled, canCancel;
 	private String idNumText = "";
-	int resetErrorDisplay;
 	
 	public GUI() throws UserErrorException{
 		//initialize ChronoTimer1009system
@@ -93,22 +91,14 @@ public class GUI extends JFrame implements ActionListener{
 		discChan = new JComboBox<String>(new String[]{"Chan 1", "Chan 2", "Chan 3", "Chan 4", "Chan 5", "Chan 6", "Chan 7", "Chan 8"});
 		//initialize JTextArea
 		console = new JTextArea(15,15);
-		error = new JTextArea(2,15);
 		//initialize JScrollPane
 		consoleScrollPane = new JScrollPane(console, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		//initialize JTextField
 		idNum = new JTextField("Competitor");
 		//initialize Timer
 		clockTimer = new Timer(10, new ActionListener(){
-			int resetErrorDisplay = 0;
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//only show error messages for 5 seconds
-				if(resetErrorDisplay == 500){
-					error.setText("");
-					resetErrorDisplay = 0;
-				}
-				++resetErrorDisplay;
 				//update the display every hundreth of a second
 				updateDisplay();
 			}
@@ -161,8 +151,6 @@ public class GUI extends JFrame implements ActionListener{
 		rightTop.add(exit);
 		rightTop.add(reset);
 		console.setEditable(false);
-		error.setLineWrap(true);
-		error.setEditable(false);
 		optionsGrid.add(newHeat);
 		optionsGrid.add(clear);
 		optionsGrid.add(start);
@@ -202,8 +190,6 @@ public class GUI extends JFrame implements ActionListener{
 		parentLeft.add(leftBottom, gbc);
 		gbc.gridheight = 1;
 		parentRight.add(rightTop, gbc);
-		++gbc.gridy;
-		parentRight.add(error, gbc);
 		++gbc.gridy;
 		gbc.gridheight = 2;
 		//the following two lines of code will eliminate the jitter cause by updating the text every hundreth of a second
@@ -285,7 +271,6 @@ public class GUI extends JFrame implements ActionListener{
 		for(JButton x : channels){setColorRed(x);}
 		idNum.setText("Competitor");
 		console.setText("");
-		error.setText("");
 	}
 	
 	public void doReset(){
@@ -305,7 +290,6 @@ public class GUI extends JFrame implements ActionListener{
 		}}
 		setEnabledSelectedJComponents(new JComponent[]{connect, connChan, sensors, disconnect, discChan}, true);
 		idNum.setText("Competitor");
-		error.setText("");
 	}
 	
 	public void doPrinter(){
@@ -330,7 +314,7 @@ public class GUI extends JFrame implements ActionListener{
 			timer.getCurEvent().createRun();
 		} catch (UserErrorException e1) {
 			// TODO Auto-generated catch block
-			error.setText(e1.getMessage());
+			JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 		setEnabledSelectedJComponents(new JComponent[]{sensors, connect, connChan, disconnect, discChan}, true);
 	}
@@ -340,7 +324,7 @@ public class GUI extends JFrame implements ActionListener{
 			timer.getCurEvent().getHeats().get(timer.getCurEvent().getCurHeat()).clearNextCompetitor();
 		} catch (UserErrorException e1) {
 			// TODO Auto-generated catch block
-			error.setText(e1.getMessage());
+			JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -374,7 +358,7 @@ public class GUI extends JFrame implements ActionListener{
 			if(canEnableSensorConnection()){
 				enableSensorConnection();
 			}
-			error.setText(e1.getMessage());
+			JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -385,7 +369,7 @@ public class GUI extends JFrame implements ActionListener{
 			if(canEnableSensorConnection()){enableSensorConnection();}
 		} catch (UserErrorException e1) {
 			// TODO Auto-generated catch block
-			error.setText(e1.getMessage());
+			JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -395,7 +379,7 @@ public class GUI extends JFrame implements ActionListener{
 				for(int i = 1; i<channels.length; i+=2){
 					if(channels[i].getBackground().equals(Color.YELLOW)){
 						channels[i].setBackground(Color.ORANGE);
-						error.setText("Click on the orange channel to activate cancel");
+						JOptionPane.showMessageDialog(this, "Click on the orange channel to activate cancel", "WARNING", JOptionPane.WARNING_MESSAGE);
 					}
 					else if(channels[i].getBackground().equals(Color.ORANGE)){
 						channels[i].setBackground(Color.YELLOW);
@@ -406,7 +390,7 @@ public class GUI extends JFrame implements ActionListener{
 				timer.getCurEvent().cancel(1);
 			}
 			else{
-				error.setText("can only cancel the current competitor");
+				JOptionPane.showMessageDialog(this, "You can only cancel the current competitor!", "ERROR", JOptionPane.ERROR_MESSAGE);
 			}
 			canCancel = false;
 			EventType thisEvent = timer.getCurEvent().getType();
@@ -419,7 +403,7 @@ public class GUI extends JFrame implements ActionListener{
 			}
 		} catch (UserErrorException e1) {
 			// TODO Auto-generated catch block
-			error.setText(e1.getMessage());
+			JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -433,7 +417,7 @@ public class GUI extends JFrame implements ActionListener{
 				for(int i = 1; i<channels.length; i+=2){
 					if(channels[i].getBackground().equals(Color.YELLOW)){
 						channels[i].setBackground(Color.cyan);
-						error.setText("Click on the blue channel to activate DNF");
+						JOptionPane.showMessageDialog(this, "Click on the blue channel to activate DNF", "WARNING", JOptionPane.WARNING_MESSAGE);
 					}
 					else if(channels[i].getBackground().equals(Color.cyan)){
 						channels[i].setBackground(Color.YELLOW);
@@ -442,7 +426,7 @@ public class GUI extends JFrame implements ActionListener{
 			}
 		} catch (UserErrorException e1) {
 			// TODO Auto-generated catch block
-			error.setText(e1.getMessage());
+			JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -451,7 +435,7 @@ public class GUI extends JFrame implements ActionListener{
 			timer.getCurEvent().getHeats().get(timer.getCurEvent().getCurHeat()).swap();
 		} catch (UserErrorException e1) {
 			// TODO Auto-generated catch block
-			error.setText(e1.getMessage());
+			JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -495,16 +479,19 @@ public class GUI extends JFrame implements ActionListener{
 				idNumText = "";
 			} catch (UserErrorException e1) {
 				// TODO Auto-generated catch block
-				error.setText(e1.getMessage());
+				JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 			}
 			if(added){updateDisplay();}
 		}
 		else{
+			JOptionPane.showMessageDialog(this, "Not a valid competitor number!", "ERROR", JOptionPane.ERROR_MESSAGE);
 			idNum.setText("Not Valid");
 		}
 	}
 	
 	public void doCreate(){
+		int result = JOptionPane.showConfirmDialog(this, "Are you sure you would like to create an event?", "Create Event", JOptionPane.WARNING_MESSAGE);
+		if(result == JOptionPane.CANCEL_OPTION || result == JOptionPane.CLOSED_OPTION) return;
 		EventType x = (EventType) eventTypes.getSelectedItem();
 		try {
 			timer.newEvent(x);
@@ -544,7 +531,7 @@ public class GUI extends JFrame implements ActionListener{
 			ChronoTimer1009System.getChan(parameter).connectSensor(selectedSensor);
 		} catch (UserErrorException e1) {
 			// TODO Auto-generated catch block
-			error.setText(e1.getMessage());
+			JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -564,7 +551,7 @@ public class GUI extends JFrame implements ActionListener{
 			ChronoTimer1009System.getChan(parameter).disconnectSensor();
 		} catch (UserErrorException e1) {
 			// TODO Auto-generated catch block
-			error.setText(e1.getMessage());
+			JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
@@ -593,7 +580,7 @@ public class GUI extends JFrame implements ActionListener{
 			} catch (UserErrorException e1) {
 				// TODO Auto-generated catch block
 				enableSensorConnection();
-				error.setText(e1.getMessage());
+				JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		if(button.getBackground().equals(Color.cyan)){
@@ -605,7 +592,7 @@ public class GUI extends JFrame implements ActionListener{
 				}
 			} catch (UserErrorException e1) {
 				// TODO Auto-generated catch block
-				error.setText(e1.getMessage());;
+				JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		if(button.getBackground().equals(Color.ORANGE)){
@@ -614,14 +601,14 @@ public class GUI extends JFrame implements ActionListener{
 				if(canEnableSensorConnection()) enableSensorConnection();
 			} catch (UserErrorException e1) {
 				// TODO Auto-generated catch block
-				error.setText(e1.getMessage());;
+				JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		try {
 			changeButtonColor(button);
 		} catch (UserErrorException e1) {
 			// TODO Auto-generated catch block
-			error.setText(e1.getMessage());
+			JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	

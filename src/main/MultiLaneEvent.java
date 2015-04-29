@@ -10,8 +10,7 @@ public abstract class MultiLaneEvent extends Event {
 	private Queue<Competitor> canceledLane1, canceledLane2, canceledLane3, canceledLane4;
 	private boolean canCancelLane1, canCancelLane2, canCancelLane3, canCancelLane4;
 
-	public MultiLaneEvent(String name) throws UserErrorException {
-		super(name);
+	public MultiLaneEvent() throws UserErrorException {
 		unfinishedLane1 = new LinkedList<Competitor>();
 		unfinishedLane2 = new LinkedList<Competitor>();
 		unfinishedLane3 = new LinkedList<Competitor>();
@@ -77,7 +76,7 @@ public abstract class MultiLaneEvent extends Event {
 			//finished.setEndTime(dnf ? ChronoTimer1009System.getChan(chan).triggerChannel() : DNF);
 			finished.setEndTime(dnf ? Time.elapsed(ChronoTimer1009System.getChan(chan).triggerChannel(), finished.getStartTime()) : DNF);
 			//tells the printer to print if on
-			if(ChronoTimer1009System.getPrinter().isOn()) ChronoTimer1009System.getPrinter().print("Event: " + getName() + " " + finished.toString());
+			if(ChronoTimer1009System.getPrinter().isOn()) ChronoTimer1009System.getPrinter().print(finished.toString());
 			ChronoTimer1009System.export();
 		}
 		else throw new UserErrorException("You must start this competitor first");

@@ -3,14 +3,8 @@ package main;
 import java.util.Queue;
 
 public class PARGRP extends MultiLaneEvent {
-
-	public PARGRP(String name) throws UserErrorException{
-		super(name);
-	}
 	
-	public PARGRP() throws UserErrorException{
-		super("insert name here");
-	}
+	public PARGRP() throws UserErrorException{super();}
 	
 	private void doCancel(int ln, Queue<Competitor> unfinishedLn){
 		while(!getUnfinishedLane(ln).isEmpty()){
