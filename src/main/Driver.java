@@ -190,11 +190,7 @@ public class Driver {
 			}
 			else if(command.equals("NEWRUN"))
 			{
-				try {
-					timer.getCurEvent().createRun();
-				} catch (UserErrorException e) {
-					System.out.println(e.getMessage());
-				}
+				timer.getCurEvent().createRun();
 			}
 			
 			else if(!command.equals("ON") && !command.equals("OFF"))

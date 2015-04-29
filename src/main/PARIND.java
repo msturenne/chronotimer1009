@@ -5,7 +5,7 @@ import java.util.Queue;
 
 public class PARIND extends MultiLaneEvent{
 	
-	public PARIND() throws UserErrorException{super();}
+	public PARIND(){super();}
 	
 	private boolean doCancel(int ln, boolean canCancelLn, Queue<Competitor> canceledLn, Queue<Competitor> unfinishedLane) throws UserErrorException{
 		if(!canCancelLn) throw new UserErrorException("You can only cancel the current competitor");

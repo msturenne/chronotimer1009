@@ -7,7 +7,7 @@ public abstract class Event extends Display{
 	private int curHeat; //private means only this class can modify, not the subclasses
 	private Competitor curComp;
 	
-	public Event() throws UserErrorException{
+	public Event(){
 		heats = new ArrayList<Heat>();
 		curHeat = -1;
 		curComp = null;
@@ -18,7 +18,7 @@ public abstract class Event extends Display{
 	 * regardless of the EventType.
 	 * @throws UserErrorException
 	 */
-	public void createRun() throws UserErrorException{
+	public void createRun(){
 		heats.add(new Heat()); ++curHeat;
 	}
 	/**

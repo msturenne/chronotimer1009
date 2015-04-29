@@ -11,7 +11,7 @@ public abstract class SingleLaneEvent extends Event {
 
 	private Queue<Competitor> unfinished; //used for pending competitors.  for the purpose of multiple competitors using a 'track' at one time.
 	
-	public SingleLaneEvent() throws UserErrorException {
+	public SingleLaneEvent(){
 		unfinished = new LinkedList<Competitor>();
 	}
 
@@ -42,8 +42,6 @@ public abstract class SingleLaneEvent extends Event {
 	}
 
 	public void finish(boolean dnf) throws UserErrorException{
-
-
 		if(this.unfinished.isEmpty()) throw new UserErrorException("There are no competitors competing");
 		Time DNF = new Time(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE); //will represent a DNF 
 		//takes the first unfinished runner

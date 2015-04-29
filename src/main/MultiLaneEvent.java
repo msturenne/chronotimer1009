@@ -10,7 +10,7 @@ public abstract class MultiLaneEvent extends Event {
 	private Queue<Competitor> canceledLane1, canceledLane2, canceledLane3, canceledLane4;
 	private boolean canCancelLane1, canCancelLane2, canCancelLane3, canCancelLane4;
 
-	public MultiLaneEvent() throws UserErrorException {
+	public MultiLaneEvent(){
 		unfinishedLane1 = new LinkedList<Competitor>();
 		unfinishedLane2 = new LinkedList<Competitor>();
 		unfinishedLane3 = new LinkedList<Competitor>();

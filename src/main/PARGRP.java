@@ -4,7 +4,7 @@ import java.util.Queue;
 
 public class PARGRP extends MultiLaneEvent {
 	
-	public PARGRP() throws UserErrorException{super();}
+	public PARGRP(){super();}
 	
 	private void doCancel(int ln, Queue<Competitor> unfinishedLn){
 		while(!getUnfinishedLane(ln).isEmpty()){
