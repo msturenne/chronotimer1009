@@ -89,6 +89,8 @@ public class ChronoTimer1009System {
 		String toJson = "{\"events\":[";
 		//iterate through each event
 		for(int i = ChronoTimer1009System.getMasterLog().size()-1; i >= 0; --i){
+			//specialCaseComma = true;
+			if(ChronoTimer1009System.getMasterLog().get(i).getHeats().get(0).getRacers().size() == 0)continue;
 			//iterate through each heat of each event
 			toJson += "{\"heats\":[";
 			for(int j = ChronoTimer1009System.getMasterLog().get(i).getHeats().size()-1; j >= 0; --j){
@@ -109,7 +111,7 @@ public class ChronoTimer1009System {
 				if(j > 0) toJson += ",";
 			}
 			toJson += "]}";
-			if(i > 0) toJson += ",";
+			if((i > 0))toJson += ",";
 		}
 		
 		toJson += "]}";

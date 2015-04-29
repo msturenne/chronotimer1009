@@ -72,8 +72,6 @@ public abstract class MultiLaneEvent extends Event {
 			Competitor finished = ln.remove();
 			finished.setCompeting(false);
 			//sets the endtime for the completed runner only if they finished.
-			//computes the elapsed time
-			//finished.setEndTime(dnf ? ChronoTimer1009System.getChan(chan).triggerChannel() : DNF);
 			finished.setEndTime(dnf ? Time.elapsed(ChronoTimer1009System.getChan(chan).triggerChannel(), finished.getStartTime()) : DNF);
 			//tells the printer to print if on
 			if(ChronoTimer1009System.getPrinter().isOn()) ChronoTimer1009System.getPrinter().print(finished.toString());

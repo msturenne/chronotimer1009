@@ -97,7 +97,7 @@ public class GUI extends JFrame implements ActionListener{
 		idNum = new JTextField("Competitor");
 		//initialize Timer
 		clockTimer = new Timer(10, new ActionListener(){
-			Color[] colors = {Color.PINK, Color.CYAN, Color.GREEN, Color.BLUE, Color.LIGHT_GRAY, Color.MAGENTA, Color.ORANGE, Color.YELLOW};
+			Color[] colors = {Color.PINK, new Color(132, 61, 125), new Color(61, 133, 68), new Color(0, 133, 202), new Color(135, 75, 82), new Color(117, 120, 123), new Color(241, 178, 220), new Color(255, 108, 47), new Color(250, 202, 48), new Color(0, 183, 150)};
 			int i = 0;
 			int backgroundTimer = 200;
 			@Override
@@ -210,6 +210,14 @@ public class GUI extends JFrame implements ActionListener{
 		parentRight.add(consoleScrollPane, gbc);
 		this.add(parentPanel);
 		this.setVisible(true);
+		this.setLocationRelativeTo(null);
+		//WELCOME
+		ImageIcon icon = new ImageIcon(getClass().getResource("/images/Logo_FF.png"));
+		Image icon2 = icon.getImage();
+		Image newimg = icon2.getScaledInstance(113, 100,  java.awt.Image.SCALE_SMOOTH);
+		icon = new ImageIcon(newimg);
+		JOptionPane.showMessageDialog(this, "Welcome to Chronotimer1009! Click OK to proceed", "WELCOME", JOptionPane.INFORMATION_MESSAGE, icon);
+
 	}
 	//setup JPanel methods
 	public void setupJPanels(){setBackground(new JPanel[]{parentLeft, leftTop, leftBottom, parentMiddle, middleGridParent, optionsGrid, channelsGrid, parentRight, rightTop}, Color.DARK_GRAY);}
@@ -331,11 +339,12 @@ public class GUI extends JFrame implements ActionListener{
 	}
 	
 	public void doStart(){
+		Color green = new Color(217, 217, 214);
 		try {
 			if(timer.getCurEvent().getType().equals(EventType.PARGRP)){
 				//first check for sensors enabled
 				for(JButton x : channels){
-					if(x.getBackground().equals(Color.GREEN)){
+					if(x.getBackground().equals(green)){
 						if(!ChronoTimer1009System.getChan(Integer.parseInt(x.getName())).getState() || !ChronoTimer1009System.getChan(Integer.parseInt(x.getName())+1).getState()){
 							start.setEnabled(true);
 							throw new UserErrorException("Please connect all sensors for all channels used");
@@ -344,7 +353,7 @@ public class GUI extends JFrame implements ActionListener{
 				}
 				//then trigger
 				for(JButton x : channels){
-					if(x.getBackground().equals(Color.GREEN)){
+					if(x.getBackground().equals(green)){
 						ChronoTimer1009System.getChan(Integer.parseInt(x.getName())+1).setCanTrigger(true);
 						timer.getCurEvent().trigChan(Integer.parseInt(x.getName()), true);
 					}
@@ -442,10 +451,11 @@ public class GUI extends JFrame implements ActionListener{
 	}
 	
 	public void doManual(){
+		Color green = new Color(217, 217, 214);
 		if(manualModeEnabled){
 			start.setEnabled(false);
 			for(int i = 0; i<channels.length; ++i){
-				if(channels[i].getBackground().equals(Color.YELLOW)){channels[i].setBackground(Color.GREEN);}
+				if(channels[i].getBackground().equals(Color.YELLOW)){setColorGreen(channels[i]);}
 				channels[i].setEnabled(true);
 			}
 			manualModeEnabled = false;
@@ -454,12 +464,12 @@ public class GUI extends JFrame implements ActionListener{
 			for(int i = 0; i<channels.length; ++i){
 				if(timer.getCurEvent().getType().equals(EventType.PARGRP)){
 					start.setEnabled(true);
-					if(channels[0].getBackground().equals(Color.GREEN)){channels[1].setBackground(Color.YELLOW);}
-					if(channels[2].getBackground().equals(Color.GREEN)){channels[3].setBackground(Color.YELLOW);}
-					if(channels[4].getBackground().equals(Color.GREEN)){channels[5].setBackground(Color.YELLOW);}
-					if(channels[6].getBackground().equals(Color.GREEN)){channels[7].setBackground(Color.YELLOW);}
+					if(channels[0].getBackground().equals(green)){channels[1].setBackground(Color.YELLOW);}
+					if(channels[2].getBackground().equals(green)){channels[3].setBackground(Color.YELLOW);}
+					if(channels[4].getBackground().equals(green)){channels[5].setBackground(Color.YELLOW);}
+					if(channels[6].getBackground().equals(green)){channels[7].setBackground(Color.YELLOW);}
 				}else{
-					if(channels[i].getBackground().equals(Color.GREEN)){channels[i].setBackground(Color.YELLOW);}
+					if(channels[i].getBackground().equals(green)){channels[i].setBackground(Color.YELLOW);}
 					else channels[i].setEnabled(false);
 				}
 				manualModeEnabled = true;
@@ -504,7 +514,7 @@ public class GUI extends JFrame implements ActionListener{
 		}
 		setupEventTypeEnabledButtons(x);
 		for(JButton y : channels){
-			y.setBackground(Color.RED);
+			setColorRed(y);
 		}
 		setEnabledSelectedJComponents(new JComponent[]{sensors, discChan, connChan}, true);
 		try {
@@ -613,7 +623,14 @@ public class GUI extends JFrame implements ActionListener{
 	}
 	
 	public void setColorRed(JButton x){
-		x.setBackground(Color.RED);
+		x.setBackground(new Color(45, 41, 38));
+		x.setForeground(Color.LIGHT_GRAY);
+		x.setBorder(null);
+		x.setOpaque(true);
+	}
+	public void setColorGreen(JButton x){
+		x.setBackground(new Color(217, 217, 214));
+		x.setForeground(new Color(45, 41, 38));
 		x.setBorder(null);
 		x.setOpaque(true);
 	}
@@ -661,6 +678,7 @@ public class GUI extends JFrame implements ActionListener{
 	}
 	
 	public void changeButtonColor(JButton x) throws NumberFormatException, UserErrorException{
+		Color red = new Color(45, 41, 38);
 		if(timer.getCurEvent().getType().equals(EventType.PARGRP)){
 			if(manualModeEnabled){
 				return;
@@ -675,12 +693,12 @@ public class GUI extends JFrame implements ActionListener{
 		}
 		if(change){
 			if(!x.getBackground().equals(Color.YELLOW)){
-				if(x.getBackground().equals(Color.RED)){
+				if(x.getBackground().equals(red)){
 					if(ChronoTimer1009System.getChan(Integer.parseInt(x.getName())).getSensor().getType().equals(SensorType.NONE))
 						throw new UserErrorException("Connect a Sensor");
-					else x.setBackground(Color.GREEN);
+					else setColorGreen(x);
 				}
-				else x.setBackground(Color.RED);
+				else setColorRed(x);
 				ChronoTimer1009System.getChan(Integer.parseInt(x.getName())).toggleState();
 			}
 		}
