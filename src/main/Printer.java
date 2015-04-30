@@ -6,10 +6,12 @@ import java.io.PrintWriter;
 	public class Printer{
 		private boolean state;
 		private String outFileName;
+		private String sendToPrinter;
 		/**
 		 * Erase the content of the file
 		 */
 		public Printer(){
+			sendToPrinter = null;
 			state = false;
 			outFileName = "printerOutFile";
 			try{
@@ -34,14 +36,19 @@ import java.io.PrintWriter;
 			if(state == false) state = true;
 			else state = false;
 		}
+		public void received(){
+			sendToPrinter = null;
+		}
+		public String toSend(){
+			return sendToPrinter;
+		}
 		/**
 		 * print the information on the top of the Log stack;
 		 */
 		public void print(String toPrint){
 			try{
 				PrintWriter fileOut = new PrintWriter (new FileWriter(outFileName, true));
-				//Log auxLog = ChronoTimer1009System.getLog().peek();
-				//fileOut.println(auxLog.toString());
+				this.sendToPrinter = toPrint;
 				fileOut.println(toPrint);
 				fileOut.close();
 			}catch(IOException e){

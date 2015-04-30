@@ -1,7 +1,5 @@
 package main;
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -9,7 +7,6 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Stack;
 
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
@@ -36,12 +33,14 @@ public class GUI extends JFrame implements ActionListener{
 	private Timer clockTimer;
 	//JTextField
 	private final JTextField idNum;
+	//PrinterGUI
+	private static PrinterGUI p;
 	//other
 	private final GridBagConstraints gbc;
 	private boolean manualModeEnabled, canCancel;
 	private String idNumText = "";
 	
-	public GUI() throws UserErrorException{
+	public GUI(PrinterGUI p) throws UserErrorException{
 		//initialize ChronoTimer1009system
 		timer = new ChronoTimer1009System();
 		//initialize & setup JPanel
@@ -68,7 +67,7 @@ public class GUI extends JFrame implements ActionListener{
 		disconnect = new JButton("Disconnect");
 		exit = new JButton("exit");
 		power = new JButton("ON");
-		printer = new JButton("printer");
+		printer = new JButton("Print OFF");
 		reset = new JButton("reset");
 		newHeat = new JButton("New Heat");
 		start = new JButton("start");
@@ -95,6 +94,8 @@ public class GUI extends JFrame implements ActionListener{
 		consoleScrollPane = new JScrollPane(console, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		//initialize JTextField
 		idNum = new JTextField("Competitor");
+		//initialize PrinterGUI
+		GUI.p = p;
 		//initialize Timer
 		clockTimer = new Timer(10, new ActionListener(){
 			Color[] colors = {Color.PINK, new Color(132, 61, 125), new Color(61, 133, 68), new Color(0, 133, 202), new Color(135, 75, 82), new Color(117, 120, 123), new Color(241, 178, 220), new Color(255, 108, 47), new Color(250, 202, 48), new Color(0, 183, 150)};
@@ -110,6 +111,11 @@ public class GUI extends JFrame implements ActionListener{
 					
 				}
 				--backgroundTimer;
+				//update printer display
+				if(ChronoTimer1009System.getPrinter().toSend() != null){
+					GUI.p.print(ChronoTimer1009System.getPrinter().toSend());
+					ChronoTimer1009System.getPrinter().received();
+				}
 				//update the display every hundreth of a second
 				updateDisplay();
 			}
@@ -217,7 +223,6 @@ public class GUI extends JFrame implements ActionListener{
 		Image newimg = icon2.getScaledInstance(113, 100,  java.awt.Image.SCALE_SMOOTH);
 		icon = new ImageIcon(newimg);
 		JOptionPane.showMessageDialog(this, "Welcome to Chronotimer1009! Click OK to proceed", "WELCOME", JOptionPane.INFORMATION_MESSAGE, icon);
-
 	}
 	//setup JPanel methods
 	public void setupJPanels(){setBackground(new JPanel[]{parentLeft, leftTop, leftBottom, parentMiddle, middleGridParent, optionsGrid, channelsGrid, parentRight, rightTop}, Color.DARK_GRAY);}
@@ -308,7 +313,11 @@ public class GUI extends JFrame implements ActionListener{
 	}
 	
 	public void doPrinter(){
-		if(timer != null && timer.getCurEvent() != null){ChronoTimer1009System.getPrinter().toggleState();}
+		if(timer != null && timer.getCurEvent() != null){
+			ChronoTimer1009System.getPrinter().toggleState();
+			if(ChronoTimer1009System.getPrinter().isOn()){this.p.off();printer.setText("Print ON");}
+			else{this.p.on(); printer.setText("Print OFF");}
+		}
 	}
 	
 	public void resetChannels(){
@@ -487,6 +496,7 @@ public class GUI extends JFrame implements ActionListener{
 			boolean added = false;
 			try {
 				added = timer.getCurEvent().getHeats().get(currentHeat).addCompetitor(new Competitor(currentHeat, toDisplay, new Time(ChronoTimer1009System.globalTime.getTime())));
+				if(!added) JOptionPane.showMessageDialog(this, "Competitor already exists!", "ERROR", JOptionPane.ERROR_MESSAGE);
 				idNum.setText("Competitor");
 				idNumText = "";
 			} catch (UserErrorException e1) {
@@ -759,8 +769,5 @@ public class GUI extends JFrame implements ActionListener{
 	}
 	public void disableSensorConnection(){
 		setEnabledSelectedJComponents(new JComponent[]{connect, disconnect, sensors, connChan, discChan}, false);
-	}
-	public static void main(String[] args) throws UserErrorException{
-		new GUI();
 	}
 }

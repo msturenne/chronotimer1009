@@ -18,11 +18,10 @@ public abstract class SingleLaneEvent extends Event {
 	@Override
 	public void endRun() throws UserErrorException {
 		if(getHeats().get(getCurHeat()).getRacers().isEmpty()) throw new UserErrorException("Utilize the current heat!");
-		for(Competitor x : getHeats().get(getCurHeat()).getRacers()){
-			if(x.getStartTime() == null){
-				//if runner hasn't gone yet we need to remove that runner
-				getHeats().get(getCurHeat()).remove(x);
-			}
+		Iterator<Competitor> it = getHeats().get(getCurHeat()).getRacers().iterator();
+		while(it.hasNext()){
+			Competitor check = it.next();
+			if(check.getStartTime() == null) it.remove();
 		}
 		if(!unfinished.isEmpty()){while(!unfinished.isEmpty()){trigChan(2, false);};}
 	}

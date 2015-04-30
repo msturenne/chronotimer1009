@@ -1,6 +1,7 @@
  package main;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -27,12 +28,10 @@ public abstract class MultiLaneEvent extends Event {
 
 	@Override
 	public void endRun() throws UserErrorException {
-		for(Competitor x : getHeats().get(getCurHeat()).getRacers()){
-			if(x.getStartTime() == null){
-				//if runner hasn't gone yet we need to remove that runner
-				getHeats().get(getCurHeat()).remove(x);
-			}
-			
+		Iterator<Competitor> it = getHeats().get(getCurHeat()).getRacers().iterator();
+		while(it.hasNext()){
+			Competitor check = it.next();
+			if(check.getStartTime() == null) it.remove();
 		}
 		if(!unfinishedLane1.isEmpty()){while(!unfinishedLane1.isEmpty()){trigChan(2, false);};}
 		if(!unfinishedLane2.isEmpty()){while(!unfinishedLane2.isEmpty()){trigChan(4, false);};}

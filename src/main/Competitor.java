@@ -83,7 +83,7 @@ public class Competitor {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "heat: " + getRunNum()+1 + ", ID#: " + getIdNum() + ", elapsed: " + getEndTime();
+		return "HEAT: " + (getRunNum()+1) + " ID: " + getIdNum() + " RESULT: " + getEndTime().toString().substring(1, getEndTime().toString().length()-1);
 	}
 	
 }
