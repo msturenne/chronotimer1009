@@ -1,5 +1,6 @@
 package main;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -47,7 +48,7 @@ public class GUI extends JFrame implements ActionListener{
 		parentPanel = new JPanel(new GridLayout(1,3));
 		parentLeft = new JPanel(new GridBagLayout());
 		leftTop = new JPanel(new GridBagLayout());
-		leftBottom = new JPanel(new GridLayout(4,3));
+		leftBottom = new JPanel(new GridLayout(4,3,1,1));
 		parentMiddle = new JPanel(new GridBagLayout());
 		middleGridParent = new JPanel(new GridLayout(2,1,0,25));
 		optionsGrid = new JPanel(new GridLayout(5,2));
@@ -61,7 +62,7 @@ public class GUI extends JFrame implements ActionListener{
 		discSensor = new JLabel("Disc Sensor");
 		setupJLabels();
 		//initialize & setup JButton
-		keys = new JButton[10]; for(int i=0;i<keys.length;++i){keys[i] = new JButton(String.valueOf((i+1)%10));keys[i].setName(String.valueOf((i+1)%10));}
+		keys = new JButton[10]; for(int i=0;i<keys.length;++i){keys[i] = new JButton(String.valueOf((i+1)%10));keys[i].setName(String.valueOf((i+1)%10));keys[i].setPreferredSize(new Dimension(50,40));}
 		channels = new JButton[8]; for(int i = 0; i<channels.length; ++i){channels[i] = new JButton("CHAN" + (i+1));}
 		connect = new JButton("Connect");
 		disconnect = new JButton("Disconnect");
@@ -108,7 +109,6 @@ public class GUI extends JFrame implements ActionListener{
 					setBackground(new JPanel[]{parentPanel, parentLeft, leftTop, leftBottom, parentMiddle, middleGridParent, optionsGrid, channelsGrid, parentRight, rightTop}, colors[i%colors.length]);
 					++i;
 					backgroundTimer = 200;
-					
 				}
 				--backgroundTimer;
 				//update printer display
@@ -123,6 +123,8 @@ public class GUI extends JFrame implements ActionListener{
 		//initialize other
 		manualModeEnabled = canCancel = false;
 		gbc = new GridBagConstraints();
+		//set size for looks
+		setJComponentSize(new JComponent[]{add, create, disconnect, sensors, idNum, connChan, eventTypes, discChan, connect}, new Dimension(100, 25));
 		
 		//CREATE GUI
 		this.setTitle("ChronoTimer1009");
@@ -223,6 +225,10 @@ public class GUI extends JFrame implements ActionListener{
 		Image newimg = icon2.getScaledInstance(113, 100,  java.awt.Image.SCALE_SMOOTH);
 		icon = new ImageIcon(newimg);
 		JOptionPane.showMessageDialog(this, "Welcome to Chronotimer1009! Click OK to proceed", "WELCOME", JOptionPane.INFORMATION_MESSAGE, icon);
+	}
+	//setup JButtons size
+	public void setJComponentSize(JComponent[] y, Dimension x){
+		for(JComponent item : y) item.setPreferredSize(x);
 	}
 	//setup JPanel methods
 	public void setupJPanels(){setBackground(new JPanel[]{parentLeft, leftTop, leftBottom, parentMiddle, middleGridParent, optionsGrid, channelsGrid, parentRight, rightTop}, Color.DARK_GRAY);}
@@ -490,7 +496,7 @@ public class GUI extends JFrame implements ActionListener{
 	
 	public void doAdd(){
 		int toDisplay = 0;
-		if(idNum.getText().matches("^([0-9][0-9]{0,4}|99999)$")){
+		if(idNum.getText().matches("^([1-9][0-9]{0,4}|99999)$")){
 			toDisplay = Integer.parseInt(idNum.getText());
 			int currentHeat = timer.getCurEvent().getCurHeat();
 			boolean added = false;
@@ -518,10 +524,7 @@ public class GUI extends JFrame implements ActionListener{
 		EventType x = (EventType) eventTypes.getSelectedItem();
 		try {
 			timer.newEvent(x);
-		} catch (UserErrorException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
+		} catch (UserErrorException e2) {}
 		setupEventTypeEnabledButtons(x);
 		for(JButton y : channels){
 			setColorRed(y);
@@ -529,10 +532,7 @@ public class GUI extends JFrame implements ActionListener{
 		setEnabledSelectedJComponents(new JComponent[]{sensors, discChan, connChan}, true);
 		try {
 			timer.getCurEvent().endRun();
-		} catch (UserErrorException e1) {
-			// TODO Auto-generated catch block
-			//doNothing
-		}
+		} catch (UserErrorException e1) {}
 		manualModeEnabled = false;
 		updateDisplay();
 	}
@@ -727,16 +727,16 @@ public class GUI extends JFrame implements ActionListener{
 	
 	public void addSensorPicture(JButton x, SensorType y){
 		if(!x.isEnabled() && y.equals(SensorType.NONE)){
-			doAddPicture("/images/none.jpg.png", x);
+			doAddPicture("/images/social_stop_logo_sign_tag_wordpress_success_empty_set.png", x);
 		}
 		else{
 			switch(y){
 			case EYE:
-				doAddPicture("/images/Eye_open_font_awesome.svg.png", x);
+				doAddPicture("/images/eye-161410_1280.png", x);
 			break;
 			
 			case GATE:
-				doAddPicture("/images/wicket_gate.jpg", x);
+				doAddPicture("/images/f-a-frame-shadow.jpg.png", x);
 			break;
 			
 			case PAD:
@@ -744,7 +744,7 @@ public class GUI extends JFrame implements ActionListener{
 			break;
 			
 			case NONE:
-				doAddPicture("/images/none.jpg.png", x);
+				doAddPicture("/images/social_stop_logo_sign_tag_wordpress_success_empty_set.png", x);
 			break;
 			}
 		}
