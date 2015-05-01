@@ -59,6 +59,7 @@ public class GUI extends JFrame implements ActionListener{
 		//initialize & setup JLabel
 		connSensor = new JLabel("Conn Sensor");
 		middleTop = new JLabel("ChronoTimer1009");
+		middleTop.setForeground(new Color(236, 240, 241));
 		discSensor = new JLabel("Disc Sensor");
 		setupJLabels();
 		//initialize & setup JButton
@@ -91,26 +92,30 @@ public class GUI extends JFrame implements ActionListener{
 		discChan = new JComboBox<String>(new String[]{"Chan 1", "Chan 2", "Chan 3", "Chan 4", "Chan 5", "Chan 6", "Chan 7", "Chan 8"});
 		//initialize JTextArea
 		console = new JTextArea(15,15);
+		console.setBackground(new Color(231, 76, 60));
 		//initialize JScrollPane
 		consoleScrollPane = new JScrollPane(console, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		consoleScrollPane.setBackground(new Color(231, 76, 60));
 		//initialize JTextField
 		idNum = new JTextField("Competitor");
+		idNum.setForeground(new Color(236, 240, 241));
+		idNum.setBackground(new Color(231, 76, 60));
 		//initialize PrinterGUI
 		GUI.p = p;
 		//initialize Timer
 		clockTimer = new Timer(10, new ActionListener(){
-			Color[] colors = {Color.PINK, new Color(132, 61, 125), new Color(61, 133, 68), new Color(0, 133, 202), new Color(135, 75, 82), new Color(117, 120, 123), new Color(241, 178, 220), new Color(255, 108, 47), new Color(250, 202, 48), new Color(0, 183, 150)};
-			int i = 0;
-			int backgroundTimer = 200;
+			//Color[] colors = {Color.PINK, new Color(132, 61, 125), new Color(61, 133, 68), new Color(0, 133, 202), new Color(135, 75, 82), new Color(117, 120, 123), new Color(241, 178, 220), new Color(255, 108, 47), new Color(250, 202, 48), new Color(0, 183, 150)};
+			//int i = 0;
+			//int backgroundTimer = 200;
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//lets make the background change color every second
-				if(backgroundTimer == 0){
+				/*if(backgroundTimer == 0){
 					setBackground(new JPanel[]{parentPanel, parentLeft, leftTop, leftBottom, parentMiddle, middleGridParent, optionsGrid, channelsGrid, parentRight, rightTop}, colors[i%colors.length]);
 					++i;
 					backgroundTimer = 200;
 				}
-				--backgroundTimer;
+				--backgroundTimer;*/
 				//update printer display
 				if(ChronoTimer1009System.getPrinter().toSend() != null){
 					GUI.p.print(ChronoTimer1009System.getPrinter().toSend());
@@ -224,14 +229,14 @@ public class GUI extends JFrame implements ActionListener{
 		Image icon2 = icon.getImage();
 		Image newimg = icon2.getScaledInstance(113, 100,  java.awt.Image.SCALE_SMOOTH);
 		icon = new ImageIcon(newimg);
-		JOptionPane.showMessageDialog(this, "Welcome to Chronotimer1009! Click OK to proceed", "WELCOME", JOptionPane.INFORMATION_MESSAGE, icon);
+		JOptionPane.showMessageDialog(this, "Welcome to Chronotimer1009! Click OK to proceed\nLive result can be viewed at: http://5-dot-eastern-cosmos-92417.appspot.com/server", "WELCOME", JOptionPane.INFORMATION_MESSAGE, icon);
 	}
 	//setup JButtons size
 	public void setJComponentSize(JComponent[] y, Dimension x){
 		for(JComponent item : y) item.setPreferredSize(x);
 	}
 	//setup JPanel methods
-	public void setupJPanels(){setBackground(new JPanel[]{parentLeft, leftTop, leftBottom, parentMiddle, middleGridParent, optionsGrid, channelsGrid, parentRight, rightTop}, Color.DARK_GRAY);}
+	public void setupJPanels(){setBackground(new JPanel[]{parentLeft, leftTop, leftBottom, parentMiddle, middleGridParent, optionsGrid, channelsGrid, parentRight, rightTop}, new Color(192, 57, 43));}
 	public void setBackground(JPanel[] x, Color c){for(JPanel y : x)y.setBackground(c);}
 	//setup JLabel methods
 	public void setupJLabels(){middleTop.setFont(new Font("Bazooka", Font.PLAIN, 36));middleTop.setForeground(Color.WHITE);}
@@ -492,7 +497,7 @@ public class GUI extends JFrame implements ActionListener{
 		}
 	}
 	
-	public void doKey(JButton btn){idNum.setText(idNumText += btn.getName());}
+	public void doKey(JButton btn){idNum.setText(idNumText += btn.getName());idNum.setForeground(new Color(236, 240, 241));}
 	
 	public void doAdd(){
 		int toDisplay = 0;
@@ -752,6 +757,7 @@ public class GUI extends JFrame implements ActionListener{
 	
 	public void updateDisplay(){
 		console.setText(timer.getCurEvent().updateConsole());
+		console.setForeground(new Color(236, 240, 241));
 	}
 	
 	public boolean canEnableSensorConnection(){
