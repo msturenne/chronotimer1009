@@ -43,7 +43,7 @@ public class Driver {
 		return t;
 	}
 
-	private static void initiate(int time, String command,
+	private static void initiate(long time, String command,
 			String commandVar, String commandVar2) throws NumberFormatException, UserErrorException {
 		
 		
@@ -94,7 +94,11 @@ public class Driver {
 			}
 			else if(command.equals("TOGGLE"))
 			{
-				ChronoTimer1009System.getChan(Integer.parseInt(commandVar)).toggleState();
+				try{
+					ChronoTimer1009System.getChan(Integer.parseInt(commandVar)).toggleState();
+				}catch(UserErrorException x){
+					System.out.println(x.getMessage());
+				}
 			}
 			else if(command.equals("NUM"))
 			{
@@ -106,7 +110,7 @@ public class Driver {
 					e.printStackTrace();
 				} catch (UserErrorException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
 			}
 			else if(command.equals("FIN"))
@@ -115,7 +119,7 @@ public class Driver {
 					timer.getCurEvent().trigChan(2, true);
 				} catch (UserErrorException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
 			}
 			else if(command.equals("START"))
@@ -124,7 +128,7 @@ public class Driver {
 					timer.getCurEvent().trigChan(1, true);
 				} catch (UserErrorException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
 			}
 			else if(command.equals("DNF"))
@@ -134,7 +138,7 @@ public class Driver {
 					timer.getCurEvent().trigChan(2, false);
 				} catch (UserErrorException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
 			}
 			else if(command.equals("PRINT"))
@@ -166,18 +170,16 @@ public class Driver {
 			}
 			else if(command.equals("TRIG"))
 			{
-				//timer.getCurrentEvent().getChannel(Integer.parseInt(commandVar)).triggerChannel();
 				try {
 					timer.getCurEvent().trigChan(Integer.parseInt(commandVar), true);
 				} catch (UserErrorException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
 			}
 			else if(command.equals("EXPORT"))
 			{
-				//export heats by heat #?
-				timer.export();
+				ChronoTimer1009System.export();
 			}
 			else if(command.equals("ENDRUN"))
 			{
@@ -185,11 +187,12 @@ public class Driver {
 					timer.getCurEvent().endRun();
 				} catch (UserErrorException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
 			}
 			else if(command.equals("NEWRUN"))
 			{
+				//do nothing because this is done in the next command
 				timer.getCurEvent().createRun();
 			}
 			

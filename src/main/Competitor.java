@@ -2,7 +2,7 @@ package main;
 public class Competitor {
 
 	private int idNum;
-	private int runNum;
+	private int heatNum;
 	private Time entryTime;
 	private Time startTime;
 	private Time endTime;
@@ -16,7 +16,7 @@ public class Competitor {
 	 */
 	public Competitor(int runNum, int idNum, Time entryTime){
 		//initialize
-		this.runNum = runNum;
+		this.heatNum = runNum;
 		this.idNum = idNum;
 		this.entryTime = entryTime;
 		this.startTime = null;
@@ -51,7 +51,7 @@ public class Competitor {
 	 * @return the runNum
 	 */
 	public int getRunNum() {
-		return runNum;
+		return heatNum;
 	}
 	/**
 	 * @param startTime the startTime to set

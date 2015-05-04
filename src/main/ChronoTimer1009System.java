@@ -35,7 +35,7 @@ public class ChronoTimer1009System {
 
 	public void newEvent(EventType e) throws UserErrorException {
 		if(this.curEvent != null){
-			this.curEvent.endRun();
+			try{this.curEvent.endRun();}catch(UserErrorException x){}
 			if(this.curEvent.getHeats().get(this.curEvent.getCurHeat()).getRacers().size() == 0) this.curEvent.getHeats().remove(this.curEvent.getCurHeat());
 			if(this.curEvent.getHeats().size() == 0) ChronoTimer1009System.getMasterLog().remove(ChronoTimer1009System.getMasterLog().indexOf(this.curEvent));
 		}
@@ -76,19 +76,16 @@ public class ChronoTimer1009System {
 	public Event getCurEvent() {
 		return curEvent;
 	}
-	
 	/**
 	 * @return the state
 	 */
 	public boolean isState() {
 		return state;
 	}
-	
 	public static Channel getChan(int chan){
 		if(chan < 1 || chan > 8) throw new IllegalArgumentException("Argument is not in range");
 		return channels[chan-1];
 	}
-	
 	public static void export(){
 		//*****FORMAT JSON*****
 		//before formating, a sort of the runners within each heat is needed to determine place.
@@ -98,6 +95,8 @@ public class ChronoTimer1009System {
 			//iterate through each heat of each event
 			toJson += "{\"heats\":[";
 			for(int j = ChronoTimer1009System.getMasterLog().get(i).getHeats().size()-1; j >= 0; --j){
+				//remove heats that are empty
+				if(ChronoTimer1009System.getMasterLog().get(i).getHeats().get(j).getRacers().size() == 0) continue;
 				//iterate through each competitor in each heat
 				toJson += "{\"runners\":[";
 				ArrayList<Competitor> y = new ArrayList<Competitor>();
@@ -106,7 +105,6 @@ public class ChronoTimer1009System {
 				y = sortByPlace(y);
 				for(int k = 0; k < y.size(); ++k){
 					//notice we are working with a sorted copy
-					//TODO make Competitor endTime the elapsed time
 					if(y.get(k).getEndTime() == null) continue;
 					toJson += "{\"place\":\"" + String.valueOf(k+1) + "\",\"compNum\":\"" + y.get(k).getIdNum() + "\", \"elapsed\":\"" + y.get(k).getEndTime().toString() + "\"}";
 					if(k < y.size()-1) toJson += ",";
@@ -121,7 +119,7 @@ public class ChronoTimer1009System {
 		}
 		toJson += "]}";
 		
-		System.out.println(toJson);
+		//System.out.println(toJson);
 		
 		try{
 			URL site = new URL("http://5-dot-eastern-cosmos-92417.appspot.com/server");
@@ -135,7 +133,7 @@ public class ChronoTimer1009System {
 			out.writeBytes(data);
 			out.flush();
 			out.close();
-			System.out.println("Done sent to server");
+			//System.out.println("Done sent to server");
 
 			new InputStreamReader(conn.getInputStream());
 		}
@@ -144,7 +142,6 @@ public class ChronoTimer1009System {
 			e.printStackTrace();
 		}
 	}
-	
 	private static ArrayList<Competitor> sortByPlace(ArrayList<Competitor> whole){
         ArrayList<Competitor> left = new ArrayList<Competitor>();
         ArrayList<Competitor> right = new ArrayList<Competitor>();
@@ -170,7 +167,6 @@ public class ChronoTimer1009System {
         }
         return whole;
     }
- 
     private static void merge(ArrayList<Competitor> left, ArrayList<Competitor> right, ArrayList<Competitor> whole) {
         int leftIndex = 0;
         int rightIndex = 0;
@@ -214,7 +210,6 @@ public class ChronoTimer1009System {
 	public static ArrayList<Event> getMasterLog() {
 		return masterLog;
 	}
-
 	/**
 	 * @return the p
 	 */

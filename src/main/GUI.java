@@ -1,5 +1,6 @@
 package main;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -19,7 +20,7 @@ public class GUI extends JFrame implements ActionListener{
 	//JPanel
 	private JPanel parentPanel, parentLeft, leftTop, leftBottom, parentMiddle, middleGridParent, optionsGrid, channelsGrid, parentRight, rightTop;
 	//JLabel
-	private JLabel middleTop, connSensor, discSensor;
+	private JLabel middleTop, connSensor, discSensor, server;
 	//JButton
 	private final JButton channels[], keys[], connect, disconnect, exit, power, printer, reset, newHeat, start, finish, cancel, dnf, swap, manual, clear, add, create;
 	//JComboBox
@@ -61,6 +62,10 @@ public class GUI extends JFrame implements ActionListener{
 		middleTop = new JLabel("ChronoTimer1009");
 		middleTop.setForeground(new Color(236, 240, 241));
 		discSensor = new JLabel("Disc Sensor");
+		server = new JLabel("<html><a href=\"\">" + new String("ViewLiveRaceResults") + "</a></html>");
+		server.setFont(new Font(server.getFont().toString(), Font.PLAIN, 20));
+		server.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		//goWebsite(server);
 		setupJLabels();
 		//initialize & setup JButton
 		keys = new JButton[10]; for(int i=0;i<keys.length;++i){keys[i] = new JButton(String.valueOf((i+1)%10));keys[i].setName(String.valueOf((i+1)%10));keys[i].setPreferredSize(new Dimension(50,40));}
@@ -104,18 +109,8 @@ public class GUI extends JFrame implements ActionListener{
 		GUI.p = p;
 		//initialize Timer
 		clockTimer = new Timer(10, new ActionListener(){
-			//Color[] colors = {Color.PINK, new Color(132, 61, 125), new Color(61, 133, 68), new Color(0, 133, 202), new Color(135, 75, 82), new Color(117, 120, 123), new Color(241, 178, 220), new Color(255, 108, 47), new Color(250, 202, 48), new Color(0, 183, 150)};
-			//int i = 0;
-			//int backgroundTimer = 200;
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//lets make the background change color every second
-				/*if(backgroundTimer == 0){
-					setBackground(new JPanel[]{parentPanel, parentLeft, leftTop, leftBottom, parentMiddle, middleGridParent, optionsGrid, channelsGrid, parentRight, rightTop}, colors[i%colors.length]);
-					++i;
-					backgroundTimer = 200;
-				}
-				--backgroundTimer;*/
 				//update printer display
 				if(ChronoTimer1009System.getPrinter().toSend() != null){
 					GUI.p.print(ChronoTimer1009System.getPrinter().toSend());
@@ -142,19 +137,23 @@ public class GUI extends JFrame implements ActionListener{
 		setEnabledSelectedJComponents(new JComponent[]{exit, printer, reset, newHeat, start, finish,
 				cancel, dnf, swap, manual, clear, connect, disconnect, add, create, eventTypes, discChan, idNum, sensors, connChan}, false);
 		gbc.gridx = gbc.gridy = 0;
+		//gbc.gridwidth = 3;
+		//leftTop.add(server, gbc);
+		gbc.gridwidth = 1;
+		//++gbc.gridy;
 		leftTop.add(new JLabel("New Comp"), gbc);
 		++gbc.gridx;
 		leftTop.add(idNum, gbc);
 		idNum.setEditable(false);
 		++gbc.gridx;
 		leftTop.add(add, gbc);
-		gbc.gridx = 0; gbc.gridy = 1;
+		gbc.gridx = 0; ++gbc.gridy;
 		leftTop.add(new JLabel("New Event"), gbc);
 		++gbc.gridx;
 		leftTop.add(eventTypes, gbc);
 		++gbc.gridx;
 		leftTop.add(create, gbc);
-		gbc.gridx = 0; gbc.gridy = 2;
+		gbc.gridx = 0; ++gbc.gridy;
 		leftTop.add(connSensor, gbc);
 		++gbc.gridx;
 		leftTop.add(connChan, gbc);
@@ -163,13 +162,12 @@ public class GUI extends JFrame implements ActionListener{
 		++gbc.gridx;
 		leftTop.add(connect, gbc);
 		++gbc.gridx;
-		gbc.gridx = 0; gbc.gridy = 3;
+		gbc.gridx = 0; ++gbc.gridy;
 		leftTop.add(discSensor, gbc);
 		++gbc.gridx;
 		leftTop.add(discChan, gbc);
 		++gbc.gridx;
 		leftTop.add(disconnect, gbc);
-		gbc.gridx+=2;
 		gbc.gridx = gbc.gridy = 0;
 		rightTop.add(printer);
 		rightTop.add(power);
@@ -225,11 +223,11 @@ public class GUI extends JFrame implements ActionListener{
 		this.setVisible(true);
 		this.setLocationRelativeTo(null);
 		//WELCOME
-		ImageIcon icon = new ImageIcon(getClass().getResource("/images/Logo_FF.png"));
+		ImageIcon icon = new ImageIcon(getClass().getResource("/images/logo_transparent.png"));
 		Image icon2 = icon.getImage();
-		Image newimg = icon2.getScaledInstance(113, 100,  java.awt.Image.SCALE_SMOOTH);
+		Image newimg = icon2.getScaledInstance(125, 125,  java.awt.Image.SCALE_SMOOTH);
 		icon = new ImageIcon(newimg);
-		JOptionPane.showMessageDialog(this, "Welcome to Chronotimer1009! Click OK to proceed\nLive result can be viewed at: http://5-dot-eastern-cosmos-92417.appspot.com/server", "WELCOME", JOptionPane.INFORMATION_MESSAGE, icon);
+		JOptionPane.showMessageDialog(this, "Welcome to Chronotimer1009! Click OK to proceed", "WELCOME", JOptionPane.INFORMATION_MESSAGE, icon);
 	}
 	//setup JButtons size
 	public void setJComponentSize(JComponent[] y, Dimension x){
@@ -776,4 +774,21 @@ public class GUI extends JFrame implements ActionListener{
 	public void disableSensorConnection(){
 		setEnabledSelectedJComponents(new JComponent[]{connect, disconnect, sensors, connChan, discChan}, false);
 	}
+	/*public void goWebsite(JLabel website){
+		website.addMouseListener(new MouseAdapter(){
+			/* (non-Javadoc)
+			 * @see java.awt.event.MouseAdapter#mouseClicked(java.awt.event.MouseEvent)
+			 */
+			/*@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				try {
+					Desktop.getDesktop().browse(new URI("http://5-dot-eastern-cosmos-92417.appspot.com/server"));
+				} catch (IOException | URISyntaxException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+	}*/
 }

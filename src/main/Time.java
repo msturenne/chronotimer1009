@@ -1,7 +1,5 @@
 package main;
 
-import com.google.gson.annotations.Expose;
-
 public class Time implements Comparable{
 	
 	private int hours;
@@ -9,7 +7,6 @@ public class Time implements Comparable{
 	private int seconds;
 	private int hundreths;
 	private long lastMilliseconds;
-	@Expose private String time; //used for JSON
 	
 	/**
 	 * Constructor
@@ -25,7 +22,6 @@ public class Time implements Comparable{
 		//compute hundreths
 		this.hundreths = (int)((milliseconds/10) % 100);
 		this.lastMilliseconds = System.currentTimeMillis();
-		time = this.toString().substring(1, this.toString().length()-1);
 	}
 	/**
 	 * @param hours
@@ -38,7 +34,7 @@ public class Time implements Comparable{
 		this.minutes = min;
 		this.seconds = sec;
 		this.hundreths = d;
-		time = this.toString();
+		this.lastMilliseconds = System.currentTimeMillis();
 	}
 	/**
 	 * @return lastMilliseconds
@@ -82,8 +78,8 @@ public class Time implements Comparable{
 	 * Returns the time in milliseconds
 	 * @return
 	 */
-	public int getTime(){
-		return (int)((this.hours * 1000 * 60 * 60)+(this.minutes * 1000 * 60)+(this.seconds * 1000)+(this.hundreths * 10));
+	public long getTime(){
+		return (long)((this.hours * 1000 * 60 * 60)+(this.minutes * 1000 * 60)+(this.seconds * 1000)+(this.hundreths * 10));
 	}
 	/**
 	 * Checks equality of variables
@@ -114,7 +110,7 @@ public class Time implements Comparable{
 		if(b == null || a == null) throw new IllegalArgumentException("argument can't be null!");
 		return new Time(b.getTime()-a.getTime());
 	}
-	public int updateTime() {
+	public long updateTime() {
 		this.setTime(this.getTime() + System.currentTimeMillis() - this.lastMilliseconds);
 		this.lastMilliseconds = System.currentTimeMillis();
 		return this.getTime();
@@ -124,8 +120,10 @@ public class Time implements Comparable{
 		// TODO Auto-generated method stub
 		Time x = (Time) o;
 		int toReturn = 0;
-		if(this.getTime() < x.getTime()) toReturn = -1;
-		if(this.getTime() > x.getTime()) toReturn = 1;
+		if(this.hours == Integer.MAX_VALUE && this.minutes == Integer.MAX_VALUE && this.seconds ==  Integer.MAX_VALUE && this.hundreths == Integer.MAX_VALUE) toReturn = 1;
+		else if(x.hours == Integer.MAX_VALUE && x.minutes == Integer.MAX_VALUE && x.seconds ==  Integer.MAX_VALUE && x.hundreths == Integer.MAX_VALUE) toReturn = -1;
+		else if((this.getTime() < x.getTime())) toReturn = -1;
+		else if(this.getTime() > x.getTime()) toReturn = 1;
 		return toReturn;
 	}
 }

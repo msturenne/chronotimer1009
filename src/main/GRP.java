@@ -49,7 +49,7 @@ public class GRP extends SingleLaneEvent{
 				finish(dnf);
 			break;
 			
-			default: throw new IllegalStateException();
+			default: throw new UserErrorException("This channel is not enabled for this EventType");
 		}
 	}
 }
