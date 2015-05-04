@@ -1,5 +1,4 @@
 package testing;
-import static org.junit.Assert.*;
 import main.Channel;
 import main.ChronoTimer1009System;
 import main.Competitor;
@@ -31,7 +30,6 @@ public class ChronoBoundaryTest extends TestCase {
 		try {
 			oneChannel.disconnectSensor();
 		} catch (UserErrorException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		assertEquals(SensorType.NONE, oneChannel.getSensor().getType());
