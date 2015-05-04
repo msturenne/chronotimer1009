@@ -8,7 +8,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class PrinterGUI extends JFrame{
-	
+	private static final long serialVersionUID = 1L;
 	private final JTextArea console;
 	private final JScrollPane consoleScrollPane;
 	

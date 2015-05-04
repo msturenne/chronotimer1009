@@ -206,7 +206,7 @@ public class GUI extends JFrame implements ActionListener{
 		middleGridParent.add(channelsGrid);
 		gbc.gridheight = 1;
 		gbc.weighty = 1;
-		gbc.anchor = gbc.SOUTH;
+		gbc.anchor = GridBagConstraints.SOUTH;
 		parentLeft.add(leftTop, gbc);
 		++gbc.gridy;
 		gbc.gridheight = 2;
@@ -279,7 +279,6 @@ public class GUI extends JFrame implements ActionListener{
 		try {
 			timer.on();
 		} catch (UserErrorException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		clockTimer.start();
@@ -306,7 +305,6 @@ public class GUI extends JFrame implements ActionListener{
 		try {
 			timer.reset();
 		} catch (UserErrorException e2) {
-			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
 		clockTimer.restart();
@@ -314,7 +312,6 @@ public class GUI extends JFrame implements ActionListener{
 			addSensorPicture(x, SensorType.NONE);
 			if(!ChronoTimer1009System.getChan(Integer.parseInt(x.getName())).getSensor().getType().equals(SensorType.NONE)) ChronoTimer1009System.getChan(Integer.parseInt(x.getName())).disconnectSensor();
 		} catch (UserErrorException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}}
 		setEnabledSelectedJComponents(new JComponent[]{connect, connChan, sensors, disconnect, discChan}, true);
@@ -324,8 +321,8 @@ public class GUI extends JFrame implements ActionListener{
 	public void doPrinter(){
 		if(timer != null && timer.getCurEvent() != null){
 			ChronoTimer1009System.getPrinter().toggleState();
-			if(ChronoTimer1009System.getPrinter().isOn()){this.p.off();printer.setText("Print ON");}
-			else{this.p.on(); printer.setText("Print OFF");}
+			if(ChronoTimer1009System.getPrinter().isOn()){GUI.p.off();printer.setText("Print ON");}
+			else{GUI.p.on(); printer.setText("Print OFF");}
 		}
 	}
 	
@@ -341,7 +338,6 @@ public class GUI extends JFrame implements ActionListener{
 			timer.getCurEvent().endRun();
 			timer.getCurEvent().createRun();
 		} catch (UserErrorException e1) {
-			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 		setEnabledSelectedJComponents(new JComponent[]{sensors, connect, connChan, disconnect, discChan}, true);
@@ -351,7 +347,6 @@ public class GUI extends JFrame implements ActionListener{
 		try {
 			timer.getCurEvent().getHeats().get(timer.getCurEvent().getCurHeat()).clearNextCompetitor();
 		} catch (UserErrorException e1) {
-			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -383,7 +378,6 @@ public class GUI extends JFrame implements ActionListener{
 			cancel.setEnabled(true);
 			disableSensorConnection();
 		} catch (UserErrorException e1) {
-			// TODO Auto-generated catch block
 			if(canEnableSensorConnection()){
 				enableSensorConnection();
 			}
@@ -397,7 +391,6 @@ public class GUI extends JFrame implements ActionListener{
 			cancel.setEnabled(false);
 			if(canEnableSensorConnection()){enableSensorConnection();}
 		} catch (UserErrorException e1) {
-			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -431,7 +424,6 @@ public class GUI extends JFrame implements ActionListener{
 				enableSensorConnection();
 			}
 		} catch (UserErrorException e1) {
-			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -454,7 +446,6 @@ public class GUI extends JFrame implements ActionListener{
 				}
 			}
 		} catch (UserErrorException e1) {
-			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -463,7 +454,6 @@ public class GUI extends JFrame implements ActionListener{
 		try {
 			timer.getCurEvent().getHeats().get(timer.getCurEvent().getCurHeat()).swap();
 		} catch (UserErrorException e1) {
-			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -509,7 +499,6 @@ public class GUI extends JFrame implements ActionListener{
 				idNum.setText("Competitor");
 				idNumText = "";
 			} catch (UserErrorException e1) {
-				// TODO Auto-generated catch block
 				JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 			}
 			if(added){updateDisplay();}
@@ -573,7 +562,6 @@ public class GUI extends JFrame implements ActionListener{
 			if(ChronoTimer1009System.getChan(parameter).getState()) ChronoTimer1009System.getChan(parameter).toggleState();
 			setColorRed(channels[parameter-1]);
 		} catch (UserErrorException e1) {
-			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -601,7 +589,6 @@ public class GUI extends JFrame implements ActionListener{
 					}
 				}
 			} catch (UserErrorException e1) {
-				// TODO Auto-generated catch block
 				enableSensorConnection();
 				JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 			}
@@ -614,7 +601,6 @@ public class GUI extends JFrame implements ActionListener{
 					if(canEnableSensorConnection()) start.setEnabled(true);
 				}
 			} catch (UserErrorException e1) {
-				// TODO Auto-generated catch block
 				JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 			}
 		}
@@ -623,14 +609,12 @@ public class GUI extends JFrame implements ActionListener{
 				timer.getCurEvent().cancel((int)(Math.ceil(Integer.parseInt(button.getName())/2.0)));
 				if(canEnableSensorConnection()) enableSensorConnection();
 			} catch (UserErrorException e1) {
-				// TODO Auto-generated catch block
 				JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		try {
 			changeButtonColor(button);
 		} catch (UserErrorException e1) {
-			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog(this, e1.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -781,11 +765,9 @@ public class GUI extends JFrame implements ActionListener{
 			 */
 			/*@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
 				try {
 					Desktop.getDesktop().browse(new URI("http://5-dot-eastern-cosmos-92417.appspot.com/server"));
 				} catch (IOException | URISyntaxException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}

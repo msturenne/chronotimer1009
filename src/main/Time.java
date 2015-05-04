@@ -1,6 +1,6 @@
 package main;
 
-public class Time implements Comparable{
+public class Time implements Comparable<Object>{
 	
 	private int hours;
 	private int minutes;
@@ -117,7 +117,6 @@ public class Time implements Comparable{
 	}
 	@Override
 	public int compareTo(Object o) {
-		// TODO Auto-generated method stub
 		Time x = (Time) o;
 		int toReturn = 0;
 		if(this.hours == Integer.MAX_VALUE && this.minutes == Integer.MAX_VALUE && this.seconds ==  Integer.MAX_VALUE && this.hundreths == Integer.MAX_VALUE) toReturn = 1;

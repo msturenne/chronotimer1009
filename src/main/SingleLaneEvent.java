@@ -1,10 +1,8 @@
 package main;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Vector;
 
 
 public abstract class SingleLaneEvent extends Event {
@@ -91,7 +89,6 @@ public abstract class SingleLaneEvent extends Event {
 
 	@Override
 	public String displayRunning() {
-		// TODO Auto-generated method stub
 		String toReturn = "";
 		if(unfinished.isEmpty()) toReturn = "No competitors competing";
 		else{
